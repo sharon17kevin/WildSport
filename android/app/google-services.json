@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "63280564541",
+    "project_id": "wildcard-efc52",
+    "storage_bucket": "wildcard-efc52.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:63280564541:android:973a01f37b3694cf5b5d54",
+        "android_client_info": {
+          "package_name": "com.example.wild_sport"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "63280564541-c11a0fnvhjnk68f0m7kri744711ifj81.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBXTRlU0E-_3xiuzSt7fZ_eqQX2uCuEgGY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "63280564541-c11a0fnvhjnk68f0m7kri744711ifj81.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
