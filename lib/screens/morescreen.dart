@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:wild_sport/morePages/managementPanel.dart';
 
 import '../helperPages/statsTile.dart';
 import '../stat_pages/season_stats.dart';
@@ -61,7 +62,7 @@ class _MoreScreenState extends State<MoreScreen> {
             height: 60,
             padding: EdgeInsets.symmetric(horizontal: 10),
             child: StatsTile(
-              page: SeasonStats(),
+              page: ManagementPanel(),
               title: "Management Panel",
             ),
           ),
