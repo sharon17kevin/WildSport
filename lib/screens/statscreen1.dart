@@ -2,9 +2,11 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:sliding_switch/sliding_switch.dart';
+import 'package:wild_sport/controllers/teamsController.dart';
 import 'package:wild_sport/helperPages/statsTile.dart';
 import 'package:wild_sport/helpers/playerStats.dart';
 import 'package:wild_sport/helpers/teamStats.dart';
+import 'package:wild_sport/models/teamsModel.dart';
 import 'package:wild_sport/stat_pages/alltime_stats.dart';
 import 'package:wild_sport/stat_pages/player_comparison.dart';
 import 'package:wild_sport/stat_pages/records.dart';
@@ -20,11 +22,11 @@ class _StatsScreen1State extends State<StatsScreen1> {
   var activeIndex;
   var body = [TeamStats(), PlayerStats()];
   CarouselController switchCarouselController = CarouselController();
+
   @override
   Widget build(BuildContext context) {
     var themeController = Get.put(ThemeManager());
     bool isDark = Get.isDarkMode;
-
     return CustomScrollView(
       slivers: [
         SliverToBoxAdapter(

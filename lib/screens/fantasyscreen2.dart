@@ -3,6 +3,9 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:wild_sport/helperPages/pickTeam.dart';
+import 'package:wild_sport/helperPages/transfers.dart';
+import 'package:wild_sport/helpers/leagueBox.dart';
 
 class FantasyScreen2 extends StatefulWidget {
   @override
@@ -54,7 +57,7 @@ class _FantasyScreen2State extends State<FantasyScreen2> {
                     width: Get.width * 0.9,
                     height: 171,
                     decoration: BoxDecoration(
-                      color: Color(0xff4A4238),
+                      color: Get.isDarkMode? Color(0xff2C2E3B) : Color(0xff4A4238),
                       borderRadius: BorderRadius.all(Radius.circular(20)),
                     ),
                     child: Column(
@@ -93,11 +96,19 @@ class _FantasyScreen2State extends State<FantasyScreen2> {
                                   children: [
                                     CircleAvatar(
                                       radius: 18,
-                                      backgroundColor: Colors.white,
+                                      backgroundColor: Colors.black.withOpacity(0.2),
+                                      child: Icon(Icons.arrow_back_ios,
+                                        color: Colors.white,
+                                        size: 16,
+                                      ),
                                     ),
                                     CircleAvatar(
                                       radius: 18,
-                                      backgroundColor: Colors.white,
+                                      backgroundColor: Colors.black.withOpacity(0.2),
+                                      child: Icon(Icons.arrow_forward_ios,
+                                        color: Colors.white,
+                                        size: 16,
+                                      ),
                                     ),
                                   ],
                                 ),
@@ -123,7 +134,7 @@ class _FantasyScreen2State extends State<FantasyScreen2> {
                                     height: 56,
                                     decoration: BoxDecoration(
                                       borderRadius: BorderRadius.all(Radius.circular(7)),
-                                      color: Colors.white,
+                                      color: Get.isDarkMode? Color(0xff16171D) : Color(0xff2C2721 ),
                                     ),
                                   )
                                 ],
@@ -148,7 +159,7 @@ class _FantasyScreen2State extends State<FantasyScreen2> {
                                         width: 66,
                                         height: 66,
                                         decoration: BoxDecoration(
-                                          color: Colors.black,
+                                          color: Get.isDarkMode? Color(0xff16171D) : Color(0xff2C2721 ),
                                           borderRadius: BorderRadius.all(Radius.circular(9))
                                         ),
                                       ),
@@ -168,7 +179,7 @@ class _FantasyScreen2State extends State<FantasyScreen2> {
                                     height: 56,
                                     decoration: BoxDecoration(
                                       borderRadius: BorderRadius.all(Radius.circular(7)),
-                                      color: Colors.white,
+                                      color: Get.isDarkMode? Color(0xff16171D) : Color(0xff2C2721 ),
                                     ),
                                   )
                                 ],
@@ -188,7 +199,7 @@ class _FantasyScreen2State extends State<FantasyScreen2> {
                     height: 105,
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.all(Radius.circular(50)),
-                      color: Color(0xff4A4238),
+                      color: Get.isDarkMode? Color(0xff2C2E3B) : Color(0xff4A4238),
                     ),
                     child: Center(
                       child: Container(
@@ -200,7 +211,7 @@ class _FantasyScreen2State extends State<FantasyScreen2> {
                           color: Colors.white,
                         ),
                         child: Image.asset(
-                          "assets/images/logo.png",
+                          "assets/images/AFLlogo.webp",
                           fit: BoxFit.contain,
                         ),
                       ),
@@ -271,51 +282,125 @@ class _FantasyScreen2State extends State<FantasyScreen2> {
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Container(
-                            width: Get.width * 0.41,
-                            height: 105,
-                            decoration: BoxDecoration(
-                                color: Colors.black.withOpacity(0.15),
-                                borderRadius: BorderRadius.all(Radius.circular(15))
-                            ),
-                            child: Center(
-                              child: Container(
-                                width: Get.width * 0.4,
-                                height: 100,
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.all(Radius.circular(15)),
-                                    gradient: LinearGradient(
-                                      colors: [
-                                        Color(0xff9A96FF),
-                                        Color(0xffF0D1FF),
-                                      ],
-                                      begin: Alignment.topLeft,
-                                      end: Alignment.bottomRight
-                                   ),
+                          GestureDetector(
+                            onTap: (){
+                              Get.to(() => Transfers());
+                            },
+                            child: Container(
+                              width: Get.width * 0.41,
+                              height: 105,
+                              decoration: BoxDecoration(
+                                  color: Colors.black.withOpacity(0.15),
+                                  borderRadius: BorderRadius.all(Radius.circular(15))
+                              ),
+                              child: Center(
+                                child: Container(
+                                  width: Get.width * 0.4,
+                                  height: 100,
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.all(Radius.circular(15)),
+                                      gradient: LinearGradient(
+                                        colors: [
+                                          Color(0xff9A96FF),
+                                          Color(0xffF0D1FF),
+                                        ],
+                                        begin: Alignment.topLeft,
+                                        end: Alignment.bottomRight
+                                     ),
+                                  ),
+                                  padding: EdgeInsets.all(15),
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      Row(
+                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Text("Transfer",
+                                            style: GoogleFonts.inter(
+                                                fontSize: 15,
+                                                fontWeight: FontWeight.w600,
+                                                color: Colors.white
+                                            ),
+                                          ),
+                                          Image.asset(
+                                            'assets/icons/transfer.webp',
+                                            height: 15,
+                                            width: 15,
+                                            fit: BoxFit.contain,
+                                          )
+                                        ],
+                                      ),
+                                      Text('Make changes to \nyour squad list',
+                                        style: GoogleFonts.inter(
+                                            fontSize: 13,
+                                            fontWeight: FontWeight.w300,
+                                            color: Colors.white
+                                        ),
+                                      )
+                                    ],
+                                  ),
                                 ),
                               ),
                             ),
                           ),
-                          Container(
-                            width: Get.width * 0.41,
-                            height: 105,
-                            decoration: BoxDecoration(
-                                color: Colors.black.withOpacity(0.15),
-                                borderRadius: BorderRadius.all(Radius.circular(15))
-                            ),
-                            child: Center(
-                              child: Container(
-                                width: Get.width * 0.4,
-                                height: 100,
-                                decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.all(Radius.circular(15)),
-                                  gradient: LinearGradient(
-                                      colors: [
-                                        Color(0xff35A88D),
-                                        Color(0xff9BCE76),
-                                      ],
-                                      begin: Alignment.topLeft,
-                                      end: Alignment.bottomRight
+                          GestureDetector(
+                            onTap: (){
+                              Get.to(() => PickTeam());
+                            },
+                            child: Container(
+                              width: Get.width * 0.41,
+                              height: 105,
+                              decoration: BoxDecoration(
+                                  color: Colors.black.withOpacity(0.15),
+                                  borderRadius: BorderRadius.all(Radius.circular(15))
+                              ),
+                              child: Center(
+                                child: Container(
+                                  width: Get.width * 0.4,
+                                  height: 100,
+                                  decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.all(Radius.circular(15)),
+                                    gradient: LinearGradient(
+                                        colors: [
+                                          Color(0xff35A88D),
+                                          Color(0xff9BCE76),
+                                        ],
+                                        begin: Alignment.topLeft,
+                                        end: Alignment.bottomRight
+                                    ),
+                                  ),
+                                  padding: EdgeInsets.all(15),
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      Row(
+                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Text("Pick Team",
+                                            style: GoogleFonts.inter(
+                                                fontSize: 15,
+                                                fontWeight: FontWeight.w600,
+                                                color: Colors.white
+                                            ),
+                                          ),
+                                          Image.asset(
+                                            'assets/icons/pick.webp',
+                                            height: 15,
+                                            width: 15,
+                                            fit: BoxFit.contain,
+                                          )
+                                        ],
+                                      ),
+                                      Text('Pick that winning \ngame week line-up',
+                                        style: GoogleFonts.inter(
+                                            fontSize: 13,
+                                            fontWeight: FontWeight.w300,
+                                            color: Colors.white
+                                        ),
+                                      )
+                                    ],
                                   ),
                                 ),
                               ),
@@ -351,6 +436,38 @@ class _FantasyScreen2State extends State<FantasyScreen2> {
                                       end: Alignment.bottomRight
                                     ),
                                 ),
+                                padding: EdgeInsets.all(15),
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Row(
+                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Text("Table",
+                                          style: GoogleFonts.inter(
+                                              fontSize: 15,
+                                              fontWeight: FontWeight.w600,
+                                              color: Colors.white
+                                          ),
+                                        ),
+                                        Image.asset(
+                                          'assets/icons/table.webp',
+                                          height: 15,
+                                          width: 15,
+                                          fit: BoxFit.contain,
+                                        )
+                                      ],
+                                    ),
+                                    Text('Check the standing\n of your teams',
+                                      style: GoogleFonts.inter(
+                                          fontSize: 13,
+                                          fontWeight: FontWeight.w300,
+                                          color: Colors.white
+                                      ),
+                                    )
+                                  ],
+                                ),
                               ),
                             ),
                           ),
@@ -376,6 +493,38 @@ class _FantasyScreen2State extends State<FantasyScreen2> {
                                       end: Alignment.bottomRight
                                     ),
                                 ),
+                                padding: EdgeInsets.all(15),
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Row(
+                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Text("Statistics",
+                                          style: GoogleFonts.inter(
+                                              fontSize: 15,
+                                              fontWeight: FontWeight.w600,
+                                              color: Colors.white
+                                          ),
+                                        ),
+                                        Image.asset(
+                                          'assets/icons/pick.webp',
+                                          height: 15,
+                                          width: 15,
+                                          fit: BoxFit.contain,
+                                        )
+                                      ],
+                                    ),
+                                    Text('Check out player \nfantasy history',
+                                      style: GoogleFonts.inter(
+                                          fontSize: 13,
+                                          fontWeight: FontWeight.w300,
+                                          color: Colors.white
+                                      ),
+                                    )
+                                  ],
+                                ),
                               ),
                             ),
                           ),
@@ -391,16 +540,17 @@ class _FantasyScreen2State extends State<FantasyScreen2> {
         SliverToBoxAdapter(
           child: Container(
             margin: EdgeInsets.only(top: 15),
-            color:  Colors.blue,
             child: Center(
               child: Container(
                 width: Get.width * 0.95,
-                height: 100,
+                padding: EdgeInsets.only(bottom: 5),
                 decoration: BoxDecoration(
-                  color: Colors.black,
+                  color: Get.isDarkMode? Color(0xff2C2E3B) : Color(0xff4A4238),
                   borderRadius: BorderRadius.only(
                     topLeft: Radius.circular(25),
-                    topRight: Radius.circular(25)
+                    topRight: Radius.circular(25),
+                    bottomRight: Radius.circular(10),
+                    bottomLeft: Radius.circular(10)
                   ),
                 ),
                 child: Column(
@@ -418,29 +568,70 @@ class _FantasyScreen2State extends State<FantasyScreen2> {
                     Container(
                       padding: EdgeInsets.only(left: 12),
                       //margin: EdgeInsets.symmetric(vertical: 8),
-                      child:                     Row(
+                      child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text("Leagues",
                             style: GoogleFonts.inter(
-                              fontSize: 18,
-                              fontWeight: FontWeight.w600,
-                              color: Colors.white
+                                fontSize: 15,
+                                fontWeight: FontWeight.w600,
+                                color: Colors.white
                             ),
                           ),
                           TextButton(
                             onPressed: (){},
                             child: Text("...",
                               style: GoogleFonts.inter(
-                                fontSize: 18,
-                                fontWeight: FontWeight.w900,
-                                color: Colors.white
+                                  fontSize: 15,
+                                  fontWeight: FontWeight.w900,
+                                  color: Colors.white
                               ),
                             ),
                           )
                         ],
                       ),
-                    )
+                    ),
+                    Container(
+                      padding: EdgeInsets.symmetric(horizontal: 12),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Expanded(
+                            child: Container(
+                              alignment: Alignment.centerLeft,
+                              child: Text("Rank",
+                                style: GoogleFonts.inter(
+                                    fontSize: 12,
+                                    fontWeight: FontWeight.w600,
+                                    color: Colors.white
+                                ),
+                              ),
+                            ),
+                          ),
+                          Expanded(
+                            child: Container(
+                              alignment: Alignment.centerLeft,
+                              child: Text("Leagues",
+                                style: GoogleFonts.inter(
+                                    fontSize: 12,
+                                    fontWeight: FontWeight.w600,
+                                    color: Colors.white
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 10),
+                      child: Divider(
+                        thickness: 1,
+                        color: Colors.white.withOpacity(0.4),
+                      ),
+                    ),
+                    LeagueBox(),
+                    LeagueBox()
                   ],
                 ),
               ),

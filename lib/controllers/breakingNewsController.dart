@@ -54,6 +54,7 @@ class BreakingNewsController extends GetxController {
       throw Exception(error);
     }
     _breakingNews.value = _generalNews.where((item) => item.priority == true).toList();
+    _latestNews.value = _generalNews.where((item) => item.priority == false).toList();
   }
 
   Future<void> fetchAuthorsSpecific() async {

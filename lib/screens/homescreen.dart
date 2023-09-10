@@ -56,10 +56,6 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                   ]
                 ),
               ),
-              // Text(
-              //   'Hello, Sharon',
-              //   style:Theme.of(context).textTheme.headlineLarge,
-              // ),
               actions: [
                 GetBuilder<ThemeManager>(
                   builder: (_) => CupertinoSwitch(

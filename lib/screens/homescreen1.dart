@@ -54,8 +54,6 @@ class _HomeScreenNState extends State<HomeScreenN> {
             backgroundColor: isDark? Color(0xff3D4455) : Colors.white,
             activeColor: isDark? Color(0xff525F4F) : Color(0xffCCB28F),
             color: isDark? Colors.white : Color(0xff4A4138),
-            //tabBorder: Border.all(color: Colors.black, width: 1),
-            //tabActiveBorder: Border.all(color: Colors.green, width: 1),
             tabs: [
               GButton(
                 icon: Icons.home,

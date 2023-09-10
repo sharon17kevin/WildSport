@@ -1,13 +1,16 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:wild_sport/themes/theme_manager.dart';
 
 class TeamStatsBlocks extends StatelessWidget {
+  dynamic name;
   dynamic team;
   dynamic category;
   dynamic stat;
   TeamStatsBlocks({
     Key? key,
+    required this.name,
     required this.team,
     required this.category,
     required this.stat
@@ -34,16 +37,48 @@ class TeamStatsBlocks extends StatelessWidget {
           Column(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
-              team,
-              Text("Sample Name"),
+              //team,
+              Text(name),
               Text(category),
-              Text(stat)
+              Text('${stat}')
             ],
           ),
-          Icon(Icons.local_police,
-            size: 100,
-            color: Get.theme.primaryColorDark,
+          Image.network(
+            team,
+            height: 100,
+            width: 100,
+            fit: BoxFit.fitWidth,
+            loadingBuilder: (BuildContext context, Widget child, ImageChunkEvent? loadingProgress) {
+              if (loadingProgress == null) {
+                return child;
+              } else if (loadingProgress.cumulativeBytesLoaded == loadingProgress.expectedTotalBytes) {
+                return Center(
+                  child: Image.asset(
+                    'assets/icons/imagePlaceholder.webp',
+                    fit: BoxFit.contain,
+                    height: 50,
+                    width: 50,
+                  ),
+                );
+              } else {
+                return Center(child: CircularProgressIndicator());
+              }
+            },
+            errorBuilder: (BuildContext context, Object exception, StackTrace? stackTrace) {
+              return Center(
+                child: Image.asset(
+                  'assets/icons/imagePlaceholder.webp',
+                  fit: BoxFit.contain,
+                  height: 50,
+                  width: 50,
+                ),
+              );
+            },
           )
+          // Icon(Icons.local_police,
+          //   size: 100,
+          //   color: Get.theme.primaryColorDark,
+          // )
         ],
       ),
     );

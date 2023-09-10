@@ -53,6 +53,32 @@ class NewsBlock extends StatelessWidget {
                         fit: BoxFit.cover,
                         color: Colors.green,
                         colorBlendMode: BlendMode.softLight,
+                        loadingBuilder: (BuildContext context, Widget child, ImageChunkEvent? loadingProgress) {
+                          if (loadingProgress == null) {
+                            return child;
+                          } else if (loadingProgress.cumulativeBytesLoaded == loadingProgress.expectedTotalBytes) {
+                            return Center(
+                              child: Image.asset(
+                                'assets/icons/imagePlaceholder.webp',
+                                fit: BoxFit.contain,
+                                height: 50,
+                                width: 50,
+                              ),
+                            );
+                          } else {
+                            return Center(child: CircularProgressIndicator());
+                          }
+                        },
+                        errorBuilder: (BuildContext context, Object exception, StackTrace? stackTrace) {
+                          return Center(
+                            child: Image.asset(
+                              'assets/icons/imagePlaceholder.webp',
+                              fit: BoxFit.contain,
+                              height: 50,
+                              width: 50,
+                            ),
+                          );
+                        },
                       ),
                     ),
                   ),
