@@ -1,7 +1,3 @@
-// To parse this JSON data, do
-//
-//     final player = playerFromJson(jsonString);
-
 import 'dart:convert';
 
 List<Player> playerFromJson(String str) => List<Player>.from(json.decode(str).map((x) => Player.fromJson(x)));
@@ -10,6 +6,7 @@ String playerToJson(List<Player> data) => json.encode(List<dynamic>.from(data.ma
 
 class Player {
   Image image;
+  int fantasyPrice;
   String id;
   String name;
   String team;
@@ -24,10 +21,14 @@ class Player {
   int yellowCards;
   int redCards;
   int v;
+  int cleanSheets;
+  int currentFantasyPoints;
+  int ownGoals;
   String imageUrl;
 
   Player({
     required this.image,
+    required this.fantasyPrice,
     required this.id,
     required this.name,
     required this.team,
@@ -42,11 +43,15 @@ class Player {
     required this.yellowCards,
     required this.redCards,
     required this.v,
+    required this.cleanSheets,
+    required this.currentFantasyPoints,
+    required this.ownGoals,
     required this.imageUrl,
   });
 
   factory Player.fromJson(Map<String, dynamic> json) => Player(
     image: Image.fromJson(json["image"]),
+    fantasyPrice: json["fantasyPrice"],
     id: json["_id"],
     name: json["name"],
     team: json["team"],
@@ -61,11 +66,15 @@ class Player {
     yellowCards: json["yellowCards"],
     redCards: json["redCards"],
     v: json["__v"],
+    cleanSheets: json["cleanSheets"],
+    currentFantasyPoints: json["currentFantasyPoints"],
+    ownGoals: json["ownGoals"],
     imageUrl: json["imageUrl"],
   );
 
   Map<String, dynamic> toJson() => {
     "image": image.toJson(),
+    "fantasyPrice": fantasyPrice,
     "_id": id,
     "name": name,
     "team": team,
@@ -80,6 +89,9 @@ class Player {
     "yellowCards": yellowCards,
     "redCards": redCards,
     "__v": v,
+    "cleanSheets": cleanSheets,
+    "currentFantasyPoints": currentFantasyPoints,
+    "ownGoals": ownGoals,
     "imageUrl": imageUrl,
   };
 }

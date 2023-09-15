@@ -25,7 +25,7 @@ class _StatsScreen1State extends State<StatsScreen1> {
 
   @override
   Widget build(BuildContext context) {
-    var themeController = Get.put(ThemeManager());
+    //var themeController = Get.put(ThemeManager());
     bool isDark = Get.isDarkMode;
     return CustomScrollView(
       slivers: [
@@ -112,17 +112,14 @@ class _StatsScreen1State extends State<StatsScreen1> {
             child: Column(
               children: [
                 StatsTile(
-                  page: SeasonStats(),
-                  title: "Season Stats",
+                  page: TeamSeasonStats(),
+                  title: "Team Season Stats",
                 ),
                 StatsTile(
-                  page: AlltimeStats(),
-                  title: "All-time Stats",
+                  page: PlayerSeasonStats(),
+                  title: "Player Season Stats",
                 ),
-                StatsTile(
-                  page: Records(),
-                  title: "Records",
-                ),
+
                 StatsTile(
                   page: PlayerComparison(),
                   title: "Player Comparison",

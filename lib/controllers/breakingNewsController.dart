@@ -46,7 +46,7 @@ class BreakingNewsController extends GetxController {
   Future<void> fetchNews() async {
     toggleFlag(false);
     try{
-      var response = await fetchBreakingNews('http://172.20.10.8:3000/api/newsBlocks');
+      var response = await fetchBreakingNews('http://172.20.10.3:3000/api/newsBlocks');
       List<BreakingNews> generalNews = breakingNewsFromJson(response);
       updateGeneralNews(generalNews);
       uniqueNames = generalNews.map((object) => object.author as String).toSet();
@@ -60,7 +60,7 @@ class BreakingNewsController extends GetxController {
   Future<void> fetchAuthorsSpecific() async {
     try{
       var response;
-      fetchNewsAuthorSpecific('http://172.20.10.8:3000/api/authors', uniqueNames.toList()).then(
+      fetchNewsAuthorSpecific('http://172.20.10.3:3000/api/authors', uniqueNames.toList()).then(
               (value) {
             response = value;
             toggleFlag(true);
@@ -76,7 +76,7 @@ class BreakingNewsController extends GetxController {
 
   Future<void> fetchAuthors() async {
     try{
-      var response = await fetchNewsAuthor('http://172.20.10.8:3000/api/authors');
+      var response = await fetchNewsAuthor('http://172.20.10.3:3000/api/authors');
       List<Author> authors = authorsFromJson(response);
       updateNewsAuthors(authors);
     }catch(error) {

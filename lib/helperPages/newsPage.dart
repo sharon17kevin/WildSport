@@ -1,10 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_lorem/flutter_lorem.dart';
+import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class NewsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    String image = Get.arguments[0];
+    String title = Get.arguments[1];
+    String subtitle = Get.arguments[2];
     return Scaffold(
       body: CustomScrollView(
         slivers: [
@@ -41,7 +45,9 @@ class NewsPage extends StatelessWidget {
                 ),
                   width: double.maxFinite,
                   child: Center(child: Text(
-                      'The News Title',
+                    title,
+                      //'The News Title',
+                    overflow: TextOverflow.ellipsis,
                     style: GoogleFonts.bebasNeue(
                       fontSize: 25,
                       fontWeight: FontWeight.w500
@@ -52,10 +58,37 @@ class NewsPage extends StatelessWidget {
             pinned: true,
             expandedHeight: 300,
             flexibleSpace: FlexibleSpaceBar(
-              background: Image.asset(
-                  'assets/images/football3.jpg',
+              background: Image.network(
+                image,
+                //'assets/images/football3.jpg',
                 width: double.maxFinite,
                 fit: BoxFit.cover,
+                loadingBuilder: (BuildContext context, Widget child, ImageChunkEvent? loadingProgress) {
+                  if (loadingProgress == null) {
+                    return child;
+                  } else if (loadingProgress.cumulativeBytesLoaded == loadingProgress.expectedTotalBytes) {
+                    return Center(
+                      child: Image.asset(
+                        'assets/icons/imagePlaceholder.webp',
+                        fit: BoxFit.contain,
+                        height: 50,
+                        width: 50,
+                      ),
+                    );
+                  } else {
+                    return Center(child: CircularProgressIndicator());
+                  }
+                },
+                errorBuilder: (BuildContext context, Object exception, StackTrace? stackTrace) {
+                  return Center(
+                    child: Image.asset(
+                      'assets/icons/imagePlaceholder.webp',
+                      fit: BoxFit.contain,
+                      height: 50,
+                      width: 50,
+                    ),
+                  );
+                },
               ),
             ),
           ),
@@ -63,6 +96,7 @@ class NewsPage extends StatelessWidget {
             child: Container(
               margin: EdgeInsets.only(left: 20, right: 20),
               child: Text(
+                //subtitle,
                 lorem(paragraphs: 4, words: 500),
               ),
             ),

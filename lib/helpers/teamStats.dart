@@ -14,13 +14,6 @@ class TeamStats extends StatefulWidget {
 class _TeamStatsState extends State<TeamStats> {
   TeamController _teamController = Get.find<TeamController>();
 
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-    //_teamController.fetchTeamGoals();
-  }
-
   var activeIndex = 0;
 
   @override
@@ -29,13 +22,14 @@ class _TeamStatsState extends State<TeamStats> {
     List<Team> loss = _teamController.getTeamLoss;
     List<Team> win = _teamController.getTeamWin;
     List<Team> draw = _teamController.getTeamDraw;
-    var _slides = [["Most Goals For", goal[0].imageUrl, goal[0].goals, goal[0].name],
+    var _slides = [
+      ["Most Goals For", goal[0].imageUrl, goal[0].goals, goal[0].name],
       ["Most Games Lost",  loss[0].imageUrl, loss[0].loss, loss[0].name],
       ["Most Wins",  win[0].imageUrl, win[0].win, win[0].name],
       ["Most Draws",  draw[0].imageUrl, 13 , draw[0].name],
     ];
     return Container(
-      child:           Column(
+      child: Column(
         children: [
           CarouselSlider.builder(
               itemCount: _slides.length,

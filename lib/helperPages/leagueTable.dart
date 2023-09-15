@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:wild_sport/models/tableRow.dart';
 
 class LeagueTable extends StatefulWidget {
@@ -11,16 +12,24 @@ class _LeagueTableState extends State<LeagueTable> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        leading: TextButton(
-          child: Text('Back',
-            style: TextStyle(
-              fontSize: 10,
+          leadingWidth: 100,
+          leading: Padding(
+            padding: EdgeInsets.symmetric(horizontal: 10),
+            child: GestureDetector(
+              onTap: (){
+                Get.back();
+              },
+              child: Container(
+                child: Row(
+                  children: [
+                    Icon(Icons.arrow_back_ios, size: 10,),
+                    SizedBox(width: 5,),
+                    Text('Back')
+                  ],
+                ),
+              ),
             ),
           ),
-          onPressed: (){
-            Navigator.of(context).pop();
-          },
-        ),
         title: Center(
             child: Text('Table')
         ),
@@ -39,12 +48,12 @@ class _LeagueTableState extends State<LeagueTable> {
               Drow(
                 height: 25,
               ),
-              Drow(
-                height: 40,
-              ),
-              Drow(
-                height: 40,
-              ),
+              // Drow(
+              //   height: 40,
+              // ),
+              // Drow(
+              //   height: 40,
+              // ),
             ],
           ),
         ),

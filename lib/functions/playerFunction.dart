@@ -7,7 +7,21 @@ Future fetchPlayers(String url) async {
     if (response.statusCode == 200) {
       return response.body;
     } else {
-      throw Exception('Failed to load team');
+      throw Exception('Failed to load players');
+    }
+  } catch(error) {
+    throw Exception(error);
+  }
+}
+
+Future fetchPlayerStats(String url, List<int> ids) async {
+  try {
+    final queryParameters = {'id': ids.join(',')};
+    http.Response response = await http.get(Uri.parse(url).replace(queryParameters: queryParameters));
+    if (response.statusCode == 200) {
+      return response.body;
+    } else {
+      throw Exception('Failed to load players');
     }
   } catch(error) {
     throw Exception(error);

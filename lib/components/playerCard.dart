@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:wild_sport/helpers/drawerCard.dart';
 
@@ -35,8 +36,8 @@ class _PlayerCardState extends State<PlayerCard> {
               children: [
                 Center(
                   child: Container(
-                    margin: EdgeInsets.only(top: 5),
-                    height: 10,
+                    margin: EdgeInsets.only(top: 10),
+                    height: 5,
                     width: 100,
                     decoration: BoxDecoration(
                       color: isDark? Colors.white : Color(0xffCCB28F),
@@ -86,7 +87,11 @@ class _PlayerCardState extends State<PlayerCard> {
                             child: Container(
                               padding: EdgeInsets.all(10),
                               child: CheckboxListTile(
-                                title: Text('Captain'),
+                                title: Text('Captain',
+                                  style: TextStyle(
+                                      fontSize: 15
+                                  ),
+                                ),
                                 value: _checked,
                                 onChanged: (value) {
                                   setState((){
@@ -101,7 +106,11 @@ class _PlayerCardState extends State<PlayerCard> {
                             child: Container(
                               padding: EdgeInsets.all(10),
                               child: CheckboxListTile(
-                                title: Text('Captain'),
+                                title: Text('Vice Captain',
+                                  style: TextStyle(
+                                    fontSize: 15
+                                  ),
+                                ),
                                 value: _checked,
                                 onChanged: (value) {
                                   setState((){
@@ -128,15 +137,22 @@ class _PlayerCardState extends State<PlayerCard> {
           children: [
             Expanded(
               flex: 2,
-              child: Container(
-                decoration: BoxDecoration(
-                  image: DecorationImage(
-                    image: AssetImage(
-                      'assets/images/player.png',
+              child: CircleAvatar(
+                radius: 25,
+                backgroundColor:Get.isDarkMode? Colors.white30 : Colors.black26,
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Container(
+                    decoration: BoxDecoration(
+                      image: DecorationImage(
+                        image: AssetImage(
+                          'assets/icons/badgePlaceholderDark.webp',
+                        ),
+                        fit: BoxFit.contain,
+                        alignment: Alignment.center
+                      )
                     ),
-                    fit: BoxFit.contain,
-                    alignment: Alignment.center
-                  )
+                  ),
                 ),
               ),
             ),

@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:wild_sport/components/playerCard.dart';
 
 class PickTeam1 extends StatefulWidget {
@@ -45,6 +46,7 @@ class _PickTeam1State extends State<PickTeam1> {
       onTap: closeDrawer,
       child: AnimatedContainer(
         decoration: BoxDecoration(
+          color: Get.theme.scaffoldBackgroundColor,
           borderRadius: BorderRadius.circular(isDrawerOpen? 20 : 0),
           boxShadow: [
             BoxShadow(

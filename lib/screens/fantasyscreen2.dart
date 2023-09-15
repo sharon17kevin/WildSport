@@ -3,6 +3,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:wild_sport/helperPages/leagueTable.dart';
 import 'package:wild_sport/helperPages/pickTeam.dart';
 import 'package:wild_sport/helperPages/transfers.dart';
 import 'package:wild_sport/helpers/leagueBox.dart';
@@ -414,59 +415,64 @@ class _FantasyScreen2State extends State<FantasyScreen2> {
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Container(
-                            width: Get.width * 0.41,
-                            height: 105,
-                            decoration: BoxDecoration(
-                                color: Colors.black.withOpacity(0.15),
-                                borderRadius: BorderRadius.all(Radius.circular(15))
-                            ),
-                            child: Center(
-                              child: Container(
-                                width: Get.width * 0.4,
-                                height: 100,
-                                decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.all(Radius.circular(15)),
-                                    gradient: LinearGradient(
-                                      colors: [
-                                        Color(0xffF65567),
-                                        Color(0xffFEB779),
-                                      ],
-                                      begin: Alignment.topLeft,
-                                      end: Alignment.bottomRight
-                                    ),
-                                ),
-                                padding: EdgeInsets.all(15),
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Row(
-                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        Text("Table",
-                                          style: GoogleFonts.inter(
-                                              fontSize: 15,
-                                              fontWeight: FontWeight.w600,
-                                              color: Colors.white
-                                          ),
-                                        ),
-                                        Image.asset(
-                                          'assets/icons/table.webp',
-                                          height: 15,
-                                          width: 15,
-                                          fit: BoxFit.contain,
-                                        )
-                                      ],
-                                    ),
-                                    Text('Check the standing\n of your teams',
-                                      style: GoogleFonts.inter(
-                                          fontSize: 13,
-                                          fontWeight: FontWeight.w300,
-                                          color: Colors.white
+                          GestureDetector(
+                            onTap: (){
+                              Get.to(()=> LeagueTable());
+                            },
+                            child: Container(
+                              width: Get.width * 0.41,
+                              height: 105,
+                              decoration: BoxDecoration(
+                                  color: Colors.black.withOpacity(0.15),
+                                  borderRadius: BorderRadius.all(Radius.circular(15))
+                              ),
+                              child: Center(
+                                child: Container(
+                                  width: Get.width * 0.4,
+                                  height: 100,
+                                  decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.all(Radius.circular(15)),
+                                      gradient: LinearGradient(
+                                        colors: [
+                                          Color(0xffF65567),
+                                          Color(0xffFEB779),
+                                        ],
+                                        begin: Alignment.topLeft,
+                                        end: Alignment.bottomRight
                                       ),
-                                    )
-                                  ],
+                                  ),
+                                  padding: EdgeInsets.all(15),
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      Row(
+                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Text("Table",
+                                            style: GoogleFonts.inter(
+                                                fontSize: 15,
+                                                fontWeight: FontWeight.w600,
+                                                color: Colors.white
+                                            ),
+                                          ),
+                                          Image.asset(
+                                            'assets/icons/table.webp',
+                                            height: 15,
+                                            width: 15,
+                                            fit: BoxFit.contain,
+                                          )
+                                        ],
+                                      ),
+                                      Text('Check the standing\n of your teams',
+                                        style: GoogleFonts.inter(
+                                            fontSize: 13,
+                                            fontWeight: FontWeight.w300,
+                                            color: Colors.white
+                                        ),
+                                      )
+                                    ],
+                                  ),
                                 ),
                               ),
                             ),

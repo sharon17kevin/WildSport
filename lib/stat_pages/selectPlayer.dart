@@ -1,11 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:wild_sport/controllers/teamsController.dart';
-import 'package:wild_sport/helperPages/pickTeam1.dart';
 import 'package:wild_sport/models/playerModel.dart';
 import 'package:flutter/src/widgets/image.dart' as Image1;
 
-class DrawerCard extends StatelessWidget {
+class SelectPlayer extends StatefulWidget {
+  @override
+  State<SelectPlayer> createState() => _SelectPlayerState();
+}
+
+class _SelectPlayerState extends State<SelectPlayer> {
   @override
   Widget build(BuildContext context) {
     TeamController teamController = Get.find<TeamController>();
@@ -39,14 +43,13 @@ class DrawerCard extends StatelessWidget {
         title: Text('Select A Player'),
       ),
       body: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Container(
             padding: EdgeInsets.all(10),
             height: 70,
             child: TextField(
               style: TextStyle(
-                  color: Colors.black
+                color: Colors.black
               ),
               onChanged: (value) => updateList(value),
               decoration: InputDecoration(
@@ -58,7 +61,7 @@ class DrawerCard extends StatelessWidget {
                 ),
                 hintText: 'Enter Player Name',
                 hintStyle: TextStyle(
-                    color: Get.isDarkMode? Colors.white : Colors.black
+                  color: Get.isDarkMode? Colors.white : Colors.black
                 ),
                 prefixIcon: Icon(Icons.search),
                 prefixIconColor: Get.isDarkMode? Colors.white : Colors.white,
@@ -66,18 +69,16 @@ class DrawerCard extends StatelessWidget {
             ),
           ),
           Expanded(
-            child: Container(
-              width: Get.width * 0.5,
-              child: Obx(
-                    ()=> ListView.builder(
-                    itemCount: display_list.value.length,
-                    itemBuilder: (context, index) {
-                      return PlayerTile(
-                        title: display_list.value[index].name,
-                        subtitle: display_list.value[index].fantasyPrice,
-                      );
-                    }
-                ),
+            child: Obx(
+              ()=> ListView.builder(
+                itemCount: display_list.value.length,
+                itemBuilder: (context, index) {
+                  return PlayerTile(
+                    title: display_list.value[index].name,
+                    subtitle: display_list.value[index].position,
+                    player: display_list.value[index]
+                  );
+                }
               ),
             ),
           ),
@@ -89,12 +90,16 @@ class DrawerCard extends StatelessWidget {
 
 class PlayerTile extends StatelessWidget {
   final String title;
-  final int subtitle;
+  final String subtitle;
+  final Player player;
 
-  PlayerTile({required this.title, required this.subtitle});
+  PlayerTile({required this.title, required this.subtitle, required this.player});
   @override
   Widget build(BuildContext context) {
     return ListTile(
+      onTap: (){
+        Get.back(result: player);
+      },
       leading: CircleAvatar(
         radius: 25,
         backgroundColor: Get.isDarkMode? Colors.white30 : Colors.black12,
@@ -104,19 +109,13 @@ class PlayerTile extends StatelessWidget {
           width: 40,
         ),
       ),
-      title: Text(title,
+      title: Text(title),
+      subtitle: Text(subtitle,
         style: TextStyle(
-          fontSize: 15,
-          fontWeight: FontWeight.w500
+          color: Colors.black
         ),
       ),
-      subtitle: Text('Price: $subtitle',
-        style: TextStyle(
-            color: Colors.black,
-          fontSize: 10,
-          fontWeight: FontWeight.w300
-        ),
-      ),
+      trailing: Icon(Icons.add),
     );
   }
 }

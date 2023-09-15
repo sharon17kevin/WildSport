@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 import '../components/playerCard.dart';
 
@@ -45,6 +46,7 @@ class _Transfers1State extends State<Transfers1> {
       onTap: closeDrawer,
       child: AnimatedContainer(
         decoration: BoxDecoration(
+          color: Get.theme.scaffoldBackgroundColor,
           borderRadius: BorderRadius.circular(isDrawerOpen? 20 : 0),
           boxShadow: [
             BoxShadow(
@@ -91,7 +93,7 @@ class _Transfers1State extends State<Transfers1> {
                               ),
                             ),
                           ),
-                          Text('Pick Your Team',
+                          Text('Make Transfers',
                             style: Theme.of(context).textTheme.headlineSmall?.copyWith(
                               color: isDark? Colors.white : Color(0xff4A4138),
                               fontSize: 23,

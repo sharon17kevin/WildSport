@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:wild_sport/helperPages/newsPage.dart';
 
@@ -18,7 +19,15 @@ class NewsBlock extends StatelessWidget {
     bool isDark = Theme.of(context).brightness == Brightness.dark;
       return GestureDetector(
         onTap: (){
-          Navigator.of(context).push(MaterialPageRoute(builder: (context)=>NewsPage()));
+          Get.to(
+            NewsPage(),
+            arguments: [
+              image,
+              title,
+              subtitle
+            ]
+          );
+          //Navigator.of(context).push(MaterialPageRoute(builder: (context)=>NewsPage()));
         },
         child: Container(
           width: 325,

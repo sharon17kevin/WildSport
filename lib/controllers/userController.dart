@@ -13,7 +13,7 @@ class UserController extends GetxController {
 
   Future<void> signUp(User newUser) async {
     try{
-      var response = await registerUser('http://172.20.10.8:3000/api/users', newUser);
+      var response = await registerUser('http://172.20.10.3:3000/api/users', newUser);
       User user = userFromJson(response);
       updateUser(user);
       print("user ready");
@@ -24,7 +24,7 @@ class UserController extends GetxController {
 
   Future<void> login(User newUser) async {
     try{
-      var response = await loginUser('http://172.20.10.8:3000/api/auth', newUser);
+      var response = await loginUser('http://172.20.10.3:3000/api/auth', newUser);
       User user = userFromJson(response);
       updateUser(user);
       print("user ready");

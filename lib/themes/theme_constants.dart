@@ -1,8 +1,28 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:google_fonts/google_fonts.dart';
 
+class BackButton extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: (){
+        Get.back();
+      },
+      child: Container(
+        child: Row(
+          children: [
+            Icon(Icons.arrow_back_ios, size: 10,),
+            SizedBox(width: 5,),
+            Text('Back')
+          ],
+        ),
+      ),
+    );
+  }
+}
 
 final box = GetStorage();
 ThemeData lightTheme = ThemeData(
