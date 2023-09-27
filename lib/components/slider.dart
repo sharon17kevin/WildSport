@@ -14,6 +14,7 @@ Widget MySlider (List slides) {
             image: aSlide[0],
             title: aSlide[1],
             subtitle: "Sharon fix this",
+            timeStamp: aSlide,
           );
           //return buildImage(aImage, index);
         },

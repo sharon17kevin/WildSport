@@ -7,6 +7,7 @@ import 'package:wild_sport/controllers/highlightsController.dart';
 import 'package:wild_sport/controllers/matchesController.dart';
 import 'package:wild_sport/controllers/shortsController.dart';
 import 'package:wild_sport/controllers/teamsController.dart';
+import 'package:wild_sport/controllers/userController.dart';
 import 'package:wild_sport/home_pages/newsMore.dart';
 import 'package:wild_sport/models/breakingNewsModel.dart';
 import '../components/newsBlock.dart';
@@ -82,6 +83,7 @@ class _NewsNState extends State<NewsN> {
                                     image: slide.imageUrl,
                                     title: slide.title,
                                     subtitle: slide.subtitle,
+                                    timeStamp: slide.timestamp,
                                   );
                                 },
                                 options: CarouselOptions(

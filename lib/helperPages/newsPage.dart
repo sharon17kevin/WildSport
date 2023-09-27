@@ -35,7 +35,7 @@ class NewsPage extends StatelessWidget {
             bottom: PreferredSize(
               preferredSize: Size.fromHeight(30),
               child: Container(
-                padding: EdgeInsets.only(top: 5, bottom: 10),
+                padding: EdgeInsets.only(top: 5, bottom: 10, left: 5, right: 5),
                 decoration: BoxDecoration(
                   color: Theme.of(context).primaryColor,
                   borderRadius: BorderRadius.only(

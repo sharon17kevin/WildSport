@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:wild_sport/controllers/teamsController.dart';
+import 'package:wild_sport/controllers/userController.dart';
+import 'package:wild_sport/models/fantasyModel.dart';
 
 import '../components/playerCard.dart';
 
@@ -13,6 +16,8 @@ class _Transfers1State extends State<Transfers1> {
   double yOffset = 0;
   double scaleFactor = 1;
   bool isDrawerOpen = false;
+  TeamController teamController = Get.find<TeamController>();
+  UserController userController = Get.find<UserController>();
 
   @override
   void initState() {
@@ -28,6 +33,7 @@ class _Transfers1State extends State<Transfers1> {
       Navigator.of(context).pop();
       isDrawerOpen = true;
     });
+    teamController.updateDisplayList(userController.myToUpdate);
   }
 
   void closeDrawer() {
@@ -37,16 +43,18 @@ class _Transfers1State extends State<Transfers1> {
       scaleFactor = 1;
       isDrawerOpen = false;
     });
+    FocusScope.of(context).unfocus();
   }
 
   @override
   Widget build(BuildContext context) {
+    Fantasy fantasyTeam = userController.myFantasyTeam;
     bool isDark = Theme.of(context).brightness == Brightness.dark;
     return GestureDetector(
       onTap: closeDrawer,
       child: AnimatedContainer(
         decoration: BoxDecoration(
-          color: Get.theme.scaffoldBackgroundColor,
+          color: Get.theme.primaryColor,
           borderRadius: BorderRadius.circular(isDrawerOpen? 20 : 0),
           boxShadow: [
             BoxShadow(
@@ -138,7 +146,20 @@ class _Transfers1State extends State<Transfers1> {
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
-                                PlayerCard(onClicked: openDrawer,),
+                                Obx(
+                                  ()=> PlayerCard(
+                                    onClicked: openDrawer,
+                                    player: userController.myFantasyTeam.keeper1,
+                                    position: 'keeper1',
+                                  ),
+                                ),
+                                Obx(
+                                  ()=> PlayerCard(
+                                    onClicked: openDrawer,
+                                    player: userController.myFantasyTeam.keeper2,
+                                    position: 'keeper2',
+                                  ),
+                                ),
                               ],
                             ),
                           ),
@@ -148,11 +169,41 @@ class _Transfers1State extends State<Transfers1> {
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
-                                PlayerCard(onClicked: openDrawer,),
-                                PlayerCard(onClicked: openDrawer,),
-                                PlayerCard(onClicked: openDrawer,),
-                                PlayerCard(onClicked: openDrawer,),
-                                PlayerCard(onClicked: openDrawer,)
+                                Obx(
+                                  ()=> PlayerCard(
+                                    onClicked: openDrawer,
+                                    player: userController.myFantasyTeam.defender1,
+                                    position: 'defender1',
+                                  ),
+                                ),
+                                Obx(
+                                  ()=> PlayerCard(
+                                    onClicked: openDrawer,
+                                    player: userController.myFantasyTeam.defender2,
+                                    position: 'defender2',
+                                  ),
+                                ),
+                                Obx(
+                                  ()=> PlayerCard(
+                                    onClicked: openDrawer,
+                                    player: userController.myFantasyTeam.defender3,
+                                    position: 'defender3',
+                                  ),
+                                ),
+                                Obx(
+                                  ()=> PlayerCard(
+                                    onClicked: openDrawer,
+                                    player: userController.myFantasyTeam.defender4,
+                                    position: 'defender4',
+                                  ),
+                                ),
+                                Obx(
+                                  ()=> PlayerCard(
+                                    onClicked: openDrawer,
+                                    player: userController.myFantasyTeam.defender5,
+                                    position: 'defender5',
+                                  ),
+                                )
                               ],
                             ),
                           ),
@@ -162,10 +213,41 @@ class _Transfers1State extends State<Transfers1> {
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
-                                PlayerCard(onClicked: openDrawer,),
-                                PlayerCard(onClicked: openDrawer,),
-                                PlayerCard(onClicked: openDrawer,),
-                                PlayerCard(onClicked: openDrawer,),
+                                Obx(
+                                  ()=> PlayerCard(
+                                    onClicked: openDrawer,
+                                    player: userController.myFantasyTeam.midfielder1,
+                                    position: 'midfielder1',
+                                  ),
+                                ),
+                                Obx(
+                                  ()=> PlayerCard(
+                                    onClicked: openDrawer,
+                                    player: userController.myFantasyTeam.midfielder2,
+                                    position: 'midfielder2',
+                                  ),
+                                ),
+                                Obx(
+                                  ()=> PlayerCard(
+                                    onClicked: openDrawer,
+                                    player: userController.myFantasyTeam.midfielder3,
+                                    position: 'midfielder3',
+                                  ),
+                                ),
+                                Obx(
+                                  ()=> PlayerCard(
+                                    onClicked: openDrawer,
+                                    player: userController.myFantasyTeam.midfielder4,
+                                    position: 'midfielder4',
+                                  ),
+                                ),
+                                Obx(
+                                  ()=> PlayerCard(
+                                    onClicked: openDrawer,
+                                    player: userController.myFantasyTeam.midfielder5,
+                                    position: 'midfielder5',
+                                  ),
+                                ),
                               ],
                             ),
                           ),
@@ -175,9 +257,27 @@ class _Transfers1State extends State<Transfers1> {
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
-                                PlayerCard(onClicked: openDrawer,),
-                                PlayerCard(onClicked: openDrawer,),
-                                PlayerCard(onClicked: openDrawer,),
+                                Obx(
+                                  ()=> PlayerCard(
+                                    onClicked: openDrawer,
+                                    player: userController.myFantasyTeam.attacker1,
+                                    position: 'attacker1',
+                                  ),
+                                ),
+                                Obx(
+                                  ()=> PlayerCard(
+                                    onClicked: openDrawer,
+                                    player: userController.myFantasyTeam.attacker2,
+                                    position: 'attacker2',
+                                  ),
+                                ),
+                                Obx(
+                                  ()=> PlayerCard(
+                                    onClicked: openDrawer,
+                                    player: userController.myFantasyTeam.attacker3,
+                                    position: 'attacker3',
+                                  ),
+                                ),
                               ],
                             ),
                           ),

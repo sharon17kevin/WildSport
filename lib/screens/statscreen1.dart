@@ -7,7 +7,6 @@ import 'package:wild_sport/helperPages/statsTile.dart';
 import 'package:wild_sport/helpers/playerStats.dart';
 import 'package:wild_sport/helpers/teamStats.dart';
 import 'package:wild_sport/models/teamsModel.dart';
-import 'package:wild_sport/stat_pages/alltime_stats.dart';
 import 'package:wild_sport/stat_pages/player_comparison.dart';
 import 'package:wild_sport/stat_pages/records.dart';
 import 'package:wild_sport/stat_pages/season_stats.dart';

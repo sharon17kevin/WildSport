@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:wild_sport/components/topBlock.dart';
+import 'package:wild_sport/controllers/breakingNewsController.dart';
+import 'package:wild_sport/models/breakingNewsModel.dart';
 
 class NewsMore extends StatefulWidget {
   @override
@@ -7,8 +10,10 @@ class NewsMore extends StatefulWidget {
 }
 
 class _NewsMoreState extends State<NewsMore> {
+  BreakingNewsController _breakingNewsController = Get.find<BreakingNewsController>();
   @override
   Widget build(BuildContext context) {
+    List<BreakingNews> news = _breakingNewsController.myLatestNews;
     return Scaffold(
       appBar: AppBar(
         leadingWidth: 100,
@@ -37,14 +42,32 @@ class _NewsMoreState extends State<NewsMore> {
           SliverToBoxAdapter(
             child: Container(
               margin: EdgeInsets.symmetric(horizontal: 10),
-              height: 100,
+              //height: 100,
               child: Column(
+                mainAxisSize: MainAxisSize.min,
                 children: [
                   Text("News"),
                   Divider(
                     thickness: 2,
                     color: Get.theme.primaryColorDark,
                   ),
+                  Flexible(
+                    fit: FlexFit.loose,
+                    child: ListView.builder(
+                      shrinkWrap: true,
+                      physics: NeverScrollableScrollPhysics(),
+                      itemCount: news.length,
+                      itemBuilder: (context, index) {
+                        return TopBlock(
+                          url: news[index].imageUrl,
+                          title: news[index].title,
+                          subtitle: news[index].subtitle,
+                          timeStamp: news[index].timestamp,
+                          news: news[index],
+                        );
+                      },
+                    ),
+                  )
                 ],
               ),
             ),

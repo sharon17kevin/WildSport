@@ -52,9 +52,11 @@ class _Match1State extends State<Match1> with TickerProviderStateMixin{
         child: CustomScrollView(
           slivers: [
             SliverToBoxAdapter(
-              child: SizedBox(height: 80,),
+              child: SizedBox(height: Get.size.height * 0.07,),
             ),
             SliverAppBar(
+              leading: SizedBox(width: 0,),
+              leadingWidth: 0,
               bottom: TabBar(
                 isScrollable: true,
                 labelColor: Get.theme.primaryColorDark,

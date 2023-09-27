@@ -1,11 +1,12 @@
 import 'package:get/get.dart';
+import 'package:wild_sport/controllers/userController.dart';
 import 'package:wild_sport/functions/playerFunction.dart';
 import 'package:wild_sport/functions/teamsFunctions.dart';
 import 'package:wild_sport/models/playerModel.dart';
 import 'package:wild_sport/models/teamsModel.dart';
 
 class TeamController extends GetxController {
-  final String ipaddress = "172.20.10.3";
+  final String ipaddress = "172.20.10.8";
   //team variables-------------------------------->
   var _teams = <Team>[].obs;
   var _teamPoints = <Team>[].obs;
@@ -56,6 +57,18 @@ class TeamController extends GetxController {
   List<Player> get getPlayerCleanSheets => _playerCleanSheets.value;
   List<Player> get getPlayerOwnGoal => _playerOwnGoals.value;
 
+  var displayList = <Player>[].obs;
+  var displayListCopy = <Player>[].obs;
+
+  void updateDisplayList(String value) {
+    displayList.value = _players.value.where((element) => value.toLowerCase().contains(element.position)).toList();
+    displayListCopy.value = List<Player>.from(displayList.value);
+  }
+
+  void searchDisplayList(String value) {
+    displayListCopy.value = displayList.where((element) => element.name.toLowerCase().contains(value.toLowerCase())).toList();
+  }
+
   void updateTeams(List<Team> team) {
     _teams.value = team;
   }
@@ -93,6 +106,8 @@ class TeamController extends GetxController {
     await fetchPlayerCurrentFantasyPoints();
     await fetchPlayerFantasyPoints();
     await fetchPlayerAppearances();
+    UserController userController = Get.find<UserController>();
+    await userController.generateFantasy();
   }
 
   //player functions links variables-------------------------------->
@@ -211,6 +226,7 @@ class TeamController extends GetxController {
       var response = await fetchPlayers('http://$ipaddress:3000/api/players');
       List<Player> players = playerFromJson(response);
       updatePlayers(players);
+      displayList.value = players;
       print("players ready");
     }catch(error) {
       throw Exception(error);

@@ -3,6 +3,8 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:wild_sport/controllers/userController.dart';
+import 'package:wild_sport/fantasyPages/statistics.dart';
 import 'package:wild_sport/helperPages/leagueTable.dart';
 import 'package:wild_sport/helperPages/pickTeam.dart';
 import 'package:wild_sport/helperPages/transfers.dart';
@@ -14,6 +16,23 @@ class FantasyScreen2 extends StatefulWidget {
 }
 
 class _FantasyScreen2State extends State<FantasyScreen2> {
+  UserController _userController = Get.find<UserController>();
+
+  void showBottomSheet() {
+    Get.bottomSheet(
+      Container(
+        height: 200,
+        color: Colors.white,
+        child: Center(
+          child: Text(
+            'This is a bottom sheet',
+            style: TextStyle(fontSize: 20),
+          ),
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return CustomScrollView(
@@ -268,7 +287,9 @@ class _FantasyScreen2State extends State<FantasyScreen2> {
                           ),
                         ),
                         TextButton(
-                          onPressed: (){},
+                          onPressed: (){
+                            showBottomSheet();
+                          },
                           child: Text("...",
                             style: GoogleFonts.inter(
                               fontSize: 18,
@@ -477,59 +498,64 @@ class _FantasyScreen2State extends State<FantasyScreen2> {
                               ),
                             ),
                           ),
-                          Container(
-                            width: Get.width * 0.41,
-                            height: 105,
-                            decoration: BoxDecoration(
-                              color: Colors.black.withOpacity(0.15),
-                              borderRadius: BorderRadius.all(Radius.circular(15))
-                            ),
-                            child: Center(
-                              child: Container(
-                                width: Get.width * 0.4,
-                                height: 100,
-                                decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.all(Radius.circular(15)),
-                                    gradient: LinearGradient(
-                                      colors: [
-                                        Color(0xffDD5771),
-                                        Color(0xffFEB779),
-                                      ],
-                                      begin: Alignment.topLeft,
-                                      end: Alignment.bottomRight
-                                    ),
-                                ),
-                                padding: EdgeInsets.all(15),
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Row(
-                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        Text("Statistics",
-                                          style: GoogleFonts.inter(
-                                              fontSize: 15,
-                                              fontWeight: FontWeight.w600,
-                                              color: Colors.white
-                                          ),
-                                        ),
-                                        Image.asset(
-                                          'assets/icons/pick.webp',
-                                          height: 15,
-                                          width: 15,
-                                          fit: BoxFit.contain,
-                                        )
-                                      ],
-                                    ),
-                                    Text('Check out player \nfantasy history',
-                                      style: GoogleFonts.inter(
-                                          fontSize: 13,
-                                          fontWeight: FontWeight.w300,
-                                          color: Colors.white
+                          GestureDetector(
+                            onTap: (){
+                              Get.to(()=> Statistics());
+                            },
+                            child: Container(
+                              width: Get.width * 0.41,
+                              height: 105,
+                              decoration: BoxDecoration(
+                                color: Colors.black.withOpacity(0.15),
+                                borderRadius: BorderRadius.all(Radius.circular(15))
+                              ),
+                              child: Center(
+                                child: Container(
+                                  width: Get.width * 0.4,
+                                  height: 100,
+                                  decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.all(Radius.circular(15)),
+                                      gradient: LinearGradient(
+                                        colors: [
+                                          Color(0xffDD5771),
+                                          Color(0xffFEB779),
+                                        ],
+                                        begin: Alignment.topLeft,
+                                        end: Alignment.bottomRight
                                       ),
-                                    )
-                                  ],
+                                  ),
+                                  padding: EdgeInsets.all(15),
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      Row(
+                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Text("Statistics",
+                                            style: GoogleFonts.inter(
+                                                fontSize: 15,
+                                                fontWeight: FontWeight.w600,
+                                                color: Colors.white
+                                            ),
+                                          ),
+                                          Image.asset(
+                                            'assets/icons/pick.webp',
+                                            height: 15,
+                                            width: 15,
+                                            fit: BoxFit.contain,
+                                          )
+                                        ],
+                                      ),
+                                      Text('Check out player \nfantasy history',
+                                        style: GoogleFonts.inter(
+                                            fontSize: 13,
+                                            fontWeight: FontWeight.w300,
+                                            color: Colors.white
+                                        ),
+                                      )
+                                    ],
+                                  ),
                                 ),
                               ),
                             ),
@@ -585,7 +611,9 @@ class _FantasyScreen2State extends State<FantasyScreen2> {
                             ),
                           ),
                           TextButton(
-                            onPressed: (){},
+                            onPressed: (){
+                              showBottomSheet();
+                            },
                             child: Text("...",
                               style: GoogleFonts.inter(
                                   fontSize: 15,

@@ -42,3 +42,26 @@ Future fetchNewsAuthor(String url) async {
     throw Exception(error);
   }
 }
+
+Future updateBookmark(bool flag, ids) async {
+  final String apiUrl = 'http://172.20.10.3:3000/api/newsBlocks/bookmark';
+  final Map<String, String> headers = {
+    'Content-Type': 'application/json',
+  };
+  final queryParameters = {'id': ids.join(',')};
+  final Map<String, bool> data = {
+    'bookmark': flag,
+  };
+
+  final http.Response response = await http.put(
+    Uri.parse(apiUrl).replace(queryParameters: queryParameters),
+    headers: headers,
+    body: json.encode(data), // Convert the data to JSON
+  );
+
+  if (response.statusCode == 200) {
+    return response.body;
+  } else {
+    throw Exception('Failed to load news author');
+  }
+}

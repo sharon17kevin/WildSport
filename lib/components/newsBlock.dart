@@ -8,12 +8,34 @@ class NewsBlock extends StatelessWidget {
   dynamic image;
   dynamic title;
   String subtitle;
+  final DateTime timeStamp;
   NewsBlock({
     Key? key,
     required this.image,
     required this.title,
-    required this.subtitle
+    required this.subtitle,
+    required this.timeStamp
   }) : super(key: key);
+
+  String timeAgo(timeStamp) {
+    DateTime now = DateTime.now();
+    Duration difference = now.difference(timeStamp);
+    int minutes = difference.inMinutes;
+    int hours = difference.inHours;
+    int days = difference.inDays;
+
+    String timeAgo;
+    if (days > 0) {
+      timeAgo = '$days ${days == 1 ? 'day' : 'days'} ago';
+    } else if (hours > 0) {
+      timeAgo = '$hours ${hours == 1 ? 'hour' : 'hours'} ago';
+    } else {
+      timeAgo = '$minutes ${minutes == 1 ? 'minute' : 'minutes'} ago';
+    }
+
+    return timeAgo;
+  }
+
   @override
   Widget build(BuildContext context) {
     bool isDark = Theme.of(context).brightness == Brightness.dark;
@@ -110,12 +132,14 @@ class NewsBlock extends StatelessWidget {
                     bottom: 0,
                     child: Row(
                       children: [
-                        IconButton(
-                          onPressed: () {},
-                          icon: Icon(Icons.policy_sharp, color: Colors.white, size: 20,),
-                        ),
                         Container(
-                          child: Text(' Wildcard . 41 minutes ago', style: Theme.of(context).textTheme.bodySmall),
+                          padding: EdgeInsets.all(15),
+                          child: Row(
+                            children: [
+                              Text(' Wildcard . ', style: Theme.of(context).textTheme.bodySmall),
+                              Text(timeAgo(timeStamp), style: Theme.of(context).textTheme.bodySmall)
+                            ],
+                          ),
                         )
                       ],
                     ),

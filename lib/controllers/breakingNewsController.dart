@@ -2,7 +2,6 @@ import 'dart:convert';
 import 'package:get/get.dart';
 import 'package:wild_sport/models/authorModel.dart';
 import 'package:wild_sport/models/breakingNewsModel.dart';
-import 'package:get_storage/get_storage.dart';
 import 'package:wild_sport/functions/newsFunctions.dart';
 import 'dart:collection';
 
@@ -15,6 +14,7 @@ class BreakingNewsController extends GetxController {
   var _latestNews = <BreakingNews>[].obs;
   var _authors = <Author>[].obs;
   late Set<String> uniqueNames;
+  String pather = '172.20.10.8:3000';
 
   // ignore: invalid_use_of_protected_member
   List<BreakingNews> get myBreakingNews => _breakingNews.value;
@@ -46,7 +46,7 @@ class BreakingNewsController extends GetxController {
   Future<void> fetchNews() async {
     toggleFlag(false);
     try{
-      var response = await fetchBreakingNews('http://172.20.10.3:3000/api/newsBlocks');
+      var response = await fetchBreakingNews('http://$pather/api/newsBlocks');
       List<BreakingNews> generalNews = breakingNewsFromJson(response);
       updateGeneralNews(generalNews);
       uniqueNames = generalNews.map((object) => object.author as String).toSet();
@@ -60,7 +60,7 @@ class BreakingNewsController extends GetxController {
   Future<void> fetchAuthorsSpecific() async {
     try{
       var response;
-      fetchNewsAuthorSpecific('http://172.20.10.3:3000/api/authors', uniqueNames.toList()).then(
+      fetchNewsAuthorSpecific('http://$pather/api/authors', uniqueNames.toList()).then(
               (value) {
             response = value;
             toggleFlag(true);
@@ -76,7 +76,7 @@ class BreakingNewsController extends GetxController {
 
   Future<void> fetchAuthors() async {
     try{
-      var response = await fetchNewsAuthor('http://172.20.10.3:3000/api/authors');
+      var response = await fetchNewsAuthor('http://$pather/api/authors');
       List<Author> authors = authorsFromJson(response);
       updateNewsAuthors(authors);
     }catch(error) {
@@ -84,4 +84,13 @@ class BreakingNewsController extends GetxController {
     }
     toggleFlag(true);
   }
+
+  Future<void> putUpdateBookmark(bool flag, ids) async {
+    try{
+      var response = await updateBookmark(flag, ids);
+    }catch(error) {
+      throw Exception(error);
+    }
+  }
+
 }

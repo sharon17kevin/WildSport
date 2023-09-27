@@ -44,10 +44,10 @@ class _AppState extends State<App> {
         theme: lightTheme,
         darkTheme: darkTheme,
         themeMode: themeManager.themeMode,
-        //home: Login(),
+        home: Login(),
         //home: SignUp(),
         //home: Loading(),
-        home: HomeScreenN(),
+        //home: HomeScreenN(),
     );
     //   MaterialApp(
     //   theme: lightTheme,

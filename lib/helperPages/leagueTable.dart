@@ -48,12 +48,6 @@ class _LeagueTableState extends State<LeagueTable> {
               Drow(
                 height: 25,
               ),
-              // Drow(
-              //   height: 40,
-              // ),
-              // Drow(
-              //   height: 40,
-              // ),
             ],
           ),
         ),

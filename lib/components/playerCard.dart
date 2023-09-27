@@ -2,14 +2,25 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:wild_sport/helpers/drawerCard.dart';
+import 'package:wild_sport/controllers/teamsController.dart';
+import 'package:wild_sport/controllers/userController.dart';
+import 'package:wild_sport/fantasyPages/playerInfoPage.dart';
+import 'package:wild_sport/models/playerModel.dart';
+import 'package:flutter/src/widgets/image.dart' as Image1;
+import 'package:wild_sport/models/playerModel.dart'as Image2;
+import 'package:wild_sport/models/teamsModel.dart';
+import 'package:wild_sport/models/teamsModel.dart' as Icon1;
 
 class PlayerCard extends StatefulWidget {
   final VoidCallback onClicked;
+  final Player? player;
+  final String position;
 
   const PlayerCard({
     Key? key,
     required this.onClicked,
+    required this.player,
+    required this.position
   }) : super(key: key);
 
   @override
@@ -17,13 +28,20 @@ class PlayerCard extends StatefulWidget {
 }
 
 class _PlayerCardState extends State<PlayerCard> {
-  bool _checked = false;
+  var viceCaptain = false.obs;
+  var captain = false.obs;
 
   @override
   Widget build(BuildContext context) {
     bool isDark = Theme.of(context).brightness == Brightness.dark;
+    TeamController teamController = Get.find<TeamController>();
+    UserController userController = Get.find<UserController>();
+    List<Team> team = teamController.getTeams;
+    Team defaultTeam = Team(icon: Icon1.Icon(name: '', contentType: ''), draw: 0, currentPosition: 0, id: '', name: '', played: 0, win: 0, loss: 0, goals: 0, points: 0, jersey: '', imageUrl: '', yellowCards: 0, redCards: 0, players: [], v: 0, cleanSheets: 0, goalsAgainst: 0);
+    Player defaultPlayer = Player(image: Image2.Image(name: '', contentType: ''), fantasyPrice: 0, id: '', name: '', team: '', age: 0, number: 0, appearances: 0, goals: 0, subs: 0, assists: 0, fantasyPoints: 0, position: '', yellowCards: 0, redCards: 0, v: 0, cleanSheets: 0, currentFantasyPoints: 0, ownGoals: 0, imageUrl: '');
     return GestureDetector(
       onTap: (){
+        userController.updateToUpdate(widget.position);
         showModalBottomSheet(context: context,
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.only(
@@ -60,7 +78,7 @@ class _PlayerCardState extends State<PlayerCard> {
                             child: Container(
                               margin: EdgeInsets.symmetric(horizontal: 10),
                               child: ElevatedButton(
-                                child: Text('Substitute'),
+                                child: Text('Transfer'),
                                 onPressed: widget.onClicked,
                               ),
                             ),
@@ -71,7 +89,9 @@ class _PlayerCardState extends State<PlayerCard> {
                               margin: EdgeInsets.symmetric(horizontal: 10),
                               child: ElevatedButton(
                                 child: Text('Full Profile'),
-                                onPressed: (){},
+                                onPressed: (){
+                                  Get.to(PlayerInfoPage());
+                                },
                               ),
                             ),
                           ),
@@ -80,48 +100,6 @@ class _PlayerCardState extends State<PlayerCard> {
                       SizedBox(
                         height: 25,
                       ),
-                      Row(
-                        children: [
-                          Expanded(
-                            flex: 1,
-                            child: Container(
-                              padding: EdgeInsets.all(10),
-                              child: CheckboxListTile(
-                                title: Text('Captain',
-                                  style: TextStyle(
-                                      fontSize: 15
-                                  ),
-                                ),
-                                value: _checked,
-                                onChanged: (value) {
-                                  setState((){
-                                    _checked = value!;
-                                  });
-                                },
-                              ),
-                            ),
-                          ),
-                          Expanded(
-                            flex: 1,
-                            child: Container(
-                              padding: EdgeInsets.all(10),
-                              child: CheckboxListTile(
-                                title: Text('Vice Captain',
-                                  style: TextStyle(
-                                    fontSize: 15
-                                  ),
-                                ),
-                                value: _checked,
-                                onChanged: (value) {
-                                  setState((){
-                                    _checked = value!;
-                                  });
-                                },
-                              ),
-                            ),
-                          ),
-                        ],
-                      )
                     ],
                   ),
                 )
@@ -137,23 +115,30 @@ class _PlayerCardState extends State<PlayerCard> {
           children: [
             Expanded(
               flex: 2,
-              child: CircleAvatar(
-                radius: 25,
-                backgroundColor:Get.isDarkMode? Colors.white30 : Colors.black26,
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Container(
-                    decoration: BoxDecoration(
-                      image: DecorationImage(
-                        image: AssetImage(
-                          'assets/icons/badgePlaceholderDark.webp',
+              child: Stack(
+                clipBehavior: Clip.none,
+                children: [
+                  CircleAvatar(
+                    radius: 28,
+                    backgroundColor:Get.isDarkMode? Colors.white30 : Colors.black26,
+                    child: widget.player!.imageUrl != ''?
+                        Image1.Image.network(
+                          team.firstWhere((element) => element.id == widget.player!.team, orElse: () => defaultTeam).imageUrl,
+                          fit: BoxFit.fitWidth,
+                          height: 100,
+                          width: 200,
+                        )
+                        :
+                        Padding(
+                          padding: const EdgeInsets.all(5),
+                          child: Image1.Image.asset(
+                              'assets/icons/badgePlaceholderDark.webp',
+                            fit: BoxFit.contain,
+                            height: double.maxFinite,
+                          ),
                         ),
-                        fit: BoxFit.contain,
-                        alignment: Alignment.center
-                      )
-                    ),
                   ),
-                ),
+                ],
               ),
             ),
             Flexible(
@@ -163,7 +148,7 @@ class _PlayerCardState extends State<PlayerCard> {
                 padding: EdgeInsets.symmetric(vertical: 4),
                 width: double.maxFinite,
                 color: Color(0xff2F5233),
-                child: Text('SomeText',
+                child: Text('Default',
                   textAlign: TextAlign.center,
                   maxLines: 1,
                   style: GoogleFonts.montserrat(
@@ -188,7 +173,7 @@ class _PlayerCardState extends State<PlayerCard> {
                 ),
                 padding: EdgeInsets.symmetric(vertical: 2),
                 width: double.maxFinite,
-                child: Text('SomeText',
+                child: Text('Fixture',
                   textAlign: TextAlign.center,
                   maxLines: 1,
                   style: GoogleFonts.montserrat(

@@ -73,7 +73,6 @@ class SignUp extends StatelessWidget {
                   GestureDetector(
                     onTap: () async {
                       User newUser = User(
-                        id: "",
                         name: usernameController.text,
                         email: emailController.text,
                       );

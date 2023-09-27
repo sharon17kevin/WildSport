@@ -21,7 +21,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
   List _tabOptions = [
     ["News", NewsN()],
     ["Matches", Match1()],
-    ["Highlights", Highlights()],
+    ["Videos", Highlights()],
   ];
   List<Widget> tabs = [
     NewsN(),
@@ -46,6 +46,8 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
             handle:
             NestedScrollView.sliverOverlapAbsorberHandleFor(context),
             sliver: SliverAppBar(
+              leading: SizedBox(width: 0,),
+              leadingWidth: 0,
               backgroundColor: isDark? Color(0xff3D4455) : Colors.white,
               title: RichText(
                 text: TextSpan(

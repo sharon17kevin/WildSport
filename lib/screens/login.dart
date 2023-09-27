@@ -3,7 +3,9 @@ import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:wild_sport/components/textfield.dart';
 import 'package:wild_sport/controllers/userController.dart';
+import 'package:wild_sport/functions/secureStorage.dart';
 import 'package:wild_sport/models/userModel.dart';
+import 'package:wild_sport/screens/homescreen1.dart';
 import 'package:wild_sport/screens/signUp.dart';
 
 class Login extends StatelessWidget {
@@ -61,13 +63,15 @@ class Login extends StatelessWidget {
                   ),
                   SizedBox(height: 25,),
                   GestureDetector(
-                    onTap: () {
+                    onTap: () async{
                       User newUser = User(
-                          id: "",
-                          name: "",
                           email: emailController.text,
                       );
-                      userController.signUp(newUser);
+                      await SecureStorage.writeSecureData('password', passwordController.text);
+                      userController.login(newUser).then((value) =>
+                          Get.to(()=> HomeScreenN())
+                      );
+
                     },
                     child: Container(
                       alignment: Alignment.center,
@@ -78,7 +82,7 @@ class Login extends StatelessWidget {
                         borderRadius: BorderRadius.all(Radius.circular(15))
                       ),
                       child: Text(
-                        'Sign up',
+                        'Login',
                         style: GoogleFonts.montserrat(
                           color: Colors.white,
                           fontSize: 15,

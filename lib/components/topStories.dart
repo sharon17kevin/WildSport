@@ -11,6 +11,27 @@ Widget TopStories(BuildContext context) {
   final BreakingNewsController _breakingNewsController = Get.find<BreakingNewsController>();
   List<BreakingNews> slides = _breakingNewsController.myLatestNews;
   bool isDark = Theme.of(context).brightness == Brightness.dark;
+  var isFirstBookmark = slides[0].bookmark.obs;
+
+  String timeAgo(timeStamp) {
+    DateTime now = DateTime.now();
+    Duration difference = now.difference(timeStamp);
+    int minutes = difference.inMinutes;
+    int hours = difference.inHours;
+    int days = difference.inDays;
+
+    String timeAgo;
+    if (days > 0) {
+      timeAgo = '$days ${days == 1 ? 'day' : 'days'} ago';
+    } else if (hours > 0) {
+      timeAgo = '$hours ${hours == 1 ? 'hour' : 'hours'} ago';
+    } else {
+      timeAgo = '$minutes ${minutes == 1 ? 'minute' : 'minutes'} ago';
+    }
+
+    return timeAgo;
+  }
+
   return Container(
     padding: EdgeInsets.symmetric(horizontal: 20),
     child: Column(
@@ -51,18 +72,21 @@ Widget TopStories(BuildContext context) {
                   },
                   errorBuilder: (BuildContext context, Object exception, StackTrace? stackTrace) {
                     return Center(
-                      child: Image.asset(
-                        'assets/icons/imagePlaceholder.webp',
-                        fit: BoxFit.contain,
-                        height: 50,
-                        width: 50,
+                      child: Container(
+                        height: 150,
+                        child: Image.asset(
+                          'assets/icons/imagePlaceholder.webp',
+                          fit: BoxFit.contain,
+                          height: 50,
+                          width: 50,
+                        ),
                       ),
                     );
                   },
                 ),
               ),
               Container(
-                padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                padding: EdgeInsets.symmetric(vertical: 5),
                 child: Column(
                   children: [
                     Text(slides[0].title,
@@ -71,17 +95,27 @@ Widget TopStories(BuildContext context) {
                       style: Theme.of(context).textTheme.bodyLarge,
                     ),
                     Container(
-                      padding: EdgeInsets.all(10),
+                      padding: EdgeInsets.all(5),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Row(
                             children: [
-                              Icon(Icons.local_police),
-                              Text('  Wildcard . 5 mins', style: Theme.of(context).textTheme.labelSmall,),
+                              Text('  Wildcard . ', style: Theme.of(context).textTheme.labelSmall,),
+                              Text( timeAgo(slides[0].timestamp), style: Theme.of(context).textTheme.labelSmall,)
                             ],
                           ),
-                          Icon(Icons.bookmark_border)
+                          Obx(
+                            ()=> IconButton(
+                              onPressed: (){
+                                isFirstBookmark.value = !isFirstBookmark.value;
+                                slides[0].bookmark = isFirstBookmark.value;
+                                _breakingNewsController.putUpdateBookmark(slides[0].bookmark, [slides[0].id]);
+                                //update the newsBlock
+                              },
+                              icon: isFirstBookmark.value? Icon(Icons.bookmark) : Icon(Icons.bookmark_border),
+                            ),
+                          )
                         ],
                       ),
                     )
@@ -95,192 +129,30 @@ Widget TopStories(BuildContext context) {
           url: slides[1].imageUrl,
           title: slides[1].title,
           subtitle: slides[1].subtitle,
+          timeStamp: slides[1].timestamp,
+          news: slides[1],
         ),
         TopBlock(
           url: slides[2].imageUrl,
           title: slides[2].title,
           subtitle: slides[2].subtitle,
+          timeStamp: slides[2].timestamp,
+          news: slides[2],
         ),
         TopBlock(
           url: slides[3].imageUrl,
           title: slides[3].title,
           subtitle: slides[3].subtitle,
+          timeStamp: slides[3].timestamp,
+          news: slides[3],
         ),
         TopBlock(
           url: slides[4].imageUrl,
           title: slides[4].title,
           subtitle: slides[4].subtitle,
+          timeStamp: slides[4].timestamp,
+          news: slides[4],
         ),
-
-        // TopBlock(context),
-        // TopBlock(context),
-        // TopBlock(context),
-        // TopBlock(context),
-        // Divider(
-        //   height: 20,
-        //   thickness: 2,
-        //   color: divider,
-        // ),
-        // Padding(
-        //   padding: EdgeInsets.symmetric(vertical: 20),
-        //   child: Stack(
-        //     clipBehavior: Clip.none,
-        //     children: [
-        //       Container(
-        //           child: Padding(
-        //             padding: EdgeInsets.all(10),
-        //             child: Column(
-        //               crossAxisAlignment: CrossAxisAlignment.end,
-        //               children: [
-        //                 Row(
-        //                   children: [
-        //                     SizedBox(
-        //                       width: 180,
-        //                     ),
-        //                     Text('Sample Text, Sample Text, Sample Text, Sample Text, Sample Text, Sample Text, Sample Text, Sample Text, Sample Text, Sample Text, Sample Text, ',
-        //                       maxLines: 2,
-        //                       overflow: TextOverflow.ellipsis,
-        //                       style: Theme.of(context).textTheme.bodyLarge,
-        //                     ),
-        //                   ],
-        //                 ),
-        //                 Row(
-        //                   mainAxisAlignment: MainAxisAlignment.end,
-        //                   children: [
-        //                     Icon(Icons.local_police),
-        //                     Text('  Wildcard . 5 mins'),
-        //                   ],
-        //                 )
-        //               ],
-        //             ),
-        //           )
-        //       ),
-        //       Positioned(
-        //         top: -15,
-        //         child: ClipRRect(
-        //           borderRadius: BorderRadius.circular(10),
-        //           child: Image.asset(
-        //             'assets/images/football1.jpg',
-        //             fit: BoxFit.cover,
-        //             width: 150,
-        //             height: 100,
-        //           ),
-        //         ),
-        //       ),
-        //     ],
-        //   ),
-        // ),
-        //
-        // //-------------------------------Third block-------------------------->
-        // Divider(
-        //   height: 20,
-        //   thickness: 2,
-        //   color: divider,
-        // ),
-        // Padding(
-        //   padding: EdgeInsets.symmetric(vertical: 20),
-        //   child: Stack(
-        //     clipBehavior: Clip.none,
-        //     children: [
-        //       Container(
-        //           child: Padding(
-        //             padding: EdgeInsets.all(10),
-        //             child: Column(
-        //               crossAxisAlignment: CrossAxisAlignment.end,
-        //               children: [
-        //                 Row(
-        //                   children: [
-        //                     SizedBox(
-        //                       width: 180,
-        //                     ),
-        //                     Text('Sample Text, Sample Text, Sample Text, Sample Text, Sample Text, Sample Text, Sample Text, Sample Text, Sample Text, Sample Text, Sample Text, ',
-        //                       maxLines: 2,
-        //                       overflow: TextOverflow.ellipsis,
-        //                       style: Theme.of(context).textTheme.bodyLarge,
-        //                     ),
-        //                   ],
-        //                 ),
-        //                 Row(
-        //                   mainAxisAlignment: MainAxisAlignment.end,
-        //                   children: [
-        //                     Icon(Icons.local_police),
-        //                     Text('  Wildcard . 5 mins'),
-        //                   ],
-        //                 )
-        //               ],
-        //             ),
-        //           )
-        //       ),
-        //       Positioned(
-        //         top: -15,
-        //         child: ClipRRect(
-        //           borderRadius: BorderRadius.circular(10),
-        //           child: Image.asset(
-        //             'assets/images/football1.jpg',
-        //             fit: BoxFit.cover,
-        //             width: 150,
-        //             height: 100,
-        //           ),
-        //         ),
-        //       ),
-        //     ],
-        //   ),
-        // ),
-        // //--------------------------Fourth------------------------------------>
-        // Divider(
-        //   height: 20,
-        //   thickness: 2,
-        //   color: divider,
-        // ),
-        // Padding(
-        //   padding: EdgeInsets.symmetric(vertical: 20),
-        //   child: Stack(
-        //     clipBehavior: Clip.none,
-        //     children: [
-        //       Container(
-        //           child: Padding(
-        //             padding: EdgeInsets.all(10),
-        //             child: Column(
-        //               crossAxisAlignment: CrossAxisAlignment.end,
-        //               children: [
-        //                 Row(
-        //                   children: [
-        //                     SizedBox(
-        //                       width: 180,
-        //                     ),
-        //                     Text('Sample Text, Sample Text, Sample Text, Sample Text, Sample Text, Sample Text, Sample Text, Sample Text, Sample Text, Sample Text, Sample Text, ',
-        //                       maxLines: 2,
-        //                       overflow: TextOverflow.ellipsis,
-        //                       style: Theme.of(context).textTheme.bodyLarge,
-        //                     ),
-        //                   ],
-        //                 ),
-        //                 Row(
-        //                   mainAxisAlignment: MainAxisAlignment.end,
-        //                   children: [
-        //                     Icon(Icons.local_police),
-        //                     Text('  Wildcard . 5 mins'),
-        //                   ],
-        //                 )
-        //               ],
-        //             ),
-        //           )
-        //       ),
-        //       Positioned(
-        //         top: -15,
-        //         child: ClipRRect(
-        //           borderRadius: BorderRadius.circular(10),
-        //           child: Image.asset(
-        //             'assets/images/football1.jpg',
-        //             fit: BoxFit.cover,
-        //             width: 150,
-        //             height: 100,
-        //           ),
-        //         ),
-        //       ),
-        //     ],
-        //   ),
-        // ),
       ],
     ),
   );
