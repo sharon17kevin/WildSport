@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:get/get_state_manager/get_state_manager.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:wild_sport/controllers/userController.dart';
 import 'package:wild_sport/tabs/highlight.dart';
 import 'package:wild_sport/themes/theme_manager.dart';
 
@@ -41,6 +42,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
     bool isDark = Theme.of(context).brightness == Brightness.dark;
     return NestedScrollView(
       headerSliverBuilder: (context, bool innerBoxIsScrolled) {
+        UserController userController = Get.find<UserController>();
         return <Widget>[
           SliverOverlapAbsorber(
             handle:
@@ -48,13 +50,14 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
             sliver: SliverAppBar(
               leading: SizedBox(width: 0,),
               leadingWidth: 0,
-              backgroundColor: isDark? Color(0xff3D4455) : Colors.white,
+              backgroundColor: isDark? Color(0xff2C2E3B) : Colors.white,
               title: RichText(
                 text: TextSpan(
                   text: 'Hello, \n',
                   style: Theme.of(context).textTheme.headlineMedium,
                   children: <TextSpan>[
-                    TextSpan(text: 'Sharon', style: Theme.of(context).textTheme.headlineLarge),
+                    TextSpan(text: userController.myUser.name,
+                        style: Theme.of(context).textTheme.headlineLarge?.copyWith(fontSize: 22)),
                   ]
                 ),
               ),

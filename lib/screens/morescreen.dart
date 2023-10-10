@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:wild_sport/controllers/userController.dart';
 import 'package:wild_sport/morePages/manageAccount.dart';
 import 'package:wild_sport/morePages/managementPanel.dart';
 import 'package:wild_sport/morePages/overview.dart';
@@ -15,6 +16,7 @@ class MoreScreen extends StatefulWidget {
 }
 
 class _MoreScreenState extends State<MoreScreen> {
+  UserController userController = Get.find<UserController>();
   @override
   Widget build(BuildContext context) {
     bool isDark = Theme.of(context).brightness == Brightness.dark;
@@ -93,7 +95,8 @@ class _MoreScreenState extends State<MoreScreen> {
                     color: Get.isDarkMode? Colors.white : Colors.black
                 ),
                 child: InkWell(
-                  onTap: (){
+                  onTap: () async{
+                    await userController.updateGameWeek(userController.myUser);
                   },
                   child: Padding(
                     padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),

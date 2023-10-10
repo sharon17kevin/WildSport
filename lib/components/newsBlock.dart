@@ -65,7 +65,7 @@ class NewsBlock extends StatelessWidget {
               offset: Offset(2,5)
             )
           ],
-          color: isDark? Color(0xff3D4455) : Color(0xff4A4138),
+          color: isDark? Color(0xff2C2E3B) : Color(0xff4A4138),
           borderRadius: BorderRadius.circular(15)
         ),
         child: Column(

@@ -23,110 +23,112 @@ class _DrowState extends State<Drow> {
   @override
   Widget build(BuildContext context) {
     List<Team> teams = _teamController.getTeamPoint;
-    return Container(
-      height: 625,
-        child: Row(
-          children: [
-            Container(
-              width: 40,
-              child: TableColumn(
-                infoList: List.generate(teams.length, (index) => index + 1),
-                title: 'Pos',
-              ),
-            ),
-            Container(
-              width: 40,
-              child: PositionColumn(
-                title: '',
-              ),
-            ),
-            Container(
-              width: 120,
-              child: TableColumn(
-                infoList: teams.map((team) => team.name).toList(),
-                title: 'Club',
-              ),
-            ),
-            Expanded(
-              child: Container(
-                child: SingleChildScrollView(
-                  scrollDirection: Axis.horizontal,
-                  child: Row(
-                    children: [
-                      Container(
-                        height: double.maxFinite,
-                        width: 50,
-                        child: TableColumn(
-                          infoList: teams.map((team) => team.points).toList(),
-                          title: 'Pts',
-                        ),
-                      ),
-                      Container(
-                        height: double.maxFinite,
-                        width: 50,
-                        child: TableColumn(
-                          infoList: teams.map((team) => team.played).toList(),
-                          title: 'Pl',
-                        ),
-                      ),
-                      Container(
-                        height: double.maxFinite,
-                        width: 50,
-                        child: TableColumn(
-                          infoList: teams.map((team) => team.win).toList(),
-                          title: 'W',
-                        ),
-                      ),
-                      Container(
-                        height: double.maxFinite,
-                        width: 50,
-                        child: TableColumn(
-                          infoList: teams.map((team) => team.draw).toList(),
-                          title: 'D',
-                        ),
-                      ),
-                      Container(
-                        height: double.maxFinite,
-                        width: 50,
-                        child: TableColumn(
-                          infoList: teams.map((team) => team.loss).toList(),
-                          title: 'L',
-                        ),
-                      ),
-                      Container(
-                        height: double.maxFinite,
-                        width: 50,
-                        child: TableColumn(
-                          infoList: teams.map((team) => team.goalsAgainst).toList(),
-                          title: 'GA',
-                        ),
-                      ),
-                      Container(
-                        height: double.maxFinite,
-                        width: 50,
-                        child: TableColumn(
-                          infoList: teams.map((team) => team.goals).toList(),
-                          title: 'GF',
-                        ),
-                      ),
-                      Container(
-                        height: double.maxFinite,
-                        width: 50,
-                        child: TableColumn(
-                          infoList: teams.map((team){
-                            return team.goals - team.goalsAgainst;
-                          }).toList(),
-                          title: 'GD',
-                        ),
-                      )
-                    ],
-                  )
-                  ,
+    return SingleChildScrollView(
+      child: Container(
+        height: 625,
+          child: Row(
+            children: [
+              Container(
+                width: 40,
+                child: TableColumn(
+                  infoList: List.generate(teams.length, (index) => index + 1),
+                  title: 'Pos',
                 ),
               ),
-            ),
-          ],
-        ),
+              Container(
+                width: 40,
+                child: PositionColumn(
+                  title: '',
+                ),
+              ),
+              Container(
+                width: 120,
+                child: TableColumn(
+                  infoList: teams.map((team) => team.name).toList(),
+                  title: 'Club',
+                ),
+              ),
+              Expanded(
+                child: Container(
+                  child: SingleChildScrollView(
+                    scrollDirection: Axis.horizontal,
+                    child: Row(
+                      children: [
+                        Container(
+                          height: double.maxFinite,
+                          width: 50,
+                          child: TableColumn(
+                            infoList: teams.map((team) => team.points).toList(),
+                            title: 'Pts',
+                          ),
+                        ),
+                        Container(
+                          height: double.maxFinite,
+                          width: 50,
+                          child: TableColumn(
+                            infoList: teams.map((team) => team.played).toList(),
+                            title: 'Pl',
+                          ),
+                        ),
+                        Container(
+                          height: double.maxFinite,
+                          width: 50,
+                          child: TableColumn(
+                            infoList: teams.map((team) => team.win).toList(),
+                            title: 'W',
+                          ),
+                        ),
+                        Container(
+                          height: double.maxFinite,
+                          width: 50,
+                          child: TableColumn(
+                            infoList: teams.map((team) => team.draw).toList(),
+                            title: 'D',
+                          ),
+                        ),
+                        Container(
+                          height: double.maxFinite,
+                          width: 50,
+                          child: TableColumn(
+                            infoList: teams.map((team) => team.loss).toList(),
+                            title: 'L',
+                          ),
+                        ),
+                        Container(
+                          height: double.maxFinite,
+                          width: 50,
+                          child: TableColumn(
+                            infoList: teams.map((team) => team.goalsAgainst).toList(),
+                            title: 'GA',
+                          ),
+                        ),
+                        Container(
+                          height: double.maxFinite,
+                          width: 50,
+                          child: TableColumn(
+                            infoList: teams.map((team) => team.goals).toList(),
+                            title: 'GF',
+                          ),
+                        ),
+                        Container(
+                          height: double.maxFinite,
+                          width: 50,
+                          child: TableColumn(
+                            infoList: teams.map((team){
+                              return team.goals - team.goalsAgainst;
+                            }).toList(),
+                            title: 'GD',
+                          ),
+                        )
+                      ],
+                    )
+                    ,
+                  ),
+                ),
+              ),
+            ],
+          ),
+      ),
     );
   }
 }

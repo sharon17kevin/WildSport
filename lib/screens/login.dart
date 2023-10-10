@@ -15,6 +15,7 @@ class Login extends StatelessWidget {
   final UserController userController = Get.put(UserController());
   @override
   Widget build(BuildContext context) {
+    var error = ''.obs;
     return Scaffold(
       backgroundColor: Color(0xffF7F7F9),
       body: SafeArea(
@@ -33,6 +34,16 @@ class Login extends StatelessWidget {
                     fit: BoxFit.fitHeight,
                   ),
                   SizedBox(height: 50,),
+                  Obx(
+                          ()=> Text(
+                        userController.error.value,
+                        style: TextStyle(
+                            color: Colors.red,
+                            fontSize: 15
+                        ),
+                      )
+                  ),
+                  SizedBox(height: 5,),
                   MyTextField(
                     controller: emailController,
                     hintText: 'Email',
@@ -40,7 +51,6 @@ class Login extends StatelessWidget {
                   ),
 
                   SizedBox(height: 15,),
-
                   MyTextField(
                     controller: passwordController,
                     hintText: 'Password',
@@ -62,31 +72,28 @@ class Login extends StatelessWidget {
                     ),
                   ),
                   SizedBox(height: 25,),
-                  GestureDetector(
-                    onTap: () async{
-                      User newUser = User(
+                  Ink(
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.all(Radius.circular(5)),
+                        color: Color(0xff7B8186)
+                    ),
+                    child: InkWell(
+                      onTap: () async{
+                        User newUser = User(
                           email: emailController.text,
-                      );
-                      await SecureStorage.writeSecureData('password', passwordController.text);
-                      userController.login(newUser).then((value) =>
-                          Get.to(()=> HomeScreenN())
-                      );
-
-                    },
-                    child: Container(
-                      alignment: Alignment.center,
-                      height: 60,
-                      width: 150,
-                      decoration: BoxDecoration(
-                        color: Color(0xff7B8186),
-                        borderRadius: BorderRadius.all(Radius.circular(15))
-                      ),
-                      child: Text(
-                        'Login',
-                        style: GoogleFonts.montserrat(
-                          color: Colors.white,
-                          fontSize: 15,
-                          fontWeight: FontWeight.w600
+                        );
+                        await SecureStorage.writeSecureData('password', passwordController.text);
+                        userController.login(newUser).then((value) =>
+                            Get.to(()=> HomeScreenN())
+                        );
+                      },
+                      child: Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 30, vertical: 15),
+                        child: Text('Login',
+                          style: TextStyle(
+                            fontWeight: FontWeight.w700,
+                            color: Get.isDarkMode? Colors.black : Colors.white,
+                          ),
                         ),
                       ),
                     ),

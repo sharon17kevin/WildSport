@@ -6,7 +6,7 @@ import 'package:wild_sport/models/playerModel.dart';
 import 'package:wild_sport/models/teamsModel.dart';
 
 class TeamController extends GetxController {
-  final String ipaddress = "172.20.10.8";
+  final String ipaddress = "172.20.10.3";
   //team variables-------------------------------->
   var _teams = <Team>[].obs;
   var _teamPoints = <Team>[].obs;
@@ -108,6 +108,7 @@ class TeamController extends GetxController {
     await fetchPlayerAppearances();
     UserController userController = Get.find<UserController>();
     await userController.generateFantasy();
+    await userController.fetchGameweeks(userController.myUser);
   }
 
   //player functions links variables-------------------------------->

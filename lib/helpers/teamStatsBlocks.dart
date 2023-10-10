@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:wild_sport/stat_pages/season_stats.dart';
 import 'package:wild_sport/themes/theme_manager.dart';
 
@@ -43,9 +44,21 @@ class TeamStatsBlocks extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 //team,
-                Text(name),
+                Text(name,
+                  style: GoogleFonts.bebasNeue(
+                    letterSpacing: 2,
+                    fontSize: 16,
+                    fontWeight: FontWeight.w700,
+                  )
+
+                ),
                 Text(category),
-                Text('${stat}')
+                Text('${stat}',
+                  style: GoogleFonts.bebasNeue(
+                    fontSize: 20,
+                    fontWeight: FontWeight.w700,
+                  ),
+                )
               ],
             ),
             Image.network(

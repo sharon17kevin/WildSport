@@ -21,7 +21,7 @@ class ShortsController extends GetxController {
 
   Future<void> fetchShort() async {
     try{
-      var response = await fetchShorts('http://172.20.10.8:3000/api/shorts');
+      var response = await fetchShorts('http://172.20.10.3:3000/api/shorts');
       List<Short> short = shortFromJson(response);
       updateShorts(short);
       print("shorts ready");

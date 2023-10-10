@@ -120,9 +120,9 @@ ThemeData lightTheme = ThemeData(
 ThemeData darkTheme = ThemeData(
   brightness: Brightness.dark,
   primarySwatch: Colors.green,
-  primaryColor: Color(0xff3D4455),
+  primaryColor: Color(0xff2C2E3B),//Color(0xff3D4455),
   primaryColorDark: Colors.white,
-  scaffoldBackgroundColor: Color(0xff1F2024),
+  scaffoldBackgroundColor: Color(0xff1F2024),//Color(0xff050A30),//Color(0xff1F2024),
   textTheme: TextTheme(
     headlineLarge: GoogleFonts.openSans(
       color: Colors.white,

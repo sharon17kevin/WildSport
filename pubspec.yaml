@@ -51,6 +51,7 @@ dependencies:
   collection: 1.17.1
   video_player: ^2.7.1
   image_picker: ^1.0.4
+  uuid: ^4.1.0
   get_storage:
 
 dev_dependencies:

@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:wild_sport/controllers/userController.dart';
+import 'package:wild_sport/fantasyPages/pointPage.dart';
 import 'package:wild_sport/fantasyPages/statistics.dart';
 import 'package:wild_sport/helperPages/leagueTable.dart';
 import 'package:wild_sport/helperPages/pickTeam.dart';
@@ -22,11 +23,110 @@ class _FantasyScreen2State extends State<FantasyScreen2> {
     Get.bottomSheet(
       Container(
         height: 200,
-        color: Colors.white,
+        decoration: BoxDecoration(
+            color: Get.isDarkMode? Colors.black : Colors.white,
+            borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(10),
+                topRight: Radius.circular(10)
+            )
+        ),
+        child: Padding(
+          padding: const EdgeInsets.all(10),
+          child: Center(
+            child: Column(
+              children: [
+                Text('Team Name: ${_userController.myUser.teamName}',
+                  style: GoogleFonts.inter(
+                    fontSize: 17,
+                    fontWeight: FontWeight.w700,
+                    color: Get.isDarkMode? Colors.white : Colors.black
+                  ),
+                ),
+                SizedBox(height: 10,),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 15),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text('Bank: ${_userController.myUser.bank}',
+                        style: GoogleFonts.inter(
+                            fontSize: 15,
+                            fontWeight: FontWeight.w700,
+                            color: Get.isDarkMode? Colors.white : Colors.black
+                        ),
+                      ),
+                      Text('Squad Value:',
+                        style: GoogleFonts.inter(
+                            fontSize: 15,
+                            fontWeight: FontWeight.w700,
+                            color: Get.isDarkMode? Colors.white : Colors.black
+                        ),
+                      )
+                    ],
+                  ),
+                ),
+                SizedBox(height: 15,),
+                Container(
+                  decoration: BoxDecoration(
+                    border: Border(
+                      bottom: BorderSide(
+                        width: 1,
+                        color: Get.isDarkMode? Colors.white : Colors.black,
+                      )
+                    )
+                  ),
+                  child: Text('CHIPS',
+                    style: GoogleFonts.bebasNeue(
+                        fontSize: 20,
+                        fontWeight: FontWeight.w500,
+                        color: Get.isDarkMode? Colors.white : Colors.black,
+                      letterSpacing: 2
+                    ),
+                  ),
+                ),
+                Padding(
+                  padding: EdgeInsets.all(10),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      ChipButton(title: 'Wildcard'),
+                      ChipButton(title: 'Free Hit'),
+                      ChipButton(title: 'Bench Boost')
+                    ],
+                  ),
+                )
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  void showLeagueBottomSheet() {
+    Get.bottomSheet(
+      Container(
+        height: 150,
+        decoration: BoxDecoration(
+          color: Get.isDarkMode? Colors.black : Colors.white,
+          borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(10),
+            topRight: Radius.circular(10)
+          )
+        ),
         child: Center(
-          child: Text(
-            'This is a bottom sheet',
-            style: TextStyle(fontSize: 20),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              ElevatedButton(
+                onPressed: (){},
+                child: Text('Join League'),
+              ),
+              ElevatedButton(
+                onPressed: (){},
+                child: Text('Create League'),
+              )
+            ],
           ),
         ),
       ),
@@ -140,6 +240,7 @@ class _FantasyScreen2State extends State<FantasyScreen2> {
                           padding: EdgeInsets.only(left: 20, right: 20, top: 20, bottom: 2),
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
                               //<------------------------First Box--------------------->
                               Column(
@@ -162,11 +263,25 @@ class _FantasyScreen2State extends State<FantasyScreen2> {
                               //<----------------------Second Box --------------------->
                               Column(
                                 children: [
-                                  Text('Points',
-                                    style: TextStyle(
-                                      color: Colors.white
+                                  GestureDetector(
+                                    onTap: (){
+                                      Get.to(()=>PointPage());
+                                    },
+                                    child: Row(
+                                      children: [
+                                        Text('Points',
+                                          style: TextStyle(
+                                            color: Colors.white,
+                                          ),
+                                        ),
+                                        Icon(Icons.arrow_right_alt_outlined,
+                                          color: Colors.white,
+                                          size: 15,
+                                        ),
+                                      ],
                                     ),
                                   ),
+                                  SizedBox(height: 3,),
                                   Container(
                                     width: 68,
                                     height: 68,
@@ -174,13 +289,20 @@ class _FantasyScreen2State extends State<FantasyScreen2> {
                                       color: Colors.white,
                                       borderRadius: BorderRadius.all(Radius.circular(10)),
                                     ),
-                                    child: Center(
-                                      child: Container(
-                                        width: 66,
-                                        height: 66,
-                                        decoration: BoxDecoration(
-                                          color: Get.isDarkMode? Color(0xff16171D) : Color(0xff2C2721 ),
-                                          borderRadius: BorderRadius.all(Radius.circular(9))
+                                    alignment: Alignment.center,
+                                    child: Container(
+                                      width: 66,
+                                      height: 66,
+                                      decoration: BoxDecoration(
+                                        color: Get.isDarkMode? Color(0xff16171D) : Color(0xff2C2721 ),
+                                        borderRadius: BorderRadius.all(Radius.circular(9))
+                                      ),
+                                      alignment: Alignment.center,
+                                      child: Text('- -',
+                                        style: GoogleFonts.orbitron(
+                                          fontSize: 20,
+                                          fontWeight: FontWeight.w700,
+                                          color: Colors.white
                                         ),
                                       ),
                                     ),
@@ -367,7 +489,12 @@ class _FantasyScreen2State extends State<FantasyScreen2> {
                             ),
                           ),
                           GestureDetector(
-                            onTap: (){
+                            onTap: () {
+                              _userController.generateFantasy().then(
+                                  (value) {
+                                    _userController.genFantasyFlag.value = false;
+                                  }
+                              );
                               Get.to(() => PickTeam());
                             },
                             child: Container(
@@ -612,7 +739,7 @@ class _FantasyScreen2State extends State<FantasyScreen2> {
                           ),
                           TextButton(
                             onPressed: (){
-                              showBottomSheet();
+                              showLeagueBottomSheet();
                             },
                             child: Text("...",
                               style: GoogleFonts.inter(
@@ -664,8 +791,28 @@ class _FantasyScreen2State extends State<FantasyScreen2> {
                         color: Colors.white.withOpacity(0.4),
                       ),
                     ),
-                    LeagueBox(),
-                    LeagueBox()
+                    _userController.leagues.length == 0?
+                    Padding(
+                      padding: EdgeInsets.all(15),
+                      child: Text('Join or Create A League',
+                        style: TextStyle(
+                          color: Colors.white70
+                        ),
+                      ),
+                    ):
+                    Container(
+                      child: ListView.builder(
+                        padding: EdgeInsets.zero,
+                        shrinkWrap: true,
+                        physics: NeverScrollableScrollPhysics(),
+                        itemCount: _userController.leagues.length,
+                        itemBuilder: (context, index) {
+                          return LeagueBox(
+                            league: _userController.leagues.value[index],
+                          );
+                        },
+                      ),
+                    )
                   ],
                 ),
               ),
@@ -676,6 +823,35 @@ class _FantasyScreen2State extends State<FantasyScreen2> {
     );
   }
 }
+
+class ChipButton extends StatelessWidget {
+  final String title;
+
+  ChipButton({required this.title});
+  @override
+  Widget build(BuildContext context) {
+    return ElevatedButton(
+      style: ElevatedButton.styleFrom(
+        backgroundColor: Colors.blue, // Background color
+        foregroundColor: Colors.white, // Text color
+        elevation: 0, // Elevation (shadow)
+        padding: EdgeInsets.all(16), // Button padding
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(5), // Button border radius
+        ),
+      ),
+      onPressed: (){},
+      child: Text(title,
+        style: TextStyle(
+          fontSize: 15,
+          fontWeight: FontWeight.w700,
+          letterSpacing: 1
+        ),
+      ),
+    );
+  }
+}
+
 
 class CustomClipPath extends CustomClipper<Path> {
   @override

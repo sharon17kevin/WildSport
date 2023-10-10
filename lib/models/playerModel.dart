@@ -1,5 +1,7 @@
 import 'dart:convert';
 
+import 'package:uuid/uuid.dart';
+
 List<Player> playerFromJson(String str) => List<Player>.from(json.decode(str).map((x) => Player.fromJson(x)));
 
 String playerToJson(List<Player> data) => json.encode(List<dynamic>.from(data.map((x) => x.toJson())));
@@ -25,6 +27,7 @@ class Player {
   int currentFantasyPoints;
   int ownGoals;
   String imageUrl;
+  final String uniqueKey;
 
   Player({
     required this.image,
@@ -47,7 +50,7 @@ class Player {
     required this.currentFantasyPoints,
     required this.ownGoals,
     required this.imageUrl,
-  });
+  }): uniqueKey = Uuid().v4();
 
   factory Player.fromJson(Map<String, dynamic> json) => Player(
     image: Image.fromJson(json["image"]),

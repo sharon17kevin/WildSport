@@ -21,6 +21,15 @@ class User {
   List<String>? midfielder;
   List<String>? attacker;
   List<FantasyTeam>? fantasyTeam;
+  int? bank;
+  String? captain;
+  String? viceCaptain;
+  List<Gameweek>? gameweek;
+  int? freeTransfer;
+  int? wildcard;
+  int? freeHit;
+  int? benchBoost;
+  int? cost;
 
   User({
     this.id,
@@ -35,6 +44,15 @@ class User {
     this.midfielder,
     this.attacker,
     this.fantasyTeam,
+    this.bank,
+    this.captain,
+    this.viceCaptain,
+    this.gameweek,
+    this.freeTransfer,
+    this.wildcard,
+    this.freeHit,
+    this.benchBoost,
+    this.cost,
   });
 
   factory User.fromJson(Map<String, dynamic> json) => User(
@@ -50,6 +68,15 @@ class User {
     midfielder: List<String>.from(json["midfielder"].map((x) => x)),
     attacker: List<String>.from(json["attacker"].map((x) => x)),
     fantasyTeam: List<FantasyTeam>.from(json["fantasyTeam"].map((x) => FantasyTeam.fromJson(x))),
+    bank: json["bank"],
+    captain: json["captain"],
+    viceCaptain: json["viceCaptain"],
+    gameweek: List<Gameweek>.from(json["gameweek"].map((x) => Gameweek.fromJson(x))),
+    freeTransfer: json["freeTransfer"],
+    wildcard: json["wildcard"],
+    freeHit: json["freeHit"],
+    benchBoost: json["benchBoost"],
+    cost: json["cost"],
   );
 
   Map<String, dynamic> toJson() => {
@@ -65,6 +92,15 @@ class User {
     "midfielder": List<dynamic>.from(midfielder!.map((x) => x)),
     "attacker": List<dynamic>.from(attacker!.map((x) => x)),
     "fantasyTeam": List<dynamic>.from(fantasyTeam!.map((x) => x.toJson())),
+    "bank": bank,
+    "captain": captain,
+    "viceCaptain": viceCaptain,
+    "gameweek": List<dynamic>.from(gameweek!.map((x) => x.toJson())),
+    "freeTransfer": freeTransfer,
+    "wildcard": wildcard,
+    "freeHit": freeHit,
+    "benchBoost": benchBoost,
+    "cost": cost,
   };
 }
 
@@ -87,3 +123,25 @@ class FantasyTeam {
     "title": title,
   };
 }
+
+class Gameweek {
+  String id;
+  int number;
+
+  Gameweek({
+    required this.id,
+    required this.number,
+  });
+
+  factory Gameweek.fromJson(Map<String, dynamic> json) => Gameweek(
+    id: json["id"],
+    number: json["number"],
+  );
+
+  Map<String, dynamic> toJson() => {
+    "id": id,
+    "number": number,
+  };
+}
+
+

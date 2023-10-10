@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:wild_sport/fantasyPages/statisticsRow.dart';
 import 'package:wild_sport/models/tableRow.dart';
 
 class Statistics extends StatelessWidget {
@@ -34,7 +35,7 @@ class Statistics extends StatelessWidget {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Drow(
+              StatisticRow(
                 height: 25,
               ),
             ],

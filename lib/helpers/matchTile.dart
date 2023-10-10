@@ -43,11 +43,14 @@ class MatchTile extends StatelessWidget {
             Container(
               child: Row(
                 children: [
-                  Text(
-                      _teamController.getTeams.firstWhere(
-                              (obj) => obj.id == match.homeTeam
-                      ).name,
-                      //match.homeTeam
+                  Container(
+                    width: 100,
+                    child: Text(
+                        _teamController.getTeams.firstWhere(
+                                (obj) => obj.id == match.homeTeam
+                        ).name,
+                        //match.homeTeam
+                    ),
                   ),
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 10),
@@ -55,9 +58,37 @@ class MatchTile extends StatelessWidget {
                         _teamController.getTeams.firstWhere(
                                 (obj) => obj.id == match.homeTeam
                         ).imageUrl,
-                      height: 25,
-                      width: 25,
+                      height: 35,
+                      width: 35,
                       fit: BoxFit.contain,
+                      loadingBuilder: (BuildContext context, Widget child, ImageChunkEvent? loadingProgress) {
+                        if (loadingProgress == null) {
+                          return child;
+                        } else if (loadingProgress.cumulativeBytesLoaded == loadingProgress.expectedTotalBytes) {
+                          return Center(
+                            child: Image.asset(
+                              'assets/icons/badgePlaceholder.webp',
+                              fit: BoxFit.contain,
+                              height: 25,
+                              width: 25,
+                            ),
+                          );
+                        } else {
+                          return Center(
+                            child: CircularProgressIndicator(),
+                          );
+                        }
+                      },
+                      errorBuilder: (BuildContext context, Object exception, StackTrace? stackTrace) {
+                        return Center(
+                          child: Image.asset(
+                            'assets/icons/badgePlaceholder.webp',
+                            fit: BoxFit.contain,
+                            height: 25,
+                            width: 25,
+                          ),
+                        );
+                      },
                     ),
                   ),
                   //Icon(Icons.add_location)
@@ -81,17 +112,48 @@ class MatchTile extends StatelessWidget {
                       _teamController.getTeams.firstWhere(
                               (obj) => obj.id == match.awayTeam
                       ).imageUrl,
-                      height: 25,
-                      width: 25,
+                      height: 35,
+                      width: 35,
                       fit: BoxFit.contain,
+                      loadingBuilder: (BuildContext context, Widget child, ImageChunkEvent? loadingProgress) {
+                        if (loadingProgress == null) {
+                          return child;
+                        } else if (loadingProgress.cumulativeBytesLoaded == loadingProgress.expectedTotalBytes) {
+                          return Center(
+                            child: Image.asset(
+                              'assets/icons/badgePlaceholder.webp',
+                              fit: BoxFit.contain,
+                              height: 25,
+                              width: 25,
+                            ),
+                          );
+                        } else {
+                          return Center(
+                            child: CircularProgressIndicator()
+                          );
+                        }
+                      },
+                      errorBuilder: (BuildContext context, Object exception, StackTrace? stackTrace) {
+                        return Center(
+                          child: Image.asset(
+                            'assets/icons/badgePlaceholder.webp',
+                            fit: BoxFit.contain,
+                            height: 25,
+                            width: 25,
+                          ),
+                        );
+                      },
                     ),
                   ),
                   //Icon(Icons.add_location),
-                  Text(
-                    _teamController.getTeams.firstWhere(
-                            (obj) => obj.id == match.awayTeam
-                    ).name,
-                      //match.awayTeam
+                  Container(
+                    width: 100,
+                    child: Text(
+                      _teamController.getTeams.firstWhere(
+                              (obj) => obj.id == match.awayTeam
+                      ).name,
+                        //match.awayTeam
+                    ),
                   ),
                 ],
               ),
