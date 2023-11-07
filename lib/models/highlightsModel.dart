@@ -10,6 +10,8 @@ class Highlight {
   String id;
   String title;
   int v;
+  String thumbUrl;
+  String videoUrl;
 
   Highlight({
     required this.thumbnail,
@@ -17,6 +19,8 @@ class Highlight {
     required this.id,
     required this.title,
     required this.v,
+    required this.thumbUrl,
+    required this.videoUrl,
   });
 
   factory Highlight.fromJson(Map<String, dynamic> json) => Highlight(
@@ -25,6 +29,8 @@ class Highlight {
     id: json["_id"],
     title: json["title"],
     v: json["__v"],
+    thumbUrl: json["thumbUrl"],
+    videoUrl: json["videoUrl"],
   );
 
   Map<String, dynamic> toJson() => {
@@ -33,6 +39,8 @@ class Highlight {
     "_id": id,
     "title": title,
     "__v": v,
+    "thumbUrl": thumbUrl,
+    "videoUrl": videoUrl,
   };
 }
 

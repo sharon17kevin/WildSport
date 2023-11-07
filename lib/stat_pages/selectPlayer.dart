@@ -5,6 +5,9 @@ import 'package:wild_sport/models/playerModel.dart';
 import 'package:flutter/src/widgets/image.dart' as Image1;
 
 class SelectPlayer extends StatefulWidget {
+  final String? team;
+
+  SelectPlayer({this.team});
   @override
   State<SelectPlayer> createState() => _SelectPlayerState();
 }
@@ -15,6 +18,9 @@ class _SelectPlayerState extends State<SelectPlayer> {
     TeamController teamController = Get.find<TeamController>();
     List<Player> players = teamController.getPlayers;
     var display_list = List.from(players).obs;
+    if (widget.team != null) {
+      display_list.value = players.where((Player element) => element.team == widget.team).toList();
+    }
 
     void updateList(String value) {
       display_list.value = players.where((element) => element.name.toLowerCase().contains(value.toLowerCase())).toList();

@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:wild_sport/controllers/managementController.dart';
 import 'package:wild_sport/morePages/matchManagement.dart';
+import 'package:wild_sport/morePages/matchManagement2.dart';
 import 'package:wild_sport/morePages/newsManagement.dart';
 import 'package:wild_sport/morePages/teamRegistration.dart';
+import 'package:wild_sport/morePages/updates.dart';
+import 'package:wild_sport/morePages/videoManagement.dart';
 
 class ManagementPanel extends StatefulWidget {
   @override
@@ -10,6 +14,7 @@ class ManagementPanel extends StatefulWidget {
 }
 
 class _ManagementPanelState extends State<ManagementPanel> {
+  ManagementController managementController = Get.put(ManagementController());
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
@@ -22,6 +27,7 @@ class _ManagementPanelState extends State<ManagementPanel> {
             child: GestureDetector(
               onTap: (){
                 Get.back();
+                managementController.dispose();
               },
               child: Container(
                 child: Row(
@@ -39,7 +45,7 @@ class _ManagementPanelState extends State<ManagementPanel> {
           bottom: TabBar(
             isScrollable: true,
             tabs: [
-              Tab(text: 'Team Registration',),
+              Tab(text: 'Video',),
               Tab(text: 'News',),
               Tab(text: 'Match',),
               Tab(text: 'Update',)
@@ -48,10 +54,10 @@ class _ManagementPanelState extends State<ManagementPanel> {
         ),
         body: TabBarView(
           children: [
-            Center(child: TeamRegistration()),
+            Center(child: VideoManagement()),
             Center(child: NewsManagement()),
-            Center(child: MatchManagement()),
-            Center(child: Text('This is Tab 4')),
+            Center(child: MatchManagement1()),
+            Center(child: Updates()),
           ],
         ),
       ),

@@ -65,7 +65,11 @@ class _PlayerComparisonState extends State<PlayerComparison> {
                     Expanded(
                       child: GestureDetector(
                         onTap: () async {
-                          firstPlayer.value = await Get.to(() => SelectPlayer());
+                          Get.to(() => SelectPlayer())?.then((value){
+                            if(value != null) {
+                              firstPlayer.value = value;
+                            }
+                          });
                         },
                         child: AddButton()
                       )
@@ -73,7 +77,11 @@ class _PlayerComparisonState extends State<PlayerComparison> {
                     Expanded(
                         child: GestureDetector(
                             onTap: () async {
-                              secondPlayer.value = await Get.to(() => SelectPlayer());
+                              Get.to(() => SelectPlayer())?.then((value){
+                                if(value != null) {
+                                  secondPlayer.value = value;
+                                }
+                              });
                             },
                             child: AddButton()
                         )

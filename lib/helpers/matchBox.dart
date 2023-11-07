@@ -49,17 +49,6 @@ class _MatchBoxState extends State<MatchBox> {
               matches: entry.value);
         }).toList(),
       ),
-        // ListView.builder(
-        //   itemCount: matchdays.length,
-        //   itemBuilder: (context, index) {
-        //     DateTime? dateTime = matchdays.keys.elementAt(index);
-        //     List<Match> matches = matchdays[dateTime]!;
-        //     return GameweekTile(
-        //         dateTime: dateTime,
-        //         matches: matches
-        //     );
-        //   },
-        // )
     );
   }
 }

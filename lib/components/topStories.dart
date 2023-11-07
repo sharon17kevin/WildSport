@@ -67,7 +67,11 @@ Widget TopStories(BuildContext context) {
                         ),
                       );
                     } else {
-                      return Center(child: CircularProgressIndicator());
+                      return Center(child: Container(
+                          height: 150,
+                          alignment: Alignment.center,
+                          child: Container(height: 50, width: 50, child: CircularProgressIndicator())
+                      ));
                     }
                   },
                   errorBuilder: (BuildContext context, Object exception, StackTrace? stackTrace) {

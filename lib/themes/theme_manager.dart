@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class ThemeManager extends GetxController {
-  ThemeMode _themeMode = ThemeMode.light;
+  ThemeMode _themeMode = Get.isPlatformDarkMode? ThemeMode.dark : ThemeMode.light;
   var isDark = false;
   get themeMode => _themeMode;
 

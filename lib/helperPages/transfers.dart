@@ -21,13 +21,24 @@ class _TransfersState extends State<Transfers> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SafeArea(
-        child: Stack(
-          children: [
-            DrawerCard(),
-            Transfers1()
-          ],
-        ),
+      body: FutureBuilder<void>(
+          future: userController.generateFantasy(),
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return Center(child: CircularProgressIndicator());
+            } else if (snapshot.hasError) {
+              return Center(child: CircularProgressIndicator());
+            } else {
+              return       SafeArea(
+                child: Stack(
+                  children: [
+                    DrawerCard(),
+                    Transfers1()
+                  ],
+                ),
+              );
+            }
+          }
       ),
     );
   }

@@ -2,8 +2,47 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:wild_sport/components/textfield.dart';
 import 'package:wild_sport/controllers/userController.dart';
+import 'package:wild_sport/morePages/deleteAccount.dart';
+
+import '../functions/secureStorage.dart';
+import '../screens/login.dart';
 
 class ManageAccount extends StatelessWidget {
+  UserController userController = Get.find<UserController>();
+  void showDelete() {
+    Get.dialog(
+        AlertDialog(
+          title: Text('Delete Account'),
+          content: Text('We\'re sad to see you leave'),
+          actions: <Widget>[
+            TextButton(
+                onPressed: (){
+                  Get.back();
+                },
+                child: Text('Cancel',
+                  style: TextStyle(
+                    fontSize: 12,
+                    color: Get.isDarkMode? Colors.white : Colors.black,
+                    letterSpacing: 1,
+                  ),
+                )
+            ),
+            TextButton(
+                onPressed: () async{
+                  Get.to(()=>DeleteAccount());
+                },
+                child: Text('Confirm',
+                  style: TextStyle(
+                    fontSize: 12,
+                    color: Get.isDarkMode? Colors.white : Colors.black,
+                    letterSpacing: 1,
+                  ),
+                )
+            ),
+          ],
+        )
+    );
+  }
   @override
   Widget build(BuildContext context) {
     final TextEditingController nameController = TextEditingController();
@@ -44,7 +83,7 @@ class ManageAccount extends StatelessWidget {
                   obscureText: false
               ),
               SizedBox(height: 25,),
-              Text('Team Color Code'),
+              Text('Recovery Email'),
               MyTextField(
                   controller: emailController,
                   hintText: '${userController.myUser.email}',
@@ -85,6 +124,7 @@ class ManageAccount extends StatelessWidget {
                 ),
                 child: InkWell(
                   onTap: (){
+                    showDelete();
                   },
                   child: Padding(
                     padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),

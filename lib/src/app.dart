@@ -5,6 +5,7 @@ import 'package:wild_sport/screens/homescreen.dart';
 import 'package:wild_sport/screens/homescreen1.dart';
 import 'package:wild_sport/screens/loading.dart';
 import 'package:wild_sport/screens/login.dart';
+import 'package:wild_sport/screens/onboarding.dart';
 import 'package:wild_sport/screens/signUp.dart';
 import 'package:wild_sport/themes/theme_constants.dart';
 import 'package:wild_sport/themes/theme_manager.dart';
@@ -44,9 +45,10 @@ class _AppState extends State<App> {
         theme: lightTheme,
         darkTheme: darkTheme,
         themeMode: themeManager.themeMode,
-        home: Login(),
+        //home: Login(),
+        //home: OnBoardingScreen(),
         //home: SignUp(),
-        //home: Loading(),
+        home: Loading(),
         //home: HomeScreenN(),
     );
     //   MaterialApp(

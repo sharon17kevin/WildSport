@@ -89,7 +89,8 @@ class _Transfers1State extends State<Transfers1> {
                                       },
                                       child: Text('Back',
                                         style: TextStyle(
-                                            fontSize: 10
+                                            fontSize: 10,
+                                          color: Get.isDarkMode? Colors.white: Colors.black
                                         ),
                                       ),
                                     ),
@@ -146,8 +147,12 @@ class _Transfers1State extends State<Transfers1> {
                                         children: [
                                           Obx(
                                           ()=> Text(
-                                                'Transfer: ${userController.myUser.freeTransfer}',
+                                            userController.myUser.freeTransfer == -1?
+                                            'Transfer: ∞'
+                                                :
+                                            'Transfer: ${userController.myUser.freeTransfer}',
                                             style: TextStyle(
+                                              fontSize: 13,
                                                 color: Get.isDarkMode? Colors.black : Colors.white,
                                                 fontWeight: FontWeight.w700
                                             ),
@@ -159,13 +164,14 @@ class _Transfers1State extends State<Transfers1> {
                                     ),
                                     Container(
                                       decoration: BoxDecoration(
-                                          color: Get.isDarkMode? Colors.white : Color(0xff2F5233),
+                                          color: controller.pointGameweeks.value.firstWhere((element) => element.number == controller.viableGameweeks.value[controller.pointsPageIndex.value] ).freeHit == true? Get.isDarkMode? Colors.white : Color(0xff2F5233) : Colors.blueGrey,
                                           borderRadius: BorderRadius.all(Radius.circular(5))
                                       ),
                                       padding: EdgeInsets.symmetric(horizontal: 15,vertical: 10),
                                       child: Text(
                                           'Wild Card',
                                         style: TextStyle(
+                                            fontSize: 13,
                                             color: Get.isDarkMode? Colors.black : Colors.white,
                                             fontWeight: FontWeight.w700
                                         ),
@@ -174,7 +180,7 @@ class _Transfers1State extends State<Transfers1> {
                                     ),
                                     Container(
                                       decoration: BoxDecoration(
-                                          color: Get.isDarkMode? Colors.white : Color(0xff2F5233),
+                                          color: controller.pointGameweeks.value.firstWhere((element) => element.number == controller.viableGameweeks.value[controller.pointsPageIndex.value] ).freeHit == true? Get.isDarkMode? Colors.white : Color(0xff2F5233) : Colors.blueGrey,
                                           borderRadius: BorderRadius.all(Radius.circular(5))
                                       ),
                                       margin: EdgeInsets.only(right: 15),
@@ -182,6 +188,7 @@ class _Transfers1State extends State<Transfers1> {
                                       child: Text(
                                           'Free Hit',
                                         style: TextStyle(
+                                          fontSize: 13,
                                           color: Get.isDarkMode? Colors.black : Colors.white,
                                           fontWeight: FontWeight.w700
                                         ),
@@ -203,7 +210,7 @@ class _Transfers1State extends State<Transfers1> {
                               image: DecorationImage(
                                 alignment: Alignment.topCenter,
                                 image: AssetImage(
-                                  isDark? 'assets/images/fieldDark.png' : 'assets/images/fieldLight.png',
+                                  isDark? 'assets/images/darkField.webp' : 'assets/images/lightField.webp',
                                 ),
                                 fit: BoxFit.fill,
                               )

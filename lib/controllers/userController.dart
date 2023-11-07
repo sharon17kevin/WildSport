@@ -2,11 +2,14 @@ import 'dart:convert';
 
 import 'package:get/get.dart';
 import 'package:wild_sport/controllers/teamsController.dart';
+import 'package:wild_sport/functions/deadlineFunctions.dart';
 import 'package:wild_sport/functions/leagueFunctions.dart';
 import 'package:wild_sport/functions/pointGameWeekFunctions.dart';
 import 'package:wild_sport/functions/secureStorage.dart';
 import 'package:wild_sport/functions/userFunctions.dart';
+import 'package:wild_sport/models/deadlineModel.dart';
 import 'package:wild_sport/models/fantasyModel.dart';
+import 'package:wild_sport/models/getHighestGameweekModel.dart';
 import 'package:wild_sport/models/leagueModel.dart';
 import 'package:wild_sport/models/playerModel.dart';
 import 'package:wild_sport/models/pointGameWeekModel.dart';
@@ -14,9 +17,14 @@ import 'package:wild_sport/models/userModel.dart';
 
 class UserController extends GetxController {
   var error = ''.obs;
+  var deleteError = ''.obs;
+  var signUpError = ''.obs;
+  var deadlines = <Deadline>[].obs;
+  var viableGameweeks = <int>[].obs;
   var _user = User(id: "", name: "", email: "").obs;
+  RxBool isadmin = false.obs;
   var _fantasy = new Fantasy().obs;
-  String pather = '172.20.10.3:3000';
+  String pather = '172.20.10.8:3000';
   var _pickedTeam = <String, dynamic>{}.obs;
   var substitutes = <Player?>[].obs;
   Rx<Player?> keeperSub = Player(image: Image(name: '', contentType: ''), fantasyPrice: 0, id: '', name: '', team: '', age: 0, number: 0, appearances: 0, goals: 0, subs: 0, assists: 0, fantasyPoints: 0, position: '', yellowCards: 0, redCards: 0, v: 0, cleanSheets: 0, currentFantasyPoints: 0, ownGoals: 0, imageUrl: '').obs;
@@ -26,10 +34,18 @@ class UserController extends GetxController {
   var subbing = false.obs;
   var bankToAdd = 0.obs;
   var pickTeamUpdating = false.obs;
+  var isPreviousUser = false.obs;
 
   var toUpdate = ''.obs;
-  var leagues = [].obs;
+  var leagues = <League>[].obs;
   var pointGameweeks = <PointGameWeek>[].obs;
+
+  //Management Section--------------------------------------->
+  var leagueUsers = <User>[].obs;
+  var getMaxGameweek = <GetHighestGameweek>[].obs;
+  Rx<League> leagueUpdating = League(name: 'None', players: [], entryCode: '', id: '', v: 0).obs;
+  var password1 = "".obs;
+  var password2 = "".obs;
 
   //Transfer Page-------------------------------------------->
   var xOffset = 0.0.obs;
@@ -144,12 +160,25 @@ class UserController extends GetxController {
     _fantasy.value = fantasy;
   }
 
+  int calcCost() {
+    if (_user.value.freeTransfer! == 0) {
+      int cost = _user.value.cost! + 4;
+      return cost;
+    } else if (_user.value.freeTransfer! == -1){
+      return 0;
+    } else {
+      return 0;
+    }
+  }
+
   void updateTransferValues() async{
-    if (_user.value.freeTransfer! <= 0) {
-      _user.value.freeTransfer = -1;
+    if (_user.value.freeTransfer! == 0) {
       _user.value.cost = _user.value.cost! + 4;
     } else if (_user.value.freeTransfer! > 0) {
       _user.value.freeTransfer = _user.value.freeTransfer! - 1;
+      _user.value.cost = 0;
+    } else {
+      _user.value.cost = 0;
     }
     await updateFantasyData(_user.value);
   }
@@ -200,13 +229,38 @@ class UserController extends GetxController {
   Future<void> signUp(User newUser) async {
     try{
       var response = await registerUser('http://$pather/api/users', newUser);
-      User user = userFromJson(response);
+      User user = userFromJson(response['body']);
+
+      await SecureStorage.writeSecureData('token', response['access-token']);
       updateUser(user);
-      if (user.leagues?.length != 0) {
-        await fetchLeagues(user);
-      }
+      List<int> list = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, -1];
+      PointGameWeek pointGameWeek = PointGameWeek(
+          number: 0,
+          points: 0,
+          keeper: "",
+          defender: ["", "", "", ""],
+          midfielder: ["", "", "", ""],
+          attacker: ["", ""],
+          subKeeper: "",
+          substitution: ["", "", ""],
+          id: "",
+          v: 0);
+      list.forEach((element) async {
+        pointGameWeek.number = element;
+        var response = await postGameWeek('http://$pather/api/gameWeeks', pointGameWeek);
+        PointGameWeek newPointGameweek = pointGameWeekFromJson(response);
+        await updatePointGameWeek('http://$pather/api/users/pointGameweek', newUser, newPointGameweek);
+      });
       captain.value = user.captain!;
       viceCaptain.value = user.viceCaptain!;
+      await getSingleLeague('default');
+      joinLeague(leagueUpdating.value).then((value) async {
+        await fetchLeagues(myUser);
+      });
+      await generateFantasy();
+      await fetchGameweeks(_user.value);
+      await fetchDeadlines();
+      await fetchLeagues(_user.value);
       print("user ready");
     }catch(error) {
       throw Exception(error);
@@ -224,6 +278,10 @@ class UserController extends GetxController {
       }
       captain.value = user.captain!;
       viceCaptain.value = user.viceCaptain!;
+      await generateFantasy();
+      await fetchGameweeks(_user.value);
+      await fetchDeadlines();
+      await fetchLeagues(_user.value);
       print("user ready");
     }catch(error) {
       throw Exception(error);
@@ -233,10 +291,75 @@ class UserController extends GetxController {
   Future<void> fetchLeagues(User user) async {
     try{
       var response = await fetchLeague('http://$pather/api/leagues/init', user);
-      List<League> newLeagues = leagueFromJson(response);
+      List<League> newLeagues = leaguesFromJson(response);
       leagues.value = newLeagues;
       print('leagues ready');
      }catch (error){
+      throw Exception(error);
+    }
+  }
+
+  Future<void> fetchDeadlines() async {
+    try{
+      var response = await fetchDeadline('http://$pather/api/deadlines');
+      List<Deadline> newDeadlines = deadlineFromJson(response);
+      deadlines.value = newDeadlines;
+      print('deadline ready');
+      getViableGameweeks();
+    }catch (error){
+      throw Exception(error);
+    }
+  }
+
+  void getViableGameweeks() {
+    List<int> viable = [];
+    deadlines.value.forEach((element) {
+      if (element.date.isBefore(DateTime.now())) {
+        viable.add(element.gameweek);
+      }
+    });
+    viable.sort();
+    viableGameweeks.value = viable;
+    pointsPageIndex.value = viableGameweeks.value.length - 1;
+  }
+
+  Future<void> getMeCont(User newUser) async {
+    try{
+      var response2 = await getMe('http://$pather/api/users/me', newUser);
+      User user1 = userFromJson(response2);
+      updateUser(user1);
+      print("final user ready");
+    }catch(error) {
+      throw Exception(error);
+    }
+  }
+  Future<void> getThisUserCont(String id) async {
+    try{
+      var response = await getThisUser('http://$pather/api/users/getThisUser', id);
+      User user = userFromJson(response['body']);
+      await SecureStorage.writeSecureData('token', response['access-token']);
+      updateUser(user);
+      if (user.leagues?.length != 0) {
+        await fetchLeagues(user);
+      }
+      captain.value = user.captain!;
+      viceCaptain.value = user.viceCaptain!;
+      await fetchGameweeks(_user.value);
+      await fetchDeadlines();
+      await fetchLeagues(_user.value);
+      print("final user ready");
+    }catch(error) {
+      throw Exception(error);
+    }
+  }
+
+  Future<void> deleteMeCont(User newUser, String password) async {
+    try{
+      var response2 = await deleteMe('http://$pather/api/users/delMe', newUser, password);
+      User user1 = userFromJson(response2);
+      updateUser(user1);
+      print("final user ready");
+    }catch(error) {
       throw Exception(error);
     }
   }
@@ -260,7 +383,39 @@ class UserController extends GetxController {
       User user = userFromJson(response);
       updateUser(user);
       print("fantasy pickTeam ready");
+      await setGameWeek(newUser);
     }catch(error) {
+      throw Exception(error);
+    }
+  }
+
+  Future<void> setGameWeek(User newUser) async {
+    try{
+      List<int> possibleInt = [1,2,3,4,5,6,7,8,9,10,11];
+      possibleInt.removeWhere((element) => viableGameweeks.value.contains(element));
+      List<PointGameWeek> holder = [];
+      possibleInt.forEach((element) {
+        PointGameWeek variable = pointGameweeks.value.firstWhere((e) => e.number == element);
+        holder.add(variable);
+      });
+      Player? keeperHolder = _pickedTeam.value['keeper'];
+      List<Player?> defender = _pickedTeam.value['defender'];
+      List<Player?> midfielder = _pickedTeam.value['midfielder'];
+      List<Player?> attacker = _pickedTeam.value['attacker'];
+      PointGameWeek pointGameWeek = PointGameWeek(
+          number: 0,
+          points: 0,
+          keeper: keeperHolder!.id,
+          defender: defender!.map((e) => e!.id).toList(),
+          midfielder: midfielder!.map((e) => e!.id).toList(),
+          attacker: attacker!.map((e) => e!.id).toList(),
+          subKeeper: keeperSub.value!.id,
+          substitution: substitutes.value.map((e) => e!.id).toList(),
+          id: "",
+          v: 0);
+      await setPointGameweeks('http://$pather/api/gameWeeks/change', pointGameWeek, holder);
+      await fetchGameweeks(newUser);
+    }catch(err){
       throw Exception(error);
     }
   }
@@ -304,14 +459,15 @@ class UserController extends GetxController {
       List<PointGameWeek> pointGameweek = pointsGameWeekFromJson(response);
       pointGameweeks.value = pointGameweek;
       pointGameweeks.refresh();
-      pointsPageIndex.value = pointGameweeks.value.length - 1;
+      //pointsPageIndex.value = viableGameweeks.value.length - 1;
       print("gameweek ready");
+      await getHighestGameweek();
     }catch(error) {
       throw Exception(error);
     }
   }
   void increasepgw() {
-    if (pointsPageIndex.value >= pointGameweeks.value.length - 1) {
+    if (pointsPageIndex.value >= viableGameweeks.value.length - 1) {
       return;
     } else {
       pointsPageIndex.value = pointsPageIndex.value + 1;
@@ -323,5 +479,138 @@ class UserController extends GetxController {
     } else {
       pointsPageIndex.value = pointsPageIndex.value - 1;
     }
+  }
+
+  Future<void> getLeagueUsersCont() async {
+    try{
+      List ids = [];
+      leagues.value.forEach((element) {
+        ids.addAll(element.players);
+      });
+      Set mySet = Set.from(ids);
+      List id = List.from(mySet);
+      var response2 = await getLeagueUsers('http://$pather/api/users/leagueUsers', id);
+      List<User> user1 = usersFromJson(response2);
+      leagueUsers.value = user1;
+      print("league user ready");
+    }catch(error) {
+      throw Exception(error);
+    }
+  }
+
+  Future<void> postNewLeague(String name, String code) async {
+    try{
+      var response = await postLeague('http://$pather/api/leagues/', _user.value, name, code);
+      League league = leagueFromJson(response);
+      await updateLeague('http://$pather/api/users/leagues', _user.value, league);
+      var response1 = await getMe('http://$pather/api/users/me', _user.value);
+      User user = userFromJson(response1);
+      updateUser(user);
+      print("league posted");
+    }catch(error) {
+      throw Exception(error);
+    }
+  }
+
+  Future<void> updateUserFuture() async {
+    try{
+      var response1 = await updateMe('http://$pather/api/users/updateMe', _user.value);
+      User user = userFromJson(response1);
+      updateUser(user);
+      print("user updated");
+    }catch(error) {
+      throw Exception(error);
+    }
+  }
+
+  int gameWeekPoint (index) {
+    TeamController teamController = Get.find<TeamController>();
+    Player defaultPlayer = Player(image: Image(name: '', contentType: ''),
+        points: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        fantasyPrice: 0,
+        id: '',
+        name: '',
+        team: '',
+        age: 0,
+        number: 0,
+        appearances: 0,
+        goals: 0,
+        subs: 0,
+        assists: 0,
+        fantasyPoints: 0,
+        position: '',
+        yellowCards: 0,
+        redCards: 0,
+        v: 0,
+        cleanSheets: 0,
+        currentFantasyPoints: 0,
+        ownGoals: 0,
+        imageUrl: '');
+    List<Player> players = teamController.getPlayers;
+    PointGameWeek pgw = pointGameweeks.value.firstWhere((element) =>
+    element.number == index);
+    int value = 0;
+    List<Player> gameweekPlayers = [];
+    List<String> gameweekPlayersId = [];
+    gameweekPlayersId.add(pgw.keeper);
+    gameweekPlayersId.addAll(pgw.defender);
+    gameweekPlayersId.addAll(pgw.midfielder);
+    gameweekPlayersId.addAll(pgw.attacker);
+    if (pgw.benchBoost == true){
+      gameweekPlayersId.add(pgw.subKeeper);
+      gameweekPlayersId.addAll(pgw.substitution);
+    }
+    gameweekPlayersId.forEach((element) {
+      gameweekPlayers.add(players.firstWhere((e) => e.id == element,
+          orElse: () => defaultPlayer));
+    });
+    gameweekPlayers.forEach((element) {
+      value = value + element.points![index];
+    });
+    return value;
+  }
+
+  Future<void> getHighestGameweek() async {
+    try{
+      var response = await fetchHighestGameweek('http://$pather/api/gameWeeks/highest');
+      List<GetHighestGameweek> ghg = getHighestGameweekFromJson(response);
+      getMaxGameweek.value = ghg;
+      print("max gameweek data ready");
+    }catch(error) {
+      throw Exception(error);
+    }
+  }
+
+  Future<void> getSingleLeague(String code) async {
+    try{
+      var response = await fetchSingleLeague('http://$pather/api/leagues/search', code);
+      if (response != false) {
+        League league = leagueFromJson(response);
+        leagueUpdating.value = league;
+      } else {
+        leagueUpdating.value = League(name: 'None', players: [], entryCode: '', id: '', v: 0);
+        print('wrong code');
+      }
+      print("search league data ready");
+    }catch(error) {
+      throw Exception(error);
+    }
+  }
+
+  Future<void> joinLeague(League league) async {
+    await join('http://$pather/api/leagues/join', _user.value, league.entryCode);
+    await updateLeague('http://$pather/api/users/leagues', _user.value, league);
+    var response1;
+    response1 = await getMe('http://$pather/api/users/me', _user.value);    User user = userFromJson(response1);
+    updateUser(user);
+  }
+
+  Future<void> updatePGW(PointGameWeek pgw, int number) async {
+    var response = await updatePointGameWeekG('http://$pather/api/gameWeeks', pgw);
+    PointGameWeek pointGameWeek = pointGameWeekFromJson(response);
+    await fetchGameweeks(_user.value);
+    //int index = pointGameweeks.value.indexWhere((element) => element.number == number);
+    //pointGameweeks.value[index] = pointGameWeek;
+    print('Chip updated');
   }
 }

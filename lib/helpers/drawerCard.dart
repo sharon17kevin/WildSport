@@ -140,6 +140,7 @@ class PlayerTile extends StatelessWidget {
     }
 
     void showDialogBox() {
+      var cost = _userController.calcCost();
       Get.dialog(
         AlertDialog(
           backgroundColor: Colors.white,
@@ -150,7 +151,7 @@ class PlayerTile extends StatelessWidget {
           ),
           content: Container(
             padding: EdgeInsets.all(10),
-            height: 100,
+            height: 120,
             child: Column(
               children: [
                 Text('Transfer In',
@@ -174,39 +175,44 @@ class PlayerTile extends StatelessWidget {
                     fontSize: 15
                   ),
                 ),
+                Text('Cost: ${cost} points',
+                  style:  TextStyle(
+                      color: Colors.black,
+                      fontSize: 15
+                  ),
+                )
               ],
             ),
           ),
           actions: [
-            Obx(
-              ()=> TextButton(
-                onPressed: () async{
-                  int availableBank = _userController.myUser.bank! + _userController.bankToAdd.value;
-                  if (player.fantasyPrice <= availableBank) {
-                    User newUser = _userController.myUser;
-                    String playerPosition = _userController.myToUpdate;
-                    await _userController.updateFantasyTeam(newUser, player, playerPosition);
-                    _userController.updateFantasy(player, playerPosition);
-                    _userController.myUser.bank = availableBank - player.fantasyPrice;
-                    await _userController.updateBank(_userController.myUser);
-                    Get.back();
-                    _userController.xOffset.value = 0.0;
-                    _userController.yOffset.value = 0.0;
-                    _userController.scaleFactor.value = 1.0;
-                    _userController.isDrawerOpen.value = false;
-                    _userController.update();
-                    showSnackbar();
-                  } else {
-                    showPriceError();
-                  }
+            TextButton(
+              onPressed: () async{
+                int availableBank = _userController.myUser.bank! + _userController.bankToAdd.value;
+                if (player.fantasyPrice <= availableBank) {
+                  User newUser = _userController.myUser;
+                  String playerPosition = _userController.myToUpdate;
+                  await _userController.updateFantasyTeam(newUser, player, playerPosition);
+                  _userController.updateFantasy(player, playerPosition);
+                  _userController.myUser.bank = availableBank - player.fantasyPrice;
+                  await _userController.updateBank(_userController.myUser);
+                  _userController.updateTransferValues();
+                  Get.back();
+                  _userController.xOffset.value = 0.0;
+                  _userController.yOffset.value = 0.0;
+                  _userController.scaleFactor.value = 1.0;
+                  _userController.isDrawerOpen.value = false;
+                  _userController.update();
+                  showSnackbar();
+                } else {
+                  showPriceError();
+                }
 
-                },
-                child: Text('Confirm',
-                  style: GoogleFonts.inter(
-                    color: Colors.green,
-                    fontSize: 15,
-                    fontWeight: FontWeight.w500
-                  ),
+              },
+              child: Text('Confirm',
+                style: GoogleFonts.inter(
+                  color: Colors.green,
+                  fontSize: 15,
+                  fontWeight: FontWeight.w500
                 ),
               ),
             ),

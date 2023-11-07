@@ -1,13 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:share_plus/share_plus.dart';
+import 'package:wild_sport/controllers/userController.dart';
 import 'package:wild_sport/models/leagueModel.dart';
+import 'package:wild_sport/models/userModel.dart';
 
 class LeaguePage extends StatelessWidget {
   final League league;
 
   LeaguePage({required this.league});
+  void shareText(String text) {
+    Share.share(text);
+  }
   @override
   Widget build(BuildContext context) {
+    UserController userController = Get.find<UserController>();
+    //userController
     return Scaffold(
       appBar: AppBar(
         leadingWidth: 100,
@@ -29,57 +37,95 @@ class LeaguePage extends StatelessWidget {
           ),
         ),
         centerTitle: true,
-        title: Text('Player Comparison'),
+        title: Text('League | Entry Code Below'),
       ),
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.all(10),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
+      body: Column(
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Container(
-                padding: EdgeInsets.symmetric(horizontal: 5),
-                height: 25,
-                width: double.maxFinite,
-                color: Colors.cyanAccent,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text('Pos',
-                      style: TextStyle(
-                        color: Colors.black
-                      ),
-                    ),
-                    Text('Team Name',
-                      style: TextStyle(
-                          color: Colors.black
-                      ),
-                    ),
-                    Text('Points',
-                      style: TextStyle(
-                          color: Colors.black
-                      ),
-                    )
-                  ],
-                ),
-              ),
-              Flexible(
-                child: ListView.builder(
-                  shrinkWrap: true,
-                  physics: NeverScrollableScrollPhysics(),
-                  itemCount: 4,
-                  itemBuilder: (context, index) {
-                    return LeagueTile(
-                      index: index,
-                      title: 'Default',
-                      points: 100,
-                    );
+              Text('Code:'),
+              TextButton(
+                  onPressed: (){
+                    shareText(league.entryCode);
                   },
-                ),
-              )
+                  child: Text('${league.entryCode}',
+                    style: TextStyle(
+                        decoration: TextDecoration.underline,
+                        letterSpacing: 1,
+                        color: Get.isDarkMode? Colors.white : Colors.black,
+                        fontSize: 12
+                    ),
+                  )
+              ),
             ],
           ),
-        ),
+          Expanded(
+            child: FutureBuilder(
+              future: userController.getLeagueUsersCont(),
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return Center(child: CircularProgressIndicator());
+                } else if (snapshot.hasError) {
+                  return Center(child: Text('No Team Data Available'));
+                } else {
+                  return SingleChildScrollView(
+                    child: Padding(
+                      padding: const EdgeInsets.all(10),
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          Container(
+                            padding: EdgeInsets.symmetric(horizontal: 5),
+                            height: 25,
+                            width: double.maxFinite,
+                            color: Colors.cyanAccent,
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text('Pos',
+                                  style: TextStyle(
+                                      color: Colors.black
+                                  ),
+                                ),
+                                Text('Team Name',
+                                  style: TextStyle(
+                                      color: Colors.black
+                                  ),
+                                ),
+                                Text('Points',
+                                  style: TextStyle(
+                                      color: Colors.black
+                                  ),
+                                )
+                              ],
+                            ),
+                          ),
+                          Flexible(
+                            child: ListView.builder(
+                              shrinkWrap: true,
+                              physics: NeverScrollableScrollPhysics(),
+                              itemCount:league.players.length,
+                              itemBuilder: (context, index) {
+                                //User currentUser = userController.leagueUsers.firstWhere((element) => element.id == league.players[index]);
+                                return LeagueTile(
+                                  index: index,
+                                  title: userController.leagueUsers.firstWhere((element) => element.id == league.players[index]).name!,//currentUser.name!,
+                                  points:  userController.leagueUsers.firstWhere((element) => element.id == league.players[index]).point!.reduce((value, element) => value + element),//(currentUser.point?[0] == null)? 90: currentUser.point?[0]!,
+                                );
+                              },
+                            ),
+                          )
+                        ],
+                      ),
+                    ),
+                  );
+                }
+              },
+            ),
+          ),
+        ],
       ),
     );
   }

@@ -1,5 +1,7 @@
 import 'dart:convert';
+import 'dart:io';
 import 'package:get/get.dart';
+import 'package:wild_sport/controllers/userController.dart';
 import 'package:wild_sport/models/authorModel.dart';
 import 'package:wild_sport/models/breakingNewsModel.dart';
 import 'package:wild_sport/functions/newsFunctions.dart';
@@ -14,7 +16,7 @@ class BreakingNewsController extends GetxController {
   var _latestNews = <BreakingNews>[].obs;
   var _authors = <Author>[].obs;
   late Set<String> uniqueNames;
-  String pather = '172.20.10.3:3000';
+  String pather = '172.20.10.8:3000';
 
   // ignore: invalid_use_of_protected_member
   List<BreakingNews> get myBreakingNews => _breakingNews.value;
@@ -91,6 +93,16 @@ class BreakingNewsController extends GetxController {
     }catch(error) {
       throw Exception(error);
     }
+  }
+
+  Future<void> postNews(BreakingNews newNews, File image) async {
+    try{
+      var response = await postBreakingNews('http://$pather/api/newsBlocks', newNews, image);
+      await fetchNews();
+    }catch(error) {
+      throw Exception(error);
+    }
+    toggleFlag(true);
   }
 
 }

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:wild_sport/controllers/managementController.dart';
 import 'package:wild_sport/controllers/teamsController.dart';
 import 'package:wild_sport/home_pages/matchPage.dart';
 import 'package:wild_sport/home_pages/matchPage1.dart';
@@ -19,7 +20,7 @@ class MatchTile extends StatelessWidget {
       onPanUpdate: null,
       onPanStart: null,
       onTap: (){
-        Get.to(MatchPage1(),
+        Get.to(MatchPage1(matchx: match,),
           arguments: {
             'match': match
           }

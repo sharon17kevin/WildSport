@@ -125,7 +125,7 @@ class _PlayerCardState extends State<PlayerCard> {
                 children: [
                   CircleAvatar(
                     radius: 28,
-                    backgroundColor:Get.isDarkMode? Colors.white70 : Colors.black26,
+                    backgroundColor:Get.isDarkMode? Colors.black38 : Colors.black26,
                     child: widget.player!.imageUrl != ''?
                         Image1.Image.network(
                           team.firstWhere((element) => element.id == widget.player!.team, orElse: () => defaultTeam).imageUrl,

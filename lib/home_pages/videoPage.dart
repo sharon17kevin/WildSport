@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:wild_sport/home_pages/videoPlayer.dart';
+import 'package:wild_sport/models/highlightsModel.dart';
 
 class VideoMediaPlayer extends StatefulWidget {
+  final Highlight highlight;
+
+  VideoMediaPlayer({required this.highlight});
   @override
   _VideoMediaPlayerState createState() => _VideoMediaPlayerState();
 }

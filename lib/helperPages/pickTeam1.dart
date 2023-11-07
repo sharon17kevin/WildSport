@@ -12,7 +12,7 @@ import 'package:flutter/src/widgets/image.dart' as Image1;
 import 'package:wild_sport/models/playerModel.dart'as Image2;
 import 'package:wild_sport/models/teamsModel.dart';
 import 'package:wild_sport/models/teamsModel.dart' as Icon1;
-import 'package:wild_sport/screens/fantasyscreen2.dart';
+import 'package:flutter/src/widgets/icon.dart'as IconMain;
 
 class PickTeam1 extends StatefulWidget {
   @override
@@ -106,9 +106,9 @@ class _PickTeam1State extends State<PickTeam1> {
                                       onPressed: (){
                                         Get.back();
                                         Get.back();
-                                        userController.pickTeamUpdating.value = false;
+                                        //userController.pickTeamUpdating.value = false;
                                       },
-                                      child: Text('Proceed',
+                                      child: Text('Back',
                                           style: GoogleFonts.inter(
                                               color: Colors.black,
                                               fontWeight: FontWeight.w500,
@@ -137,7 +137,8 @@ class _PickTeam1State extends State<PickTeam1> {
                         },
                         child: Text('Back',
                           style: TextStyle(
-                              fontSize: 10
+                              fontSize: 10,
+                            color: Get.isDarkMode? Colors.white : Colors.black
                           ),
                         ),
                       ),
@@ -154,7 +155,8 @@ class _PickTeam1State extends State<PickTeam1> {
                         },
                         child: Text('Save',
                           style: TextStyle(
-                              fontSize: 10
+                              fontSize: 10,
+                            color: Get.isDarkMode? Colors.white : Colors.black
                           ),
                         ),
                       ),
@@ -165,135 +167,142 @@ class _PickTeam1State extends State<PickTeam1> {
             ),
             Flexible(
               flex: 5,
-              child: Container(
-                decoration: BoxDecoration(
-                    color: Colors.blue,
-                    image: DecorationImage(
-                      alignment: Alignment.topCenter,
-                      image: AssetImage(
-                        isDark? 'assets/images/fieldDark.png' : 'assets/images/fieldLight.png',
-                      ),
-                      fit: BoxFit.fill,
-                    )
-                ),
-                child: RefreshIndicator(
-                  onRefresh: (){
-                    return Future.delayed(Duration(seconds: 0));
-                  },
-                  child: ListView(
-                    shrinkWrap: true,
-                    children: [
-                      Container(
-                        height: MediaQuery.of(context).size.height / 7,
-                        child: GetBuilder<UserController>(
-                          builder: (controller) {
-                            return Center(
-                              child: ListView.builder(
-                                scrollDirection: Axis.horizontal,
-                                physics: NeverScrollableScrollPhysics(),
-                                shrinkWrap: true,
-                                itemCount: 1,
-                                itemBuilder: (context, index) {
-                                  return Obx(
-                                    ()=> PickedPlayerCard(
-                                      outfield: true,
-                                      onClicked: openDrawer,
-                                      position: 'keeper',
-                                      index: index,
-                                      player: controller.myPickedTeam['keeper'],
-                                    ),
-                                  );
-                                },
-                              ),
-                            );
-                          }
+              child: GestureDetector(
+                onTap: (){
+                  userController.subbing.value = false;
+                },
+                child: Container(
+                  decoration: BoxDecoration(
+                      color: Colors.blue,
+                      image: DecorationImage(
+                        alignment: Alignment.topCenter,
+                        image: AssetImage(
+                          isDark? 'assets/images/darkField.webp' : 'assets/images/lightField.webp',
                         ),
-                      ),
-                      Container(
-                        height: MediaQuery.of(context).size.height / 7,
-                        //color: Colors.yellow,
-                        child: GetBuilder<UserController>(
-                          builder: (controller) {
-                            return Center(
-                              child: Obx(
-                                ()=> ListView.builder(
-                                  scrollDirection: Axis.horizontal,
-                                  physics: NeverScrollableScrollPhysics(),
-                                  shrinkWrap: true,
-                                  itemCount: controller.myPickedTeam['defender']!.length,
-                                  itemBuilder: (context, index) {
-                                    return PickedPlayerCard(
-                                      outfield: true,
-                                      onClicked: openDrawer,
-                                      position: 'defender',
-                                      index: index,
-                                      player: controller.myPickedTeam['defender'][index],//players.firstWhere((element) => element.id == controller.myPickedTeam['defender'][index], orElse: ()=> defaultPlayer),
-                                    );
-                                  },
-                                ),
-                              ),
-                            );
-                          }
-                        ),
-                      ),
-                      Container(
-                        height: MediaQuery.of(context).size.height / 7,
-                        //color: Colors.red,
-                        child: GetBuilder<UserController>(
-                          builder: (controller) {
-                            return Center(
-                              child: Obx(
-                                ()=> ListView.builder(
-                                  scrollDirection: Axis.horizontal,
-                                  physics: NeverScrollableScrollPhysics(),
-                                  shrinkWrap: true,
-                                  itemCount: controller.myPickedTeam['midfielder']!.length,
-                                  itemBuilder: (context, index) {
-                                    return PickedPlayerCard(
-                                      outfield: true,
-                                      onClicked: openDrawer,
-                                      position: 'midfielder',
-                                      index: index,
-                                      player: controller.myPickedTeam['midfielder'][index],//players.firstWhere((element) => element.id == controller.myPickedTeam['midfielder'][index], orElse: ()=> defaultPlayer),
-                                    );
-                                  },
-                                ),
-                              ),
-                            );
-                          }
-                        ),
-                      ),
-                      Container(
-                        height: MediaQuery.of(context).size.height / 7,
-                        //color: Colors.blue,
-                        child: GetBuilder<UserController>(
-                          builder: (controller) {
-                            return Center(
-                              child: Obx(
-                                ()=> ListView.builder(
-                                  scrollDirection: Axis.horizontal,
-                                  physics: NeverScrollableScrollPhysics(),
-                                  shrinkWrap: true,
-                                  itemCount: controller.myPickedTeam['attacker']!.length,
-                                  itemBuilder: (context, index) {
-                                    return PickedPlayerCard(
-                                      outfield: true,
-                                      onClicked: openDrawer,
-                                      position: 'attacker',
-                                      index: index,
-                                      player: controller.myPickedTeam['attacker'][index],//players.firstWhere((element) => element.id == controller.myPickedTeam['attacker'][index], orElse: ()=> defaultPlayer),
-                                    );
-                                  },
-                                ),
-                              ),
-                            );
-                          }
-                        ),
-                      ),
-                      SizedBox(
-                        height: MediaQuery.of(context).size.height / 15,
+                        fit: BoxFit.fill,
                       )
-                    ],
+                  ),
+                  child: RefreshIndicator(
+                    onRefresh: () async{
+                      //return Future.delayed(Duration(seconds: 0));
+                      Future.delayed(Duration(seconds: 1));
+                      return await teamController.fetchPlayer();
+                    },
+                    child: ListView(
+                      shrinkWrap: true,
+                      children: [
+                        Container(
+                          height: MediaQuery.of(context).size.height / 7,
+                          child: GetBuilder<UserController>(
+                            builder: (controller) {
+                              return Center(
+                                child: ListView.builder(
+                                  scrollDirection: Axis.horizontal,
+                                  physics: NeverScrollableScrollPhysics(),
+                                  shrinkWrap: true,
+                                  itemCount: 1,
+                                  itemBuilder: (context, index) {
+                                    return Obx(
+                                      ()=> PickedPlayerCard(
+                                        outfield: true,
+                                        onClicked: openDrawer,
+                                        position: 'keeper',
+                                        index: index,
+                                        player: controller.myPickedTeam['keeper'],
+                                      ),
+                                    );
+                                  },
+                                ),
+                              );
+                            }
+                          ),
+                        ),
+                        Container(
+                          height: MediaQuery.of(context).size.height / 7,
+                          //color: Colors.yellow,
+                          child: GetBuilder<UserController>(
+                            builder: (controller) {
+                              return Center(
+                                child: Obx(
+                                  ()=> ListView.builder(
+                                    scrollDirection: Axis.horizontal,
+                                    physics: NeverScrollableScrollPhysics(),
+                                    shrinkWrap: true,
+                                    itemCount: controller.myPickedTeam['defender']!.length,
+                                    itemBuilder: (context, index) {
+                                      return PickedPlayerCard(
+                                        outfield: true,
+                                        onClicked: openDrawer,
+                                        position: 'defender',
+                                        index: index,
+                                        player: controller.myPickedTeam['defender'][index],//players.firstWhere((element) => element.id == controller.myPickedTeam['defender'][index], orElse: ()=> defaultPlayer),
+                                      );
+                                    },
+                                  ),
+                                ),
+                              );
+                            }
+                          ),
+                        ),
+                        Container(
+                          height: MediaQuery.of(context).size.height / 7,
+                          //color: Colors.red,
+                          child: GetBuilder<UserController>(
+                            builder: (controller) {
+                              return Center(
+                                child: Obx(
+                                  ()=> ListView.builder(
+                                    scrollDirection: Axis.horizontal,
+                                    physics: NeverScrollableScrollPhysics(),
+                                    shrinkWrap: true,
+                                    itemCount: controller.myPickedTeam['midfielder']!.length,
+                                    itemBuilder: (context, index) {
+                                      return PickedPlayerCard(
+                                        outfield: true,
+                                        onClicked: openDrawer,
+                                        position: 'midfielder',
+                                        index: index,
+                                        player: controller.myPickedTeam['midfielder'][index],//players.firstWhere((element) => element.id == controller.myPickedTeam['midfielder'][index], orElse: ()=> defaultPlayer),
+                                      );
+                                    },
+                                  ),
+                                ),
+                              );
+                            }
+                          ),
+                        ),
+                        Container(
+                          height: MediaQuery.of(context).size.height / 7,
+                          //color: Colors.blue,
+                          child: GetBuilder<UserController>(
+                            builder: (controller) {
+                              return Center(
+                                child: Obx(
+                                  ()=> ListView.builder(
+                                    scrollDirection: Axis.horizontal,
+                                    physics: NeverScrollableScrollPhysics(),
+                                    shrinkWrap: true,
+                                    itemCount: controller.myPickedTeam['attacker']!.length,
+                                    itemBuilder: (context, index) {
+                                      return PickedPlayerCard(
+                                        outfield: true,
+                                        onClicked: openDrawer,
+                                        position: 'attacker',
+                                        index: index,
+                                        player: controller.myPickedTeam['attacker'][index],//players.firstWhere((element) => element.id == controller.myPickedTeam['attacker'][index], orElse: ()=> defaultPlayer),
+                                      );
+                                    },
+                                  ),
+                                ),
+                              );
+                            }
+                          ),
+                        ),
+                        SizedBox(
+                          height: MediaQuery.of(context).size.height / 15,
+                        )
+                      ],
+                    ),
                   ),
                 ),
               ),
@@ -384,8 +393,8 @@ class PickedPlayerCard extends StatelessWidget {
   }) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    var viceCaptain = false.obs;
-    var captain = false.obs;
+    var viceCaptain = player.isViceCaptain;
+    var captain = player.isCaptain;
     bool isDark = Theme.of(context).brightness == Brightness.dark;
     TeamController teamController = Get.find<TeamController>();
     UserController userController = Get.find<UserController>();
@@ -402,6 +411,7 @@ class PickedPlayerCard extends StatelessWidget {
     }
     List<Team> team = teamController.getTeams;
     List<Player> players = teamController.getPlayers;
+    var obsFalse = false.obs;
     Team defaultTeam = Team(icon: Icon1.Icon(name: '', contentType: ''), draw: 0, currentPosition: 0, id: '', name: '', played: 0, win: 0, loss: 0, goals: 0, points: 0, jersey: '', imageUrl: '', yellowCards: 0, redCards: 0, players: [], v: 0, cleanSheets: 0, goalsAgainst: 0);
     return Obx(
         ()=> IgnorePointer(
@@ -499,23 +509,48 @@ class PickedPlayerCard extends StatelessWidget {
                                     padding: EdgeInsets.all(10),
                                     child: Obx(
                                       ()=> IgnorePointer(
-                                        ignoring: (player.id == '') || (viceCaptain.value == true),
-                                        child: CheckboxListTile(
-                                            title: Text('Captain',
-                                        style: TextStyle(
-                                            fontSize: 15
-                                        ),
+                                        ignoring: (player.id == '') || (userController.viceCaptain.value == player.id) || obsFalse.value,
+                                        child: GestureDetector(
+                                          onTap: (){
+                                            if (player.id == userController.captain.value) {
+                                              userController.updateCaptain('  ');
+                                              userController.pickTeamUpdating.value = true;
+                                            } else {
+                                              userController.myUser.captain = player.id;
+                                              userController.updateCaptain(player.id);
+                                              userController.pickTeamUpdating.value = true;
+                                            }
+                                          },
+                                          child: Container(
+                                            alignment: Alignment.center,
+                                            height: 60,
+                                            padding: EdgeInsets.symmetric(vertical: 10),
+                                            child: Row(
+                                              children: [
+                                                Expanded(
+                                                  flex: 3,
+                                                  child: Container(
+                                                    alignment: Alignment.center,
+                                                    child: Text('Captain'),
+                                                  ),
+                                                ),
+                                                Expanded(
+                                                  child: (player.id != userController.captain.value) || obsFalse.value?
+                                                  Container(
+                                                    alignment: Alignment.center,
+                                                    child: IconMain.Icon(Icons.check_box_outline_blank),
+                                                  )
+                                                    :
+                                                  Container(
+                                                    alignment: Alignment.center,
+                                                    child: IconMain.Icon(Icons.check_box_rounded),
+                                                  )
+                                                  ,
+                                                )
+                                              ],
                                             ),
-                                            value: captain.value,
-                                            onChanged: (value) {
-                                        captain.value = value!;
-                                        if (captain.value == true) {
-                                          userController.updateCaptain(player.id);
-                                        } else {
-                                          userController.updateCaptain('  ');
-                                        }
-                                            },
                                           ),
+                                        )
                                       ),
                                     ),
                                   ),
@@ -526,23 +561,65 @@ class PickedPlayerCard extends StatelessWidget {
                                     padding: EdgeInsets.all(10),
                                     child: Obx(
                                       ()=> IgnorePointer(
-                                        ignoring: (player.id == '') || (captain.value == true),
-                                        child: CheckboxListTile(
-                                            title: Text('Vice Captain',
-                                        style: TextStyle(
-                                            fontSize: 15
-                                        ),
+                                        ignoring: (player.id == '') || (userController.captain.value == player.id) || obsFalse.value,
+                                        child: GestureDetector(
+                                          onTap: (){
+                                            if (player.id == userController.viceCaptain.value) {
+                                              userController.updateViceCaptain('  ');
+                                              userController.pickTeamUpdating.value = true;
+                                            } else {
+                                              userController.myUser.viceCaptain = player.id;
+                                              userController.updateViceCaptain(player.id);
+                                              userController.pickTeamUpdating.value = true;
+                                            }
+                                          },
+                                          child: Container(
+                                            alignment: Alignment.center,
+                                            height: 60,
+                                            padding: EdgeInsets.symmetric(vertical: 10),
+                                            child: Row(
+                                              children: [
+                                                Expanded(
+                                                  flex: 3,
+                                                  child: Container(
+                                                    alignment: Alignment.center,
+                                                    child: Text('Vice Captain'),
+                                                  ),
+                                                ),
+                                                Expanded(
+                                                    child: (player.id != userController.viceCaptain.value)?
+                                                   Container(
+                                                     alignment: Alignment.center,
+                                                     child: IconMain.Icon(Icons.check_box_outline_blank),
+                                                   )
+                                                       :
+                                                   Container(
+                                                     alignment: Alignment.center,
+                                                     child: IconMain.Icon(Icons.check_box_rounded),
+                                                   )
+                                                    ,
+                                                  )
+                                              ],
                                             ),
-                                            value: viceCaptain.value,//userController.viceCaptain.value == player.id,
-                                            onChanged: (value) {
-                                        viceCaptain.value = value!;
-                                        if (viceCaptain.value == true) {
-                                          userController.updateViceCaptain(player.id);
-                                        } else {
-                                          userController.updateViceCaptain('   ');
-                                        }
-                                            },
                                           ),
+                                        ),
+                                        // CheckboxListTile(
+                                        //     title: Text('Vice Captain',
+                                        // style: TextStyle(
+                                        //     fontSize: 15
+                                        // ),
+                                        //     ),
+                                        //     value: player.isViceCaptain.value,//userController.viceCaptain.value == player.id,
+                                        //     onChanged: (value) {
+                                        // //viceCaptain.value = value!;
+                                        // player.isViceCaptain.value = value!;
+                                        // if (player.isViceCaptain.value == true) {
+                                        //   userController.updateViceCaptain(player.id);
+                                        // } else {
+                                        //   userController.updateViceCaptain('   ');
+                                        // }
+                                        //     },
+                                        //   ),
                                       ),
                                     ),
                                   ),
@@ -571,7 +648,7 @@ class PickedPlayerCard extends StatelessWidget {
                     children: [
                       CircleAvatar(
                         radius: 28,
-                        backgroundColor:Get.isDarkMode? Colors.white30 : Colors.black26,
+                        backgroundColor:Get.isDarkMode? Colors.black38 : Colors.black26,
                         child: player.imageUrl != ''?
                         Image1.Image.network(
                           team.firstWhere((element) => element.id == player.team, orElse: () => defaultTeam).imageUrl,

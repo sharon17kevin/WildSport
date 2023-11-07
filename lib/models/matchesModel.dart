@@ -19,6 +19,26 @@ class Match {
   String homeTeam;
   int gameWeek;
   bool live;
+  List<dynamic> homeGoalScorers;
+  List<dynamic> homePenaltyScorers;
+  List<dynamic> homePenaltyMissers;
+  List<dynamic> homeOwnGoals;
+  List<dynamic> homeRedCard;
+  List<dynamic> homeYellowCard;
+  List<dynamic> homeOffsides;
+  List<dynamic> homeCorners;
+  List<dynamic> awayGoalScorers;
+  List<dynamic> awayPenaltyScorers;
+  List<dynamic> awayPenaltyMissers;
+  List<dynamic> awayOwnGoals;
+  List<dynamic> awayRedCard;
+  List<dynamic> awayYellowCard;
+  List<dynamic> awayOffsides;
+  List<dynamic> awayCorners;
+  List<dynamic> homeLineUp;
+  List<dynamic> awayLineUp;
+  List<dynamic>? homeSubs;
+  List<dynamic>? awaySubs;
   int v;
 
   Match({
@@ -32,6 +52,26 @@ class Match {
     required this.homeTeam,
     required this.gameWeek,
     required this.live,
+    required this.homeGoalScorers,
+    required this.homePenaltyScorers,
+    required this.homePenaltyMissers,
+    required this.homeOwnGoals,
+    required this.homeRedCard,
+    required this.homeYellowCard,
+    required this.homeOffsides,
+    required this.homeCorners,
+    required this.awayGoalScorers,
+    required this.awayPenaltyScorers,
+    required this.awayPenaltyMissers,
+    required this.awayOwnGoals,
+    required this.awayRedCard,
+    required this.awayYellowCard,
+    required this.awayOffsides,
+    required this.awayCorners,
+    required this.homeLineUp,
+    required this.awayLineUp,
+    this.homeSubs,
+    this.awaySubs,
     required this.v,
   });
 
@@ -46,6 +86,26 @@ class Match {
     homeTeam: json["homeTeam"],
     gameWeek: json["gameWeek"],
     live: json["live"],
+    homeGoalScorers: List<dynamic>.from(json["homeGoalScorers"].map((x) => x)),
+    homePenaltyScorers: List<dynamic>.from(json["homePenaltyScorers"].map((x) => x)),
+    homePenaltyMissers: List<dynamic>.from(json["homePenaltyMissers"].map((x) => x)),
+    homeOwnGoals: List<dynamic>.from(json["homeOwnGoals"].map((x) => x)),
+    homeRedCard: List<dynamic>.from(json["homeRedCard"].map((x) => x)),
+    homeYellowCard: List<dynamic>.from(json["homeYellowCard"].map((x) => x)),
+    homeOffsides: List<dynamic>.from(json["homeOffsides"].map((x) => x)),
+    homeCorners: List<dynamic>.from(json["homeCorners"].map((x) => x)),
+    awayGoalScorers: List<dynamic>.from(json["awayGoalScorers"].map((x) => x)),
+    awayPenaltyScorers: List<dynamic>.from(json["awayPenaltyScorers"].map((x) => x)),
+    awayPenaltyMissers: List<dynamic>.from(json["awayPenaltyMissers"].map((x) => x)),
+    awayOwnGoals: List<dynamic>.from(json["awayOwnGoals"].map((x) => x)),
+    awayRedCard: List<dynamic>.from(json["awayRedCard"].map((x) => x)),
+    awayYellowCard: List<dynamic>.from(json["awayYellowCard"].map((x) => x)),
+    awayOffsides: List<dynamic>.from(json["awayOffsides"].map((x) => x)),
+    awayCorners: List<dynamic>.from(json["awayCorners"].map((x) => x)),
+    homeLineUp: List<dynamic>.from(json["homeLineUp"].map((x) => x)),
+    awayLineUp: List<dynamic>.from(json["awayLineUp"].map((x) => x)),
+    homeSubs: List<dynamic>.from(json["homeSubs"].map((x) => x)),
+    awaySubs: List<dynamic>.from(json["awaySubs"].map((x) => x)),
     v: json["__v"],
   );
 
@@ -60,6 +120,26 @@ class Match {
     "homeTeam": homeTeam,
     "gameWeek": gameWeek,
     "live": live,
+    "homeGoalScorers": List<dynamic>.from(homeGoalScorers.map((x) => x)),
+    "homePenaltyScorers": List<dynamic>.from(homePenaltyScorers.map((x) => x)),
+    "homePenaltyMissers": List<dynamic>.from(homePenaltyMissers.map((x) => x)),
+    "homeOwnGoals": List<dynamic>.from(homeOwnGoals.map((x) => x)),
+    "homeRedCard": List<dynamic>.from(homeRedCard.map((x) => x)),
+    "homeYellowCard": List<dynamic>.from(homeYellowCard.map((x) => x)),
+    "homeOffsides": List<dynamic>.from(homeOffsides.map((x) => x)),
+    "homeCorners": List<dynamic>.from(homeCorners.map((x) => x)),
+    "awayGoalScorers": List<dynamic>.from(awayGoalScorers.map((x) => x)),
+    "awayPenaltyScorers": List<dynamic>.from(awayPenaltyScorers.map((x) => x)),
+    "awayPenaltyMissers": List<dynamic>.from(awayPenaltyMissers.map((x) => x)),
+    "awayOwnGoals": List<dynamic>.from(awayOwnGoals.map((x) => x)),
+    "awayRedCard": List<dynamic>.from(awayRedCard.map((x) => x)),
+    "awayYellowCard": List<dynamic>.from(awayYellowCard.map((x) => x)),
+    "awayOffsides": List<dynamic>.from(awayOffsides.map((x) => x)),
+    "awayCorners": List<dynamic>.from(awayCorners.map((x) => x)),
+    "homeLineUp": List<dynamic>.from(homeLineUp.map((x) => x)),
+    "awayLineUp": List<dynamic>.from(awayLineUp.map((x) => x)),
+    "homeSubs": List<dynamic>.from(homeSubs!.map((x) => x)),
+    "awaySubs": List<dynamic>.from(awaySubs!.map((x) => x)),
     "__v": v,
   };
 }

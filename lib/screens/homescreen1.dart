@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:wild_sport/controllers/userController.dart';
 import 'package:wild_sport/screens/fantasyscreen2.dart';
 import 'package:wild_sport/screens/homescreen.dart';
 import 'package:wild_sport/screens/morescreen.dart';
@@ -29,7 +32,24 @@ class _HomeScreenNState extends State<HomeScreenN> {
     MoreScreen(),
   ];
 
+  Future<String> getUserName() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    return prefs.getString('wildcard_user_id') ?? '';
+  }
+  UserController userController = Get.find<UserController>();
+  Future<void> setUp() async {
+    await userController.generateFantasy();
+    await userController.fetchGameweeks(userController.myUser);
+    await userController.fetchLeagues(userController.myUser);
+  }
+
   var _currentIndex = 0;
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    //setUp();
+  }
   Widget build(BuildContext context) {
     bool isDark = Theme.of(context).brightness == Brightness.dark;
     return DefaultTabController(

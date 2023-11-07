@@ -1,11 +1,20 @@
+import 'dart:convert';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:jwt_decoder/jwt_decoder.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:wild_sport/controllers/userController.dart';
+import 'package:wild_sport/functions/secureStorage.dart';
+import 'package:wild_sport/morePages/bookmark.dart';
+import 'package:wild_sport/morePages/faqs.dart';
+import 'package:wild_sport/morePages/legal.dart';
 import 'package:wild_sport/morePages/manageAccount.dart';
 import 'package:wild_sport/morePages/managementPanel.dart';
 import 'package:wild_sport/morePages/overview.dart';
 import 'package:wild_sport/morePages/whatDoWeDo.dart';
+import 'package:wild_sport/screens/login.dart';
 
 import '../helperPages/statsTile.dart';
 import '../stat_pages/season_stats.dart';
@@ -17,6 +26,63 @@ class MoreScreen extends StatefulWidget {
 
 class _MoreScreenState extends State<MoreScreen> {
   UserController userController = Get.find<UserController>();
+   void checkIfAdmin() async{
+    final String authToken = await SecureStorage.readSecureData('token');
+    Map<String, dynamic> decodedToken = JwtDecoder.decode(authToken);
+    bool subject = decodedToken['admin'];
+    admin.value = subject;
+  }
+  RxBool admin = true.obs;
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    checkIfAdmin();
+  }
+
+  void removeUserID() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.remove('wildcard_user_id');
+  }
+
+  void showSignOut() {
+    Get.dialog(
+        AlertDialog(
+          title: Text('Sign Out'),
+          content: Text('Confirm Sign Out'),
+          actions: <Widget>[
+            TextButton(
+                onPressed: (){
+                  Get.back();
+                },
+                child: Text('Cancel',
+                  style: TextStyle(
+                    fontSize: 15,
+                    color: Get.isDarkMode? Colors.white : Colors.black,
+                    letterSpacing: 1,
+                  ),
+                )
+            ),
+            TextButton(
+                onPressed: () async{
+                  await SecureStorage.writeSecureData('password', '');
+                  await SecureStorage.writeSecureData('token', '');
+                  removeUserID();
+                  Get.to(()=> Login());
+                },
+                child: Text('Confirm',
+                  style: TextStyle(
+                    fontSize: 15,
+                    color: Get.isDarkMode? Colors.white : Colors.black,
+                    letterSpacing: 1,
+                  ),
+                )
+            ),
+          ],
+        )
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     bool isDark = Theme.of(context).brightness == Brightness.dark;
@@ -95,8 +161,8 @@ class _MoreScreenState extends State<MoreScreen> {
                     color: Get.isDarkMode? Colors.white : Colors.black
                 ),
                 child: InkWell(
-                  onTap: () async{
-                    await userController.updateGameWeek(userController.myUser);
+                  onTap: () {
+                    showSignOut();
                   },
                   child: Padding(
                     padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
@@ -123,8 +189,8 @@ class _MoreScreenState extends State<MoreScreen> {
                 height: 60,
                 padding: EdgeInsets.symmetric(horizontal: 10),
                 child: StatsTile(
-                  page: ManagementPanel(),
-                  title: "Notifications",
+                  page: Bookmark(),
+                  title: "Bookmarks",
                 ),
               ),
               Container(
@@ -167,7 +233,7 @@ class _MoreScreenState extends State<MoreScreen> {
                 height: 60,
                 padding: EdgeInsets.symmetric(horizontal: 10),
                 child: StatsTile(
-                  page: ManagementPanel(),
+                  page: Legal(),
                   title: "Legal",
                 ),
               ),
@@ -202,7 +268,7 @@ class _MoreScreenState extends State<MoreScreen> {
                 height: 60,
                 padding: EdgeInsets.symmetric(horizontal: 10),
                 child: StatsTile(
-                  page: ManagementPanel(),
+                  page: FAQs(),
                   title: "FAQs",
                 ),
               ),
@@ -224,30 +290,39 @@ class _MoreScreenState extends State<MoreScreen> {
                   title: "Cookie Policies",
                 ),
               ),
-              Container(
-                width: Get.width,
-                height: 50,
-                padding: EdgeInsets.symmetric(horizontal: 25),
-                alignment: Alignment.centerLeft,
-                decoration: BoxDecoration(
-                    border: Border(
-                        bottom: BorderSide(
-                            color: Get.isDarkMode? Colors.white: Colors.black,
-                            width: 1
-                        )
-                    )
-                ),
-                child: Text(
-                    'Admin Only'
-                ),
-              ),
-              Container(
-                margin: EdgeInsets.symmetric(vertical: 5),
-                height: 60,
-                padding: EdgeInsets.symmetric(horizontal: 10),
-                child: StatsTile(
-                  page: ManagementPanel(),
-                  title: "Management Panel",
+              Obx(
+                ()=> Visibility(
+                  visible: admin.isTrue,
+                  child: Column(
+                    children: [
+                      Container(
+                        width: Get.width,
+                        height: 50,
+                        padding: EdgeInsets.symmetric(horizontal: 25),
+                        alignment: Alignment.centerLeft,
+                        decoration: BoxDecoration(
+                            border: Border(
+                                bottom: BorderSide(
+                                    color: Get.isDarkMode? Colors.white: Colors.black,
+                                    width: 1
+                                )
+                            )
+                        ),
+                        child: Text(
+                            'Admin Only'
+                        ),
+                      ),
+                      Container(
+                        margin: EdgeInsets.symmetric(vertical: 5),
+                        height: 60,
+                        padding: EdgeInsets.symmetric(horizontal: 10),
+                        child: StatsTile(
+                          page: ManagementPanel(),
+                          title: "Management Panel",
+                        ),
+                      )
+                    ],
+                  ),
                 ),
               ),
             ],

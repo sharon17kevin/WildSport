@@ -13,13 +13,6 @@ import 'package:wild_sport/models/breakingNewsModel.dart';
 import '../components/newsBlock.dart';
 import 'package:wild_sport/controllers/breakingNewsController.dart';
 
-List _slides = [
-  ['assets/images/football1.jpg', 'This is just some sample title'],
-  ['assets/images/football2.jpg', 'This is just some sample title'],
-  ['assets/images/football3.jpg', 'This is just some sample title'],
-  ['assets/images/football4.jpg', 'This is just some sample title'],
-];
-
 class NewsN extends StatefulWidget {
   @override
   _NewsNState createState() => _NewsNState();
@@ -27,11 +20,7 @@ class NewsN extends StatefulWidget {
 
 class _NewsNState extends State<NewsN> {
 
-  final BreakingNewsController _breakingNewsController = Get.put(BreakingNewsController());
-  final MatchesController _matchesController = Get.put(MatchesController());
-  final HighlightsController _highlightsController = Get.put(HighlightsController());
-  final ShortsController _shortsController = Get.put(ShortsController());
-  final TeamController _teamController = Get.put(TeamController());
+  final BreakingNewsController _breakingNewsController = Get.find<BreakingNewsController>();
 
   @override
   Widget build(BuildContext context) {

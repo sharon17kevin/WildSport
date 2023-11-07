@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -27,139 +28,158 @@ class _PointPageState extends State<PointPage> {
     Map<String, dynamic> lineUp = userController.myPickedTeam;
     Player defaultPlayer = Player(image: Image2.Image(name: '', contentType: ''), fantasyPrice: 0, id: '', name: '', team: '', age: 0, number: 0, appearances: 0, goals: 0, subs: 0, assists: 0, fantasyPoints: 0, position: '', yellowCards: 0, redCards: 0, v: 0, cleanSheets: 0, currentFantasyPoints: 0, ownGoals: 0, imageUrl: '');
     return Scaffold(
+      appBar: AppBar(
+        leadingWidth: 200,
+        leading: GestureDetector(
+          onTap: (){
+            Get.back();
+          },
+          child: Container(
+            padding: EdgeInsets.symmetric(horizontal: 15),
+            child: Row(
+              children: [
+                Icon2.Icon(Icons.arrow_back_ios, size: 10,),
+                SizedBox(width: 5,),
+                Text('Back',
+                  style: GoogleFonts.inter(
+                      color: Get.isDarkMode? Colors.white : Colors.black,
+                      fontSize: 15
+                  ),
+                )
+              ],
+            ),
+          ),
+        ),
+      ),
       body: SafeArea(
         child: Column(
           children: [
             Expanded(
               flex: 3,
               child: Container(
-                child: Column(
-                  children: [
-                    Expanded(
-                      child: Container(
-                        child: Row(
-                          children: [
-                            Padding(
-                              padding: EdgeInsets.symmetric(horizontal: 10),
-                              child: GestureDetector(
-                                onTap: (){
-                                  Get.back();
-                                },
-                                child: Container(
-                                  child: Row(
-                                    children: [
-                                      Icon2.Icon(Icons.arrow_back_ios, size: 10,),
-                                      SizedBox(width: 5,),
-                                      Text('Back',
-                                        style: GoogleFonts.inter(
-                                          color: Get.isDarkMode? Colors.white : Colors.black,
-                                          fontSize: 15
-                                        ),
-                                      )
-                                    ],
-                                  ),
-                                ),
-                              ),
-                            ),
-                            Expanded(
-                              child: Container(
-                                alignment: Alignment.center,
-                                child: Text('Team Name',
-                                  style: GoogleFonts.inter(
-                                    fontSize: 15,
-                                    fontWeight: FontWeight.w500
-                                  ),
-                                ),
-                              ),
-                            ),
-                            Container(
-                              padding: EdgeInsets.only(right: 5),
+                child: FutureBuilder(
+                  future: userController.fetchGameweeks(userController.myUser),
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return Center(child: CircularProgressIndicator());
+                    } else if (snapshot.hasError) {
+                      return Center(child: Text('No Team Data Available'));
+                    } else {
+                      return Column(
+                        children: [
+                          Expanded(
+                            child: Container(
                               child: Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                 children: [
-                                  Icon2.Icon(Icons.arrow_back_ios, size: 10, color: Colors.transparent,),
-                                  SizedBox(width: 5,),
-                                  Text('Back',
-                                    style: GoogleFonts.inter(
-                                        color: Colors.transparent,
-                                        fontSize: 15
+                                  Padding(
+                                    padding: EdgeInsets.symmetric(horizontal: 10),
+                                    child: Container(
+                                      width: 25,
+                                    )
+                                  ),
+                                  Expanded(
+                                    child: Container(
+                                      alignment: Alignment.center,
+                                      child: Text(userController.myUser.teamName!.toUpperCase(),
+                                        style: GoogleFonts.inter(
+                                            fontSize: 15,
+                                            fontWeight: FontWeight.w500
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                  Container(
+                                    padding: EdgeInsets.only(right: 5),
+                                    child: Row(
+                                      children: [
+                                        Icon2.Icon(Icons.arrow_back_ios, size: 10, color: Colors.transparent,),
+                                        SizedBox(width: 5,),
+                                        Text('Back',
+                                          style: GoogleFonts.inter(
+                                              color: Colors.transparent,
+                                              fontSize: 15
+                                          ),
+                                        )
+                                      ],
                                     ),
                                   )
                                 ],
                               ),
-                            )
-                          ],
-                        ),
-                      ),
-                    ),
-                    Expanded(
-                      child: Container(
-                        padding: EdgeInsets.symmetric(horizontal: 10),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            GestureDetector(
-                              onTap: (){
-                                userController.decreasepgw();
-                              },
-                              child: CircleAvatar(
-                                radius: 18,
-                                backgroundColor: Get.isDarkMode? Colors.white : Colors.black,
-                                child: Icon2.Icon(Icons.arrow_back_ios,
-                                  color: Get.isDarkMode? Colors.black : Colors.white,
-                                  size: 16,
-                                ),
-                              ),
                             ),
-                            Obx(
-                              ()=> Text('Game Week ${userController.pointGameweeks.value[userController.pointsPageIndex.value].number}',
-                                style: GoogleFonts.inter(
-                                    fontSize: 15,
-                                    fontWeight: FontWeight.w500
-                                ),
-                              ),
-                            ),
-                            GestureDetector(
-                              onTap: (){
-                                userController.increasepgw();
-                              },
-                              child: CircleAvatar(
-                                radius: 18,
-                                backgroundColor: Get.isDarkMode? Colors.white : Colors.black,
-                                child: Icon2.Icon(Icons.arrow_forward_ios,
-                                  color: Get.isDarkMode? Colors.black : Colors.white,
-                                  size: 16,
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                    Expanded(
-                      flex: 2,
-                      child: Container(
-                        child: Center(
-                          child: Container(
-                            height: 60,
-                            width: 60,
-                            decoration: BoxDecoration(
-                              color: Get.isDarkMode? Colors.white : Colors.black,
-                              borderRadius: BorderRadius.all(Radius.circular(10)),
-                            ),
-                            alignment: Alignment.center,
-                            child: Obx(
-                              ()=> Text('${userController.pointGameweeks.value[userController.pointsPageIndex.value].points}',
-                                style: GoogleFonts.orbitron(
-                                  fontSize: 20,
-                                  color: Get.isDarkMode? Colors.black : Colors.white
-                                ),
+                          ),
+                          Expanded(
+                            child: Container(
+                              padding: EdgeInsets.symmetric(horizontal: 10),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                  GestureDetector(
+                                    onTap: (){
+                                      userController.decreasepgw();
+                                    },
+                                    child: CircleAvatar(
+                                      radius: 18,
+                                      backgroundColor: Get.isDarkMode? Colors.white : Colors.black,
+                                      child: Icon2.Icon(Icons.arrow_back_ios,
+                                        color: Get.isDarkMode? Colors.black : Colors.white,
+                                        size: 16,
+                                      ),
+                                    ),
+                                  ),
+                                  Obx(
+                                        ()=> Text('Game Week ${userController.pointGameweeks.value.firstWhere((element) => element.number == userController.viableGameweeks.value[userController.pointsPageIndex.value] ).number}',
+                                      style: GoogleFonts.inter(
+                                          fontSize: 15,
+                                          fontWeight: FontWeight.w500
+                                      ),
+                                    ),
+                                  ),
+                                  GestureDetector(
+                                    onTap: (){
+                                      userController.increasepgw();
+                                    },
+                                    child: CircleAvatar(
+                                      radius: 18,
+                                      backgroundColor: Get.isDarkMode? Colors.white : Colors.black,
+                                      child: Icon2.Icon(Icons.arrow_forward_ios,
+                                        color: Get.isDarkMode? Colors.black : Colors.white,
+                                        size: 16,
+                                      ),
+                                    ),
+                                  ),
+                                ],
                               ),
                             ),
                           ),
-                        ),
-                      ),
-                    )
-                  ],
+                          Expanded(
+                            flex: 2,
+                            child: Container(
+                              child: Center(
+                                child: Container(
+                                  height: 60,
+                                  width: 60,
+                                  decoration: BoxDecoration(
+                                    color: Get.isDarkMode? Colors.white : Colors.black,
+                                    borderRadius: BorderRadius.all(Radius.circular(10)),
+                                  ),
+                                  alignment: Alignment.center,
+                                  child: Obx(
+                                        ()=> Text('${userController.gameWeekPoint(userController.viableGameweeks.value[userController.pointsPageIndex.value])}',
+                                      style: GoogleFonts.orbitron(
+                                          fontSize: 20,
+                                          color: Get.isDarkMode? Colors.black : Colors.white
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          )
+                        ],
+                      );
+                    }
+                  },
                 ),
               ),
             ),
@@ -208,8 +228,9 @@ class _PointPageState extends State<PointPage> {
                           Container(
                             child: Obx(
                                   ()=> PointPlayerCard(
-                                player: players.firstWhere((element) => element.id == userController.pointGameweeks.value[userController.pointsPageIndex.value].subKeeper, orElse: ()=> defaultPlayer),//players.firstWhere((element) => element.id == userController.keeperSub.value, orElse: ()=> defaultPlayer),
-                              ),
+                                    player: players.firstWhere((element) => element.id == userController.pointGameweeks.value[userController.pointsPageIndex.value].subKeeper, orElse: ()=> defaultPlayer),//players.firstWhere((element) => element.id == userController.keeperSub.value, orElse: ()=> defaultPlayer),
+                                    gameweek: userController.pointGameweeks.value.firstWhere((element) => element.number == userController.viableGameweeks.value[userController.pointsPageIndex.value] ).number,
+                                  ),
                             ),
                           ),
                           Expanded(
@@ -223,10 +244,13 @@ class _PointPageState extends State<PointPage> {
                                           scrollDirection: Axis.horizontal,
                                           physics: NeverScrollableScrollPhysics(),
                                           shrinkWrap: true,
-                                          itemCount: controller.pointGameweeks.value.last.substitution.length,
+                                          itemCount: controller.pointGameweeks.value.firstWhere((element) => element.number == controller.viableGameweeks.value[controller.pointsPageIndex.value] ).substitution.length,
                                           itemBuilder: (context, index) {
-                                            return PointPlayerCard(
-                                                player: players.firstWhere((element) => element.id == controller.pointGameweeks.value[controller.pointsPageIndex.value].substitution[index], orElse: ()=> defaultPlayer)
+                                            return Obx(
+                                              ()=> PointPlayerCard(
+                                                gameweek: userController.pointGameweeks.value.firstWhere((element) => element.number == userController.viableGameweeks.value[userController.pointsPageIndex.value] ).number,
+                                                  player: players.firstWhere((element) => element.id == controller.pointGameweeks.value[controller.pointsPageIndex.value].substitution[index], orElse: ()=> defaultPlayer)
+                                              ),
                                             );
                                           },
                                         ),
@@ -252,8 +276,9 @@ class _PointPageState extends State<PointPage> {
 
 class PointPlayerCard extends StatelessWidget {
   final Player player;
+  final int gameweek;
 
-  PointPlayerCard({required this.player});
+  PointPlayerCard({required this.player, required this.gameweek});
   @override
   Widget build(BuildContext context) {
     UserController userController = Get.find<UserController>();
@@ -279,7 +304,7 @@ class PointPlayerCard extends StatelessWidget {
                 children: [
                   CircleAvatar(
                     radius: 28,
-                    backgroundColor:Get.isDarkMode? Colors.white30 : Colors.black26,
+                    backgroundColor:Get.isDarkMode? Colors.black38 : Colors.black26,
                     child: player.imageUrl != ''?
                     Image1.Image.network(
                       team.firstWhere((element) => element.id == player.team, orElse: () => defaultTeam).imageUrl,
@@ -414,16 +439,28 @@ class PointPlayerCard extends StatelessWidget {
                 ),
                 padding: EdgeInsets.symmetric(vertical: 2),
                 width: double.maxFinite,
-                child: Text('Point',
-                  textAlign: TextAlign.center,
-                  maxLines: 1,
-                  style: GoogleFonts.montserrat(
-                      decoration: TextDecoration.none,
-                      color: Colors.white,
-                      fontSize: 8,
-                      fontWeight: FontWeight.w500
+                child: (player.points?[gameweek] == null)?
+                  Text('--',
+                    textAlign: TextAlign.center,
+                    maxLines: 1,
+                    style: GoogleFonts.montserrat(
+                        decoration: TextDecoration.none,
+                        color: Colors.white,
+                        fontSize: 8,
+                        fontWeight: FontWeight.w500
+                    ),
+                  )
+                :
+                  Text('${player.points?[gameweek]}',
+                    textAlign: TextAlign.center,
+                    maxLines: 1,
+                    style: GoogleFonts.montserrat(
+                        decoration: TextDecoration.none,
+                        color: Colors.white,
+                        fontSize: 8,
+                        fontWeight: FontWeight.w500
+                    ),
                   ),
-                ),
               ),
             )
           ],
@@ -436,6 +473,7 @@ class PointPlayerCard extends StatelessWidget {
 class Points extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    UserController userController = Get.find<UserController>();
     TeamController teamController = Get.find<TeamController>();
     List<Player> players = teamController.getPlayers;
     Player defaultPlayer = Player(image: Image2.Image(name: '', contentType: ''), fantasyPrice: 0, id: '', name: '', team: '', age: 0, number: 0, appearances: 0, goals: 0, subs: 0, assists: 0, fantasyPoints: 0, position: '', yellowCards: 0, redCards: 0, v: 0, cleanSheets: 0, currentFantasyPoints: 0, ownGoals: 0, imageUrl: '');
@@ -445,7 +483,7 @@ class Points extends StatelessWidget {
           image: DecorationImage(
             alignment: Alignment.topCenter,
             image: AssetImage(
-              Get.isDarkMode? 'assets/images/fieldDark.png' : 'assets/images/fieldLight.png',
+              Get.isDarkMode? 'assets/images/darkField.webp' : 'assets/images/lightField.webp',
             ),
             fit: BoxFit.fill,
           )
@@ -470,6 +508,7 @@ class Points extends StatelessWidget {
                         itemBuilder: (context, index) {
                           return Obx(
                                 ()=> PointPlayerCard(
+                                  gameweek: userController.pointGameweeks.value.firstWhere((element) => element.number == userController.viableGameweeks.value[userController.pointsPageIndex.value] ).number,
                               player: players.firstWhere((element) => element.id == controller.pointGameweeks.value[controller.pointsPageIndex.value].keeper, orElse: ()=> defaultPlayer),
                             ),
                           );
@@ -487,13 +526,17 @@ class Points extends StatelessWidget {
                     return Center(
                       child: Obx(
                             ()=> ListView.builder(
+                              padding: EdgeInsets.zero,
                           scrollDirection: Axis.horizontal,
                           physics: NeverScrollableScrollPhysics(),
                           shrinkWrap: true,
-                          itemCount: controller.pointGameweeks.value.last.defender.length,
+                          itemCount: controller.pointGameweeks.value.firstWhere((element) => element.number == controller.viableGameweeks.value[controller.pointsPageIndex.value] ).defender.length,
                           itemBuilder: (context, index) {
-                            return PointPlayerCard(
-                              player: players.firstWhere((element) => element.id == controller.pointGameweeks.value[controller.pointsPageIndex.value].defender[index], orElse: ()=> defaultPlayer),
+                            return Obx(
+                              ()=> PointPlayerCard(
+                                gameweek: userController.pointGameweeks.value.firstWhere((element) => element.number == userController.viableGameweeks.value[userController.pointsPageIndex.value] ).number,
+                                player: players.firstWhere((element) => element.id == controller.pointGameweeks.value[controller.pointsPageIndex.value].defender[index], orElse: ()=> defaultPlayer),
+                              ),
                             );
                           },
                         ),
@@ -510,13 +553,17 @@ class Points extends StatelessWidget {
                     return Center(
                       child: Obx(
                             ()=> ListView.builder(
+                              padding: EdgeInsets.zero,
                           scrollDirection: Axis.horizontal,
                           physics: NeverScrollableScrollPhysics(),
                           shrinkWrap: true,
-                          itemCount: controller.pointGameweeks.value.last.midfielder.length,
+                          itemCount: controller.pointGameweeks.value.firstWhere((element) => element.number == controller.viableGameweeks.value[controller.pointsPageIndex.value] ).midfielder.length,
                           itemBuilder: (context, index) {
-                            return PointPlayerCard(
-                              player: players.firstWhere((element) => element.id == controller.pointGameweeks.value[controller.pointsPageIndex.value].midfielder[index], orElse: ()=> defaultPlayer),
+                            return Obx(
+                              ()=> PointPlayerCard(
+                                gameweek: userController.pointGameweeks.value.firstWhere((element) => element.number == userController.viableGameweeks.value[userController.pointsPageIndex.value] ).number,
+                                player: players.firstWhere((element) => element.id == controller.pointGameweeks.value[controller.pointsPageIndex.value].midfielder[index], orElse: ()=> defaultPlayer),
+                              ),
                             );
                           },
                         ),
@@ -533,13 +580,17 @@ class Points extends StatelessWidget {
                     return Center(
                       child: Obx(
                             ()=> ListView.builder(
+                              padding: EdgeInsets.zero,
                           scrollDirection: Axis.horizontal,
                           physics: NeverScrollableScrollPhysics(),
                           shrinkWrap: true,
-                          itemCount: controller.pointGameweeks.value.last.attacker.length,
+                          itemCount: controller.pointGameweeks.value.firstWhere((element) => element.number == controller.viableGameweeks.value[controller.pointsPageIndex.value] ).attacker.length,
                           itemBuilder: (context, index) {
-                            return PointPlayerCard(
-                                player: players.firstWhere((element) => element.id == controller.pointGameweeks.value[controller.pointsPageIndex.value].attacker[index], orElse: ()=> defaultPlayer)
+                            return Obx(
+                              ()=> PointPlayerCard(
+                                gameweek: userController.pointGameweeks.value.firstWhere((element) => element.number == userController.viableGameweeks.value[userController.pointsPageIndex.value] ).number,
+                                  player: players.firstWhere((element) => element.id == controller.pointGameweeks.value[controller.pointsPageIndex.value].attacker[index], orElse: ()=> defaultPlayer)
+                              ),
                             );
                           },
                         ),
@@ -548,9 +599,9 @@ class Points extends StatelessWidget {
                   }
               ),
             ),
-            SizedBox(
-              height: MediaQuery.of(context).size.height / 15,
-            )
+            // SizedBox(
+            //   height: MediaQuery.of(context).size.height / 15,
+            // )
           ],
         ),
       ),

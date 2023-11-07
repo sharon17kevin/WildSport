@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:get/get.dart';
 import 'package:uuid/uuid.dart';
 
 List<Player> playerFromJson(String str) => List<Player>.from(json.decode(str).map((x) => Player.fromJson(x)));
@@ -9,6 +10,7 @@ String playerToJson(List<Player> data) => json.encode(List<dynamic>.from(data.ma
 class Player {
   Image image;
   int fantasyPrice;
+  List<int>? points;
   String id;
   String name;
   String team;
@@ -28,10 +30,13 @@ class Player {
   int ownGoals;
   String imageUrl;
   final String uniqueKey;
+  RxBool isCaptain = false.obs;
+  RxBool isViceCaptain = false.obs;
 
   Player({
     required this.image,
     required this.fantasyPrice,
+    this.points,
     required this.id,
     required this.name,
     required this.team,
@@ -61,6 +66,7 @@ class Player {
     age: json["age"],
     number: json["number"],
     appearances: json["appearances"],
+    points: List<int>.from(json["points"].map((x) => x)),
     goals: json["goals"],
     subs: json["subs"],
     assists: json["assists"],
@@ -78,6 +84,7 @@ class Player {
   Map<String, dynamic> toJson() => {
     "image": image.toJson(),
     "fantasyPrice": fantasyPrice,
+    "points": List<dynamic>.from(points!.map((x) => x)),
     "_id": id,
     "name": name,
     "team": team,

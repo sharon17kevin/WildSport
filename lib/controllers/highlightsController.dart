@@ -7,7 +7,7 @@ import 'package:wild_sport/functions/highlightsFunctions.dart';
 class HighlightsController extends GetxController {
   var _highlights = <Highlight>[].obs;
 
-  List<Highlight> get myNews => _highlights.value;
+  List<Highlight> get myHighlights => _highlights.value;
 
   void updateHighlights(List<Highlight> highlights) {
     _highlights.value = highlights;
@@ -21,7 +21,7 @@ class HighlightsController extends GetxController {
 
   Future<void> fetchHighlight() async {
     try{
-      var response = await fetchHighlights('http://172.20.10.3:3000/api/highlights');
+      var response = await fetchHighlights('http://172.20.10.8:3000/api/highlights');
       List<Highlight> highlight = highlightsFromJson(response);
       updateHighlights(highlight);
       print("highlights ready");
