@@ -27,7 +27,7 @@ class MatchesController extends GetxController {
 
   Future<void> fetchFixtures() async {
     try{
-      var response = await fetchMatches('http://172.20.10.8:3000/api/matches');
+      var response = await fetchMatches('http://192.168.8.104:3000/api/matches');
       List<Match> fixtures = matchesFromJson(response);
       updateFixtureList(fixtures);
       var groupedMatches = groupBy(fixtures, (obj) => obj.date);

@@ -6,9 +6,9 @@ import 'package:wild_sport/home_pages/gameweekTile.dart';
 import 'package:wild_sport/models/matchesModel.dart';
 
 class MatchBox extends StatefulWidget {
-  final List<Match> gameweek;
+  List<Match> gameweek;
 
-  MatchBox({required this.gameweek});
+  MatchBox({ required this.gameweek});
 
   @override
   State<MatchBox> createState() => _MatchBoxState();
@@ -44,9 +44,14 @@ class _MatchBoxState extends State<MatchBox> {
       padding: EdgeInsets.all(10),
       child: ListView(
         children: matchdays.entries.map((entry) {
-          return GameweekTile(
+          return (widget.gameweek != null)?GameweekTile(
               dateTime: entry.key,
-              matches: entry.value);
+              matches: entry.value):
+          Container(
+            width: 100,
+            height: 200,
+            child: Text('No data just yet'),
+          );
         }).toList(),
       ),
     );

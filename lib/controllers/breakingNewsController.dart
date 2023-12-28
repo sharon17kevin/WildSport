@@ -16,7 +16,7 @@ class BreakingNewsController extends GetxController {
   var _latestNews = <BreakingNews>[].obs;
   var _authors = <Author>[].obs;
   late Set<String> uniqueNames;
-  String pather = '172.20.10.8:3000';
+  String pather = '192.168.8.104:3000';
 
   // ignore: invalid_use_of_protected_member
   List<BreakingNews> get myBreakingNews => _breakingNews.value;

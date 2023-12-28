@@ -40,6 +40,22 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     bool isDark = Theme.of(context).brightness == Brightness.dark;
+    String toTitleCase(String text) {
+      if (text == null || text.isEmpty) {
+        return "";
+      }
+
+      List<String> words = text.split(' ');
+      List<String> titleCaseWords = [];
+
+      for (String word in words) {
+        if (word.isNotEmpty) {
+          titleCaseWords.add(word[0].toUpperCase() + word.substring(1).toLowerCase());
+        }
+      }
+
+      return titleCaseWords.join(' ');
+    }
     return NestedScrollView(
       headerSliverBuilder: (context, bool innerBoxIsScrolled) {
         UserController userController = Get.find<UserController>();
@@ -56,7 +72,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                   text: 'Hello, \n',
                   style: Theme.of(context).textTheme.headlineMedium,
                   children: <TextSpan>[
-                    TextSpan(text: userController.myUser.name,
+                    TextSpan(text: toTitleCase('${userController.myUser.name}'),
                         style: Theme.of(context).textTheme.headlineLarge?.copyWith(fontSize: 22)),
                   ]
                 ),

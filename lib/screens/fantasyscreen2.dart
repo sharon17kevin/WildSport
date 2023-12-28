@@ -224,17 +224,25 @@ class _FantasyScreen2State extends State<FantasyScreen2> {
                   ),
                 )
             ),
-            // TextButton(
-            //   onPressed: () async{
-            //   },
-            //   child: Text('Confirm',
-            //     style: TextStyle(
-            //       fontSize: 15,
-            //       color: Get.isDarkMode? Colors.white : Colors.black,
-            //       letterSpacing: 1,
-            //     ),
-            //   ),
-            // ),
+            TextButton(
+              onPressed: () async{
+                _userController.myUser.freeHit = 0;
+                _userController.myUser.freeTransfer = -1;
+                await _userController.updateUserFuture();
+                int number = _userController.viableGameweeks.value.length;
+                PointGameWeek pgw = _userController.pointGameweeks.firstWhere((element) => element.number == number + 1);
+                pgw.freeHit = true;
+                await _userController.updatePGW(pgw, number + 1);
+                Get.back();
+              },
+              child: Text('Confirm',
+                style: TextStyle(
+                  fontSize: 15,
+                  color: Get.isDarkMode? Colors.white : Colors.black,
+                  letterSpacing: 1,
+                ),
+              ),
+            ),
           ],
         )
     );
@@ -286,7 +294,7 @@ class _FantasyScreen2State extends State<FantasyScreen2> {
   Widget build(BuildContext context) {
     Future<void> _data = _userController.fetchGameweeks(_userController.myUser);
     PointGameWeek defaultPgw = PointGameWeek(number: 0, points: 0, keeper: '', defender: [], midfielder: [], attacker: [], subKeeper: '', substitution: [], id: '', v: 0);
-    DateTime targetDate = _userController.deadlines.value.firstWhere((element) => element.gameweek == _userController.viableGameweeks.length + 1).date;
+    DateTime targetDate = _userController.deadlines.value.firstWhere((element) => element.gameweek == 1).date;//_userController.viableGameweeks.length + 1).date;
     DateTime currentDate = DateTime.now();
     Duration difference = targetDate.difference(currentDate);
     int daysUntilTargetDate = difference.inDays;

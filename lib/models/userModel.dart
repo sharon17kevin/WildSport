@@ -25,6 +25,11 @@ class User {
   List<String>? midfielder;
   List<String>? attacker;
   List<FantasyTeam>? fantasyTeam;
+  List<FantasyTeam>? freeHitTeam;
+  String? freeHitKeeper;
+  List<dynamic>? freeHitDefender;
+  List<dynamic>? freeHitMidfielder;
+  List<dynamic>? freeHitAttacker;
   int? bank;
   String? captain;
   String? viceCaptain;
@@ -33,7 +38,9 @@ class User {
   int? wildcard;
   int? freeHit;
   int? benchBoost;
+  int? tripleCaptain;
   int? cost;
+  DateTime? date;
 
   User({
     this.id,
@@ -48,6 +55,11 @@ class User {
     this.midfielder,
     this.attacker,
     this.fantasyTeam,
+    this.freeHitTeam,
+    this.freeHitKeeper,
+    this.freeHitDefender,
+    this.freeHitMidfielder,
+    this.freeHitAttacker,
     this.bank,
     this.captain,
     this.viceCaptain,
@@ -56,7 +68,9 @@ class User {
     this.wildcard,
     this.freeHit,
     this.benchBoost,
+    this.tripleCaptain,
     this.cost,
+    this.date,
   });
 
   factory User.fromJson(Map<String, dynamic> json) => User(
@@ -72,6 +86,11 @@ class User {
     midfielder: List<String>.from(json["midfielder"].map((x) => x)),
     attacker: List<String>.from(json["attacker"].map((x) => x)),
     fantasyTeam: List<FantasyTeam>.from(json["fantasyTeam"].map((x) => FantasyTeam.fromJson(x))),
+    freeHitTeam: List<FantasyTeam>.from(json["freeHitTeam"].map((x) => FantasyTeam.fromJson(x))),
+    freeHitKeeper: json["freeHitKeeper"],
+    freeHitDefender: List<String>.from(json["freeHitDefender"].map((x) => x)),
+    freeHitMidfielder: List<String>.from(json["freeHitMidfielder"].map((x) => x)),
+    freeHitAttacker: List<String>.from(json["freeHitAttacker"].map((x) => x)),
     bank: json["bank"],
     captain: json["captain"],
     viceCaptain: json["viceCaptain"],
@@ -80,7 +99,9 @@ class User {
     wildcard: json["wildcard"],
     freeHit: json["freeHit"],
     benchBoost: json["benchBoost"],
+    tripleCaptain: json["tripleCaptain"],
     cost: json["cost"],
+    date: DateTime.parse(json["date"]),
   );
 
   Map<String, dynamic> toJson() => {
@@ -96,6 +117,11 @@ class User {
     "midfielder": List<dynamic>.from(midfielder!.map((x) => x)),
     "attacker": List<dynamic>.from(attacker!.map((x) => x)),
     "fantasyTeam": List<dynamic>.from(fantasyTeam!.map((x) => x.toJson())),
+    "freeHitTeam": List<dynamic>.from(freeHitTeam!.map((x) => x.toJson())),
+    "freeHitKeeper": freeHitKeeper,
+    "freeHitDefender": List<dynamic>.from(freeHitDefender!.map((x) => x)),
+    "freeHitMidfielder": List<dynamic>.from(freeHitMidfielder!.map((x) => x)),
+    "freeHitAttacker": List<dynamic>.from(freeHitAttacker!.map((x) => x)),
     "bank": bank,
     "captain": captain,
     "viceCaptain": viceCaptain,
@@ -104,7 +130,9 @@ class User {
     "wildcard": wildcard,
     "freeHit": freeHit,
     "benchBoost": benchBoost,
+    "tripleCaptain": tripleCaptain,
     "cost": cost,
+    "date": date?.toIso8601String(),
   };
 }
 

@@ -137,7 +137,7 @@ class SignUp extends StatelessWidget {
                           ()=> userController.password1.value == userController.password2.value && userController.password1.value != ""?
                           Text('Password consistent ✅',
                             style: TextStyle(
-                              color: Colors.red
+                              color: Colors.black
                             ),
                           ):
                           Text('Password inconsistent ❌',
@@ -205,35 +205,38 @@ class SignUp extends StatelessWidget {
                           ),
                         ),
                       ),
-                      SizedBox(height: 10,),
-                      SizedBox(height: 25,),
-                      GestureDetector(
-                        onTap: () async {
-                          User newUser = User(
-                            name: usernameController.text,
-                            email: emailController.text.toLowerCase(),
-                            teamName: fantasyTeamController.text,
-                          );
-                          await SecureStorage.writeSecureData('password', passwordController1.text);
-                          userController.signUp(newUser).then((value) {
-                            saveName(userController.myUser.id!);
-                            Get.to(() => OnBoardingScreen(lottieAnimation: onboarding,));
-                          });
-                        },
-                        child: Container(
-                          alignment: Alignment.center,
-                          height: 60,
-                          width: 150,
-                          decoration: BoxDecoration(
-                              color: Color(0xff7B8186),
-                              borderRadius: BorderRadius.all(Radius.circular(15))
-                          ),
-                          child: Text(
-                            'Sign up',
-                            style: GoogleFonts.montserrat(
-                                color: Colors.white,
-                                fontSize: 15,
-                                fontWeight: FontWeight.w600
+                      SizedBox(height: 35,),
+                      IgnorePointer(
+                        ignoring: passwordController1.text != passwordController2.text || passwordController1.text == "",
+                        child: GestureDetector(
+                          onTap: () async {
+                            print('Is clicked');
+                            User newUser = User(
+                              name: usernameController.text,
+                              email: emailController.text.toLowerCase(),
+                              teamName: fantasyTeamController.text,
+                            );
+                            await SecureStorage.writeSecureData('password', passwordController1.text);
+                            userController.signUp(newUser).then((value) {
+                              saveName(userController.myUser.id!);
+                              Get.to(() => OnBoardingScreen(lottieAnimation: onboarding,));
+                            });
+                          },
+                          child: Container(
+                            alignment: Alignment.center,
+                            height: 60,
+                            width: 150,
+                            decoration: BoxDecoration(
+                                color: Color(0xff7B8186),
+                                borderRadius: BorderRadius.all(Radius.circular(15))
+                            ),
+                            child: Text(
+                              'Sign up',
+                              style: GoogleFonts.montserrat(
+                                  color: Colors.white,
+                                  fontSize: 15,
+                                  fontWeight: FontWeight.w600
+                              ),
                             ),
                           ),
                         ),

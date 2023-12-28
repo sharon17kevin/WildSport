@@ -4,39 +4,48 @@ import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:wild_sport/components/textfield.dart';
-import 'package:wild_sport/controllers/teamsController.dart';
 import 'package:wild_sport/models/userModel.dart' as MainUser;
 import 'package:wild_sport/controllers/userController.dart';
 import 'package:wild_sport/functions/secureStorage.dart';
 import 'package:wild_sport/models/userModel.dart';
+import 'package:wild_sport/morePages/managementLogin.dart';
 import 'package:wild_sport/screens/forgotPassword.dart';
 import 'package:wild_sport/screens/homescreen1.dart';
 import 'package:wild_sport/screens/signUp.dart';
 
-class Login extends StatelessWidget {
+class ResetPassword extends StatelessWidget {
 
   final TextEditingController emailController = TextEditingController();
-  final TextEditingController passwordController = TextEditingController();
+  final TextEditingController passwordController1 = TextEditingController();
+  final TextEditingController passwordController2 = TextEditingController();
   final UserController userController = Get.find<UserController>();
-  // final UserController userController = Get.put(UserController());
-  // final TeamController teamController = Get.put(TeamController());
 
   @override
   Widget build(BuildContext context) {
-    void saveName(String name) async {
-      final SharedPreferences prefs = await SharedPreferences.getInstance();
-      prefs.setString('wildcard_user_id', name);
-    }
-    var error = ''.obs;
-    void sendPasswordResetEmail(String email) async {
-      try {
-        await FirebaseAuth.instance.sendPasswordResetEmail(email: email);
-      } catch (e) {
-        throw Exception(e);
-      }
-    }
     return Scaffold(
       backgroundColor: Color(0xffF7F7F9),
+      appBar: AppBar(
+        leadingWidth: 100,
+        leading: Padding(
+          padding: EdgeInsets.symmetric(horizontal: 10),
+          child: GestureDetector(
+            onTap: (){
+              Get.back();
+            },
+            child: Container(
+              child: Row(
+                children: [
+                  Icon(Icons.arrow_back_ios, size: 10,),
+                  SizedBox(width: 5,),
+                  Text('Back')
+                ],
+              ),
+            ),
+          ),
+        ),
+        centerTitle: true,
+        title: Text('Enter New Passwords'),
+      ),
       body: SafeArea(
         child: GestureDetector(
           onTap: () {
@@ -71,27 +80,15 @@ class Login extends StatelessWidget {
 
                   SizedBox(height: 15,),
                   MyTextField(
-                    controller: passwordController,
-                    hintText: 'Password',
+                    controller: passwordController1,
+                    hintText: 'Enter Password',
                     obscureText: true,
                   ),
                   SizedBox(height: 10,),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 25),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
-                        GestureDetector(
-                          child: Text(
-                            'Forgot password?',
-                            style: TextStyle(color: Colors.grey[600]),
-                          ),
-                          onTap: (){
-                            Get.to(()=>ForgotPassword(email: emailController.text,));
-                          },
-                        ),
-                      ],
-                    ),
+                  MyTextField(
+                    controller: passwordController2,
+                    hintText: 'Confirm Password',
+                    obscureText: true,
                   ),
                   SizedBox(height: 25,),
                   Ink(
@@ -104,12 +101,10 @@ class Login extends StatelessWidget {
                         MainUser.User newUser = MainUser.User(
                           email: emailController.text.toLowerCase(),
                         );
-                        await SecureStorage.writeSecureData('password', passwordController.text);
-                        passwordController.text = '';
+                        await SecureStorage.writeSecureData('password', passwordController1.text);
                         userController.login(newUser).then((value) {
-                            saveName(userController.myUser.id!);
-                            Get.to(()=> HomeScreenN());
-                          }
+                          Get.to(()=> Login());
+                        }
                         );
                       },
                       child: Padding(
@@ -141,9 +136,9 @@ class Login extends StatelessWidget {
                               },
                               child: Text('Register',
                                 style: TextStyle(
-                                  color: Colors.green,
-                                  fontWeight: FontWeight.w200,
-                                  fontSize: 14
+                                    color: Colors.green,
+                                    fontWeight: FontWeight.w200,
+                                    fontSize: 14
                                 ),
                               ),
                             ),

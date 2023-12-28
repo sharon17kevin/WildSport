@@ -24,12 +24,15 @@ class UserController extends GetxController {
   var _user = User(id: "", name: "", email: "").obs;
   RxBool isadmin = false.obs;
   var _fantasy = new Fantasy().obs;
-  String pather = '172.20.10.8:3000';
+  var _freeHitFantasy = new Fantasy().obs;
+  String pather = '192.168.8.104:3000';
   var _pickedTeam = <String, dynamic>{}.obs;
+  var _freehitPickedTeam = <String, dynamic>{}.obs;
   var substitutes = <Player?>[].obs;
   Rx<Player?> keeperSub = Player(image: Image(name: '', contentType: ''), fantasyPrice: 0, id: '', name: '', team: '', age: 0, number: 0, appearances: 0, goals: 0, subs: 0, assists: 0, fantasyPoints: 0, position: '', yellowCards: 0, redCards: 0, v: 0, cleanSheets: 0, currentFantasyPoints: 0, ownGoals: 0, imageUrl: '').obs;
   var viceCaptain = 'e'.obs;
   var captain = 'e'.obs;
+  var isFirst = true.obs;
   var toBeSubbed = <String, dynamic>{}.obs;
   var subbing = false.obs;
   var bankToAdd = 0.obs;
@@ -57,9 +60,17 @@ class UserController extends GetxController {
 
   User get myUser => _user.value;
 
-  Fantasy get myFantasyTeam => _fantasy.value;
+  Fantasy get myFantasyTeam{
+    int number = viableGameweeks.value.length;
+    PointGameWeek pgw = pointGameweeks.firstWhere((element) => element.number == number + 1);
+    return pgw.freeHit == false? _fantasy.value : _freeHitFantasy.value;
+  }
 
-  Map<String, dynamic> get myPickedTeam => _pickedTeam.value;
+  Map<String, dynamic> get myPickedTeam{
+    int number = viableGameweeks.value.length;
+    PointGameWeek pgw = pointGameweeks.firstWhere((element) => element.number == number + 1);
+    return pgw.freeHit == false? _pickedTeam.value : _freehitPickedTeam.value;
+  }
 
   void updateCaptain(String id) {
     if(id == '') return;
@@ -94,6 +105,27 @@ class UserController extends GetxController {
       attacker2: players.firstWhere((element) => element.id == _user.value.fantasyTeam?.firstWhere((element) => element.title == 'attacker2', orElse: () => defaultFantasyTeam).player, orElse: ()=> Player(image: Image(name: '', contentType: ''), fantasyPrice: 0, id: '', name: '', team: '', age: 0, number: 0, appearances: 0, goals: 0, subs: 0, assists: 0, fantasyPoints: 0, position: '', yellowCards: 0, redCards: 0, v: 0, cleanSheets: 0, currentFantasyPoints: 0, ownGoals: 0, imageUrl: '')),
       attacker3: players.firstWhere((element) => element.id == _user.value.fantasyTeam?.firstWhere((element) => element.title == 'attacker3', orElse: () => defaultFantasyTeam).player, orElse: ()=> Player(image: Image(name: '', contentType: ''), fantasyPrice: 0, id: '', name: '', team: '', age: 0, number: 0, appearances: 0, goals: 0, subs: 0, assists: 0, fantasyPoints: 0, position: '', yellowCards: 0, redCards: 0, v: 0, cleanSheets: 0, currentFantasyPoints: 0, ownGoals: 0, imageUrl: '')),
     );
+    Fantasy freeHitFantasy;
+    if (_user.value.freeHit == 0) {
+      freeHitFantasy = Fantasy(
+        keeper1: players.firstWhere((element) => element.id == _user.value.freeHitTeam?.firstWhere((element) => element.title == 'keeper1', orElse: () => defaultFantasyTeam).player, orElse: ()=> Player(image: Image(name: '', contentType: ''), fantasyPrice: 0, id: '', name: '', team: '', age: 0, number: 0, appearances: 0, goals: 0, subs: 0, assists: 0, fantasyPoints: 0, position: '', yellowCards: 0, redCards: 0, v: 0, cleanSheets: 0, currentFantasyPoints: 0, ownGoals: 0, imageUrl: '')),
+        keeper2: players.firstWhere((element) => element.id == _user.value.freeHitTeam?.firstWhere((element) => element.title == 'keeper2', orElse: () => defaultFantasyTeam).player, orElse: ()=> Player(image: Image(name: '', contentType: ''), fantasyPrice: 0, id: '', name: '', team: '', age: 0, number: 0, appearances: 0, goals: 0, subs: 0, assists: 0, fantasyPoints: 0, position: '', yellowCards: 0, redCards: 0, v: 0, cleanSheets: 0, currentFantasyPoints: 0, ownGoals: 0, imageUrl: '')),
+        defender1: players.firstWhere((element) => element.id == _user.value.freeHitTeam?.firstWhere((element) => element.title == 'defender1', orElse: () => defaultFantasyTeam).player, orElse: ()=> Player(image: Image(name: '', contentType: ''), fantasyPrice: 0, id: '', name: '', team: '', age: 0, number: 0, appearances: 0, goals: 0, subs: 0, assists: 0, fantasyPoints: 0, position: '', yellowCards: 0, redCards: 0, v: 0, cleanSheets: 0, currentFantasyPoints: 0, ownGoals: 0, imageUrl: '')),
+        defender2: players.firstWhere((element) => element.id == _user.value.freeHitTeam?.firstWhere((element) => element.title == 'defender2', orElse: () => defaultFantasyTeam).player, orElse: ()=> Player(image: Image(name: '', contentType: ''), fantasyPrice: 0, id: '', name: '', team: '', age: 0, number: 0, appearances: 0, goals: 0, subs: 0, assists: 0, fantasyPoints: 0, position: '', yellowCards: 0, redCards: 0, v: 0, cleanSheets: 0, currentFantasyPoints: 0, ownGoals: 0, imageUrl: '')),
+        defender3: players.firstWhere((element) => element.id == _user.value.freeHitTeam?.firstWhere((element) => element.title == 'defender3', orElse: () => defaultFantasyTeam).player, orElse: ()=> Player(image: Image(name: '', contentType: ''), fantasyPrice: 0, id: '', name: '', team: '', age: 0, number: 0, appearances: 0, goals: 0, subs: 0, assists: 0, fantasyPoints: 0, position: '', yellowCards: 0, redCards: 0, v: 0, cleanSheets: 0, currentFantasyPoints: 0, ownGoals: 0, imageUrl: '')),
+        defender4: players.firstWhere((element) => element.id == _user.value.freeHitTeam?.firstWhere((element) => element.title == 'defender4', orElse: () => defaultFantasyTeam).player, orElse: ()=> Player(image: Image(name: '', contentType: ''), fantasyPrice: 0, id: '', name: '', team: '', age: 0, number: 0, appearances: 0, goals: 0, subs: 0, assists: 0, fantasyPoints: 0, position: '', yellowCards: 0, redCards: 0, v: 0, cleanSheets: 0, currentFantasyPoints: 0, ownGoals: 0, imageUrl: '')),
+        defender5: players.firstWhere((element) => element.id == _user.value.freeHitTeam?.firstWhere((element) => element.title == 'defender5', orElse: () => defaultFantasyTeam).player, orElse: ()=> Player(image: Image(name: '', contentType: ''), fantasyPrice: 0, id: '', name: '', team: '', age: 0, number: 0, appearances: 0, goals: 0, subs: 0, assists: 0, fantasyPoints: 0, position: '', yellowCards: 0, redCards: 0, v: 0, cleanSheets: 0, currentFantasyPoints: 0, ownGoals: 0, imageUrl: '')),
+        midfielder1: players.firstWhere((element) => element.id == _user.value.freeHitTeam?.firstWhere((element) => element.title == 'midfielder1', orElse: () => defaultFantasyTeam).player, orElse: ()=> Player(image: Image(name: '', contentType: ''), fantasyPrice: 0, id: '', name: '', team: '', age: 0, number: 0, appearances: 0, goals: 0, subs: 0, assists: 0, fantasyPoints: 0, position: '', yellowCards: 0, redCards: 0, v: 0, cleanSheets: 0, currentFantasyPoints: 0, ownGoals: 0, imageUrl: '')),
+        midfielder2: players.firstWhere((element) => element.id == _user.value.freeHitTeam?.firstWhere((element) => element.title == 'midfielder2', orElse: () => defaultFantasyTeam).player, orElse: ()=> Player(image: Image(name: '', contentType: ''), fantasyPrice: 0, id: '', name: '', team: '', age: 0, number: 0, appearances: 0, goals: 0, subs: 0, assists: 0, fantasyPoints: 0, position: '', yellowCards: 0, redCards: 0, v: 0, cleanSheets: 0, currentFantasyPoints: 0, ownGoals: 0, imageUrl: '')),
+        midfielder3: players.firstWhere((element) => element.id == _user.value.freeHitTeam?.firstWhere((element) => element.title == 'midfielder3', orElse: () => defaultFantasyTeam).player, orElse: ()=> Player(image: Image(name: '', contentType: ''), fantasyPrice: 0, id: '', name: '', team: '', age: 0, number: 0, appearances: 0, goals: 0, subs: 0, assists: 0, fantasyPoints: 0, position: '', yellowCards: 0, redCards: 0, v: 0, cleanSheets: 0, currentFantasyPoints: 0, ownGoals: 0, imageUrl: '')),
+        midfielder4: players.firstWhere((element) => element.id == _user.value.freeHitTeam?.firstWhere((element) => element.title == 'midfielder4', orElse: () => defaultFantasyTeam).player, orElse: ()=> Player(image: Image(name: '', contentType: ''), fantasyPrice: 0, id: '', name: '', team: '', age: 0, number: 0, appearances: 0, goals: 0, subs: 0, assists: 0, fantasyPoints: 0, position: '', yellowCards: 0, redCards: 0, v: 0, cleanSheets: 0, currentFantasyPoints: 0, ownGoals: 0, imageUrl: '')),
+        midfielder5: players.firstWhere((element) => element.id == _user.value.freeHitTeam?.firstWhere((element) => element.title == 'midfielder5', orElse: () => defaultFantasyTeam).player, orElse: ()=> Player(image: Image(name: '', contentType: ''), fantasyPrice: 0, id: '', name: '', team: '', age: 0, number: 0, appearances: 0, goals: 0, subs: 0, assists: 0, fantasyPoints: 0, position: '', yellowCards: 0, redCards: 0, v: 0, cleanSheets: 0, currentFantasyPoints: 0, ownGoals: 0, imageUrl: '')),
+        attacker1: players.firstWhere((element) => element.id == _user.value.freeHitTeam?.firstWhere((element) => element.title == 'attacker1', orElse: () => defaultFantasyTeam).player, orElse: ()=> Player(image: Image(name: '', contentType: ''), fantasyPrice: 0, id: '', name: '', team: '', age: 0, number: 0, appearances: 0, goals: 0, subs: 0, assists: 0, fantasyPoints: 0, position: '', yellowCards: 0, redCards: 0, v: 0, cleanSheets: 0, currentFantasyPoints: 0, ownGoals: 0, imageUrl: '')),
+        attacker2: players.firstWhere((element) => element.id == _user.value.freeHitTeam?.firstWhere((element) => element.title == 'attacker2', orElse: () => defaultFantasyTeam).player, orElse: ()=> Player(image: Image(name: '', contentType: ''), fantasyPrice: 0, id: '', name: '', team: '', age: 0, number: 0, appearances: 0, goals: 0, subs: 0, assists: 0, fantasyPoints: 0, position: '', yellowCards: 0, redCards: 0, v: 0, cleanSheets: 0, currentFantasyPoints: 0, ownGoals: 0, imageUrl: '')),
+        attacker3: players.firstWhere((element) => element.id == _user.value.freeHitTeam?.firstWhere((element) => element.title == 'attacker3', orElse: () => defaultFantasyTeam).player, orElse: ()=> Player(image: Image(name: '', contentType: ''), fantasyPrice: 0, id: '', name: '', team: '', age: 0, number: 0, appearances: 0, goals: 0, subs: 0, assists: 0, fantasyPoints: 0, position: '', yellowCards: 0, redCards: 0, v: 0, cleanSheets: 0, currentFantasyPoints: 0, ownGoals: 0, imageUrl: '')),
+      );
+      _freeHitFantasy.value = freeHitFantasy;
+    }
     _fantasy.value = fantasy;
     Map<String, dynamic> pickedTeam = {
       'keeper': _user.value.keeper != null? _fantasy.value.pickAttribute(_user.value.keeper!) : _fantasy.value.pickAttribute('keeper1'),
@@ -102,6 +134,14 @@ class UserController extends GetxController {
       'attacker': _user.value.attacker?.length == 0? [_fantasy.value.pickAttribute('attacker1'), _fantasy.value.pickAttribute('attacker2')] :  _user.value.attacker?.map((e) => _fantasy.value.pickAttribute('$e')).toList()
     };
     _pickedTeam.value = pickedTeam;
+    Map<String, dynamic> freeHitPickedTeam = {
+      'keeper': _user.value.freeHitKeeper != null? _freeHitFantasy.value.pickAttribute(_user.value.freeHitKeeper!) : _freeHitFantasy.value.pickAttribute('keeper1'),
+      'defender': _user.value.freeHitDefender?.length == 0? [_freeHitFantasy.value.pickAttribute('defender1'), _freeHitFantasy.value.pickAttribute('defender2'), _freeHitFantasy.value.pickAttribute('defender3'), _freeHitFantasy.value.pickAttribute('defender4')] : _user.value.freeHitDefender?.map((e) => _freeHitFantasy.value.pickAttribute('$e')).toList(),
+      'midfielder': _user.value.freeHitMidfielder?.length == 0? [_freeHitFantasy.value.pickAttribute('midfielder1'), _freeHitFantasy.value.pickAttribute('midfielder2'), _freeHitFantasy.value.pickAttribute('midfielder3'), _freeHitFantasy.value.pickAttribute('midfielder4')] :  _user.value.freeHitMidfielder?.map((e) => _freeHitFantasy.value.pickAttribute('$e')).toList(),
+      'attacker': _user.value.freeHitAttacker?.length == 0? [_freeHitFantasy.value.pickAttribute('attacker1'), _freeHitFantasy.value.pickAttribute('attacker2')] :  _user.value.freeHitAttacker?.map((e) => _freeHitFantasy.value.pickAttribute('$e')).toList()
+    };
+    _freehitPickedTeam.value = freeHitPickedTeam;
+    //============================================================regular subs ======================>
     List<Player?> stringList = pickedTeam.values.fold(
       [],
       (list, element){
@@ -130,8 +170,38 @@ class UserController extends GetxController {
     holder.remove(keeperHolder);
     substitutes.value = holder;
     keeperSub.value = keeperHolder;
+    //======================================freeHit Subs==============================>
+    List<Player?> stringHitList = freeHitPickedTeam.values.fold(
+        [],
+            (list, element){
+          if (element is Player?) {
+            list.add(element);
+          } else if (element is List<Player?>) {
+            list.addAll(element);
+          }
+          return list;
+        }
+    );
+    Map<Player, bool> freehitSubs = _fantasy.value.checkIfContains(stringHitList);
+    Map<Player, bool> freehitKeeperSubs = _fantasy.value.checkKeeper(stringHitList);
+    List<Player> freehitHolder = [];
+    Player? freehitKeeperHolder;
+    freehitSubs.forEach((key, value) {
+      if (value == false) {
+        freehitHolder.add(key);
+      }
+    });
+    freehitKeeperSubs.forEach((key, value) {
+      if (value == false){
+        freehitKeeperHolder = key;
+      }
+    });
+    freehitHolder.remove(freehitKeeperHolder);
+    substitutes.value = holder;
+    keeperSub.value = keeperHolder;
     print('Here we go fantasy');
   }
+
   void updateUser(User newUser) {
     _user.value = newUser;
   }
@@ -155,9 +225,17 @@ class UserController extends GetxController {
   }
 
   void updateFantasy(Player player, String position) {
-    Fantasy fantasy = _fantasy.value;
-    fantasy.setVariable(position, player);
-    _fantasy.value = fantasy;
+    int number = viableGameweeks.value.length;
+    PointGameWeek pgw = pointGameweeks.firstWhere((element) => element.number == number + 1);
+    if (pgw.freeHit == false) {
+      Fantasy fantasy = _fantasy.value;
+      fantasy.setVariable(position, player);
+      _fantasy.value = fantasy;
+    } else {
+      Fantasy fantasy = _freeHitFantasy.value;
+      fantasy.setVariable(position, player);
+      _freeHitFantasy.value = fantasy;
+    }
   }
 
   int calcCost() {
@@ -206,23 +284,45 @@ class UserController extends GetxController {
   }
 
   void subOn(Map<String, dynamic> map) {
-    _pickedTeam.value.forEach((key, value) {
-      if (key == map['position']) {
-        value.add(map['id']);
-      }
-      if (map['position'] == '') {
-        if(key == toBeSubbed.value['position']) {
+    int number = viableGameweeks.value.length;
+    PointGameWeek pgw = pointGameweeks.firstWhere((element) => element.number == number + 1);
+    if (pgw.freeHit == false) {
+      _pickedTeam.value.forEach((key, value) {
+        if (key == map['position']) {
           value.add(map['id']);
         }
-      }
-      if (key == toBeSubbed.value['position']) {
-        value.remove(toBeSubbed.value['id']);
-      }
-    });
-    substitutes.value.remove(map['id']);
-    substitutes.value.add(toBeSubbed.value['id']);
-    substitutes.refresh();
-    _pickedTeam.refresh();
+        if (map['position'] == '') {
+          if(key == toBeSubbed.value['position']) {
+            value.add(map['id']);
+          }
+        }
+        if (key == toBeSubbed.value['position']) {
+          value.remove(toBeSubbed.value['id']);
+        }
+      });
+      substitutes.value.remove(map['id']);
+      substitutes.value.add(toBeSubbed.value['id']);
+      substitutes.refresh();
+      _pickedTeam.refresh();
+    } else {
+      _freehitPickedTeam.value.forEach((key, value) {
+        if (key == map['position']) {
+          value.add(map['id']);
+        }
+        if (map['position'] == '') {
+          if(key == toBeSubbed.value['position']) {
+            value.add(map['id']);
+          }
+        }
+        if (key == toBeSubbed.value['position']) {
+          value.remove(toBeSubbed.value['id']);
+        }
+      });
+      substitutes.value.remove(map['id']);
+      substitutes.value.add(toBeSubbed.value['id']);
+      substitutes.refresh();
+      _freehitPickedTeam.refresh();
+    }
     subbing.value = false;
   }
 
@@ -313,6 +413,7 @@ class UserController extends GetxController {
 
   void getViableGameweeks() {
     List<int> viable = [];
+    List<int> isFirstViable = [];
     deadlines.value.forEach((element) {
       if (element.date.isBefore(DateTime.now())) {
         viable.add(element.gameweek);
@@ -376,6 +477,18 @@ class UserController extends GetxController {
     }
   }
 
+  Future<void> updateFreeHitTeam(User newUser, Player newPlayer, String title) async {
+    try{
+      await addFreeHitPlayer('http://$pather/api/users/freehitTeam', newUser, newPlayer, title);
+      var response = await getMe('http://$pather/api/users/me', newUser);
+      User user = userFromJson(response);
+      updateUser(user);
+      print("fantasy update ready");
+    }catch(error) {
+      throw Exception(error);
+    }
+  }
+
   Future<void> updatePickTeam(User newUser) async {
     try{
       await pickTeam('http://$pather/api/users/pickTeam', newUser);
@@ -389,32 +502,74 @@ class UserController extends GetxController {
     }
   }
 
+  Future<void> updateFreeHitPickTeam(User newUser) async {
+    try{
+      await freehitPickTeam('http://$pather/api/users/freehitPickTeam', newUser);
+      var response = await getMe('http://$pather/api/users/me', newUser);
+      User user = userFromJson(response);
+      updateUser(user);
+      print("fantasy freehit pickTeam ready");
+      await setGameWeek(newUser);
+    }catch(error) {
+      throw Exception(error);
+    }
+  }
+
   Future<void> setGameWeek(User newUser) async {
     try{
-      List<int> possibleInt = [1,2,3,4,5,6,7,8,9,10,11];
-      possibleInt.removeWhere((element) => viableGameweeks.value.contains(element));
-      List<PointGameWeek> holder = [];
-      possibleInt.forEach((element) {
-        PointGameWeek variable = pointGameweeks.value.firstWhere((e) => e.number == element);
-        holder.add(variable);
-      });
-      Player? keeperHolder = _pickedTeam.value['keeper'];
-      List<Player?> defender = _pickedTeam.value['defender'];
-      List<Player?> midfielder = _pickedTeam.value['midfielder'];
-      List<Player?> attacker = _pickedTeam.value['attacker'];
-      PointGameWeek pointGameWeek = PointGameWeek(
-          number: 0,
-          points: 0,
-          keeper: keeperHolder!.id,
-          defender: defender!.map((e) => e!.id).toList(),
-          midfielder: midfielder!.map((e) => e!.id).toList(),
-          attacker: attacker!.map((e) => e!.id).toList(),
-          subKeeper: keeperSub.value!.id,
-          substitution: substitutes.value.map((e) => e!.id).toList(),
-          id: "",
-          v: 0);
-      await setPointGameweeks('http://$pather/api/gameWeeks/change', pointGameWeek, holder);
-      await fetchGameweeks(newUser);
+      int number = viableGameweeks.value.length;
+      PointGameWeek pgw = pointGameweeks.firstWhere((element) => element.number == number + 1);
+      if (pgw.freeHit == false) {
+        List<int> possibleInt = [1,2,3,4,5,6,7,8,9,10,11];
+        possibleInt.removeWhere((element) => viableGameweeks.value.contains(element));
+        List<PointGameWeek> holder = [];
+        possibleInt.forEach((element) {
+          PointGameWeek variable = pointGameweeks.value.firstWhere((e) => e.number == element);
+          holder.add(variable);
+        });
+        Player? keeperHolder = _pickedTeam.value['keeper'];
+        List<Player?> defender = _pickedTeam.value['defender'];
+        List<Player?> midfielder = _pickedTeam.value['midfielder'];
+        List<Player?> attacker = _pickedTeam.value['attacker'];
+        PointGameWeek pointGameWeek = PointGameWeek(
+            number: 0,
+            points: 0,
+            keeper: keeperHolder!.id,
+            defender: defender!.map((e) => e!.id).toList(),
+            midfielder: midfielder!.map((e) => e!.id).toList(),
+            attacker: attacker!.map((e) => e!.id).toList(),
+            subKeeper: keeperSub.value!.id,
+            substitution: substitutes.value.map((e) => e!.id).toList(),
+            id: "",
+            v: 0);
+        await setPointGameweeks('http://$pather/api/gameWeeks/change', pointGameWeek, holder);
+        await fetchGameweeks(newUser);
+      } else {
+        List<int> possibleInt = [-1];
+        possibleInt.removeWhere((element) => viableGameweeks.value.contains(element));
+        List<PointGameWeek> holder = [];
+        possibleInt.forEach((element) {
+          PointGameWeek variable = pointGameweeks.value.firstWhere((e) => e.number == element);
+          holder.add(variable);
+        });
+        Player? keeperHolder = _freehitPickedTeam.value['keeper'];
+        List<Player?> defender = _freehitPickedTeam.value['defender'];
+        List<Player?> midfielder = _freehitPickedTeam.value['midfielder'];
+        List<Player?> attacker = _freehitPickedTeam.value['attacker'];
+        PointGameWeek pointGameWeek = PointGameWeek(
+            number: 0,
+            points: 0,
+            keeper: keeperHolder!.id,
+            defender: defender!.map((e) => e!.id).toList(),
+            midfielder: midfielder!.map((e) => e!.id).toList(),
+            attacker: attacker!.map((e) => e!.id).toList(),
+            subKeeper: keeperSub.value!.id,
+            substitution: substitutes.value.map((e) => e!.id).toList(),
+            id: "",
+            v: 0);
+        await setPointGameweeks('http://$pather/api/gameWeeks/change', pointGameWeek, holder);
+        await fetchGameweeks(newUser);
+      }
     }catch(err){
       throw Exception(error);
     }
@@ -457,6 +612,7 @@ class UserController extends GetxController {
       }
       var response = await fetchGameweek('http://$pather/api/gameWeeks', newUser);
       List<PointGameWeek> pointGameweek = pointsGameWeekFromJson(response);
+      pointGameweek.sort((a,b)=> a.number.compareTo(b.number));
       pointGameweeks.value = pointGameweek;
       pointGameweeks.refresh();
       //pointsPageIndex.value = viableGameweeks.value.length - 1;
@@ -467,7 +623,7 @@ class UserController extends GetxController {
     }
   }
   void increasepgw() {
-    if (pointsPageIndex.value >= viableGameweeks.value.length - 1) {
+    if (pointsPageIndex.value >= viableGameweeks.value.length -1) {
       return;
     } else {
       pointsPageIndex.value = pointsPageIndex.value + 1;
@@ -549,6 +705,10 @@ class UserController extends GetxController {
     List<Player> players = teamController.getPlayers;
     PointGameWeek pgw = pointGameweeks.value.firstWhere((element) =>
     element.number == index);
+    if (pgw.freeHit == true) {
+      pgw = pointGameweeks.value.firstWhere((element) =>
+      element.number == -1);
+    }
     int value = 0;
     List<Player> gameweekPlayers = [];
     List<String> gameweekPlayersId = [];
@@ -612,5 +772,14 @@ class UserController extends GetxController {
     //int index = pointGameweeks.value.indexWhere((element) => element.number == number);
     //pointGameweeks.value[index] = pointGameWeek;
     print('Chip updated');
+  }
+
+  Future<void> resetPasswordCont(User newUser, String password) async {
+    try{
+      var response2 = await resetPassword('http://$pather/api/users/resetPassword', newUser);
+      print("reset done");
+    }catch(error) {
+      throw Exception(error);
+    }
   }
 }

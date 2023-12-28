@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -9,6 +11,7 @@ import 'package:wild_sport/models/fantasyModel.dart';
 import 'package:wild_sport/models/playerModel.dart';
 import 'package:flutter/src/widgets/image.dart' as Image1;
 import 'package:wild_sport/models/playerModel.dart'as Image2;
+import 'package:wild_sport/models/pointGameWeekModel.dart';
 import 'package:wild_sport/models/teamsModel.dart';
 import 'package:wild_sport/models/teamsModel.dart' as Icon1;
 import 'package:flutter/src/widgets/icon.dart' as Icon2;
@@ -27,6 +30,11 @@ class _PointPageState extends State<PointPage> {
     Fantasy fantasyTeam = userController.myFantasyTeam;
     Map<String, dynamic> lineUp = userController.myPickedTeam;
     Player defaultPlayer = Player(image: Image2.Image(name: '', contentType: ''), fantasyPrice: 0, id: '', name: '', team: '', age: 0, number: 0, appearances: 0, goals: 0, subs: 0, assists: 0, fantasyPoints: 0, position: '', yellowCards: 0, redCards: 0, v: 0, cleanSheets: 0, currentFantasyPoints: 0, ownGoals: 0, imageUrl: '');
+    int number = userController.viableGameweeks.value.length;
+    PointGameWeek pgw = userController.pointGameweeks.firstWhere((element) => element.number == number + 1);
+    int viableInt() {
+      return (pgw.freeHit == false)? userController.viableGameweeks.value[userController.pointsPageIndex.value]: -1;
+    }
     return Scaffold(
       appBar: AppBar(
         leadingWidth: 200,
@@ -228,8 +236,12 @@ class _PointPageState extends State<PointPage> {
                           Container(
                             child: Obx(
                                   ()=> PointPlayerCard(
-                                    player: players.firstWhere((element) => element.id == userController.pointGameweeks.value[userController.pointsPageIndex.value].subKeeper, orElse: ()=> defaultPlayer),//players.firstWhere((element) => element.id == userController.keeperSub.value, orElse: ()=> defaultPlayer),
-                                    gameweek: userController.pointGameweeks.value.firstWhere((element) => element.number == userController.viableGameweeks.value[userController.pointsPageIndex.value] ).number,
+                                    player: userController.pointGameweeks.value.firstWhere((element) => element.number == userController.viableGameweeks.value[userController.pointsPageIndex.value] ).freeHit == false?
+                                    players.firstWhere((element) => element.id == userController.pointGameweeks.value.firstWhere((e) => e.number == userController.viableGameweeks.value[userController.pointsPageIndex.value]).subKeeper, orElse: ()=> defaultPlayer) :
+                                    players.firstWhere((element) => element.id == userController.pointGameweeks.value.firstWhere((e) => e.number == -1).subKeeper, orElse: ()=> defaultPlayer),
+                                    gameweek: userController.pointGameweeks.value.firstWhere((element) => element.number == userController.viableGameweeks.value[userController.pointsPageIndex.value] ).freeHit == false?
+                                    userController.viableGameweeks.value[userController.pointsPageIndex.value]:
+                                    userController.viableGameweeks.value[userController.pointsPageIndex.value],
                                   ),
                             ),
                           ),
@@ -239,7 +251,8 @@ class _PointPageState extends State<PointPage> {
                               child: GetBuilder<UserController>(
                                   builder: (controller) {
                                     return Center(
-                                      child: Obx(
+                                      child: userController.pointGameweeks.value.firstWhere((element) => element.number == userController.viableGameweeks.value[userController.pointsPageIndex.value] ).freeHit == false?
+                                      Obx(
                                             ()=> ListView.builder(
                                           scrollDirection: Axis.horizontal,
                                           physics: NeverScrollableScrollPhysics(),
@@ -248,8 +261,24 @@ class _PointPageState extends State<PointPage> {
                                           itemBuilder: (context, index) {
                                             return Obx(
                                               ()=> PointPlayerCard(
-                                                gameweek: userController.pointGameweeks.value.firstWhere((element) => element.number == userController.viableGameweeks.value[userController.pointsPageIndex.value] ).number,
-                                                  player: players.firstWhere((element) => element.id == controller.pointGameweeks.value[controller.pointsPageIndex.value].substitution[index], orElse: ()=> defaultPlayer)
+                                                gameweek: controller.viableGameweeks.value[controller.pointsPageIndex.value],
+                                                  player: players.firstWhere((element) => element.id == controller.pointGameweeks.value.firstWhere((e) => e.number == controller.viableGameweeks.value[controller.pointsPageIndex.value]).substitution[index], orElse: ()=> defaultPlayer)
+                                              ),
+                                            );
+                                          },
+                                        ),
+                                      ):
+                                      Obx(
+                                            ()=> ListView.builder(
+                                          scrollDirection: Axis.horizontal,
+                                          physics: NeverScrollableScrollPhysics(),
+                                          shrinkWrap: true,
+                                          itemCount: controller.pointGameweeks.value.firstWhere((element) => element.number == -1 ).substitution.length,
+                                          itemBuilder: (context, index) {
+                                            return Obx(
+                                                  ()=> PointPlayerCard(
+                                                  gameweek: controller.viableGameweeks.value[controller.pointsPageIndex.value],
+                                                  player: players.firstWhere((element) => element.id == controller.pointGameweeks.value.firstWhere((e) => e.number == -1).substitution[index], orElse: ()=> defaultPlayer)
                                               ),
                                             );
                                           },
@@ -477,6 +506,11 @@ class Points extends StatelessWidget {
     TeamController teamController = Get.find<TeamController>();
     List<Player> players = teamController.getPlayers;
     Player defaultPlayer = Player(image: Image2.Image(name: '', contentType: ''), fantasyPrice: 0, id: '', name: '', team: '', age: 0, number: 0, appearances: 0, goals: 0, subs: 0, assists: 0, fantasyPoints: 0, position: '', yellowCards: 0, redCards: 0, v: 0, cleanSheets: 0, currentFantasyPoints: 0, ownGoals: 0, imageUrl: '');
+    int number = userController.viableGameweeks.value.length;
+    PointGameWeek pgw = userController.pointGameweeks.firstWhere((element) => element.number == number + 1);
+    int viableInt() {
+      return (pgw.freeHit == false)? userController.viableGameweeks.value[userController.pointsPageIndex.value]: -1;
+    }
     return Container(
       decoration: BoxDecoration(
           color: Colors.blue,
@@ -500,7 +534,8 @@ class Points extends StatelessWidget {
               child: GetBuilder<UserController>(
                   builder: (controller) {
                     return Center(
-                      child: ListView.builder(
+                      child: userController.pointGameweeks.value.firstWhere((element) => element.number == userController.viableGameweeks.value[userController.pointsPageIndex.value] ).freeHit == false?
+                      ListView.builder(
                         scrollDirection: Axis.horizontal,
                         physics: NeverScrollableScrollPhysics(),
                         shrinkWrap: true,
@@ -508,8 +543,22 @@ class Points extends StatelessWidget {
                         itemBuilder: (context, index) {
                           return Obx(
                                 ()=> PointPlayerCard(
-                                  gameweek: userController.pointGameweeks.value.firstWhere((element) => element.number == userController.viableGameweeks.value[userController.pointsPageIndex.value] ).number,
-                              player: players.firstWhere((element) => element.id == controller.pointGameweeks.value[controller.pointsPageIndex.value].keeper, orElse: ()=> defaultPlayer),
+                                  gameweek: controller.viableGameweeks.value[controller.pointsPageIndex.value],
+                              player: players.firstWhere((element) => element.id == controller.pointGameweeks.value.firstWhere((e) => e.number == controller.viableGameweeks.value[controller.pointsPageIndex.value]).keeper, orElse: ()=> defaultPlayer),
+                            ),
+                          );
+                        },
+                      ):
+                      ListView.builder(
+                        scrollDirection: Axis.horizontal,
+                        physics: NeverScrollableScrollPhysics(),
+                        shrinkWrap: true,
+                        itemCount: 1,
+                        itemBuilder: (context, index) {
+                          return Obx(
+                                ()=> PointPlayerCard(
+                              gameweek: -1,
+                              player: players.firstWhere((element) => element.id == controller.pointGameweeks.value.firstWhere((e) => e.number == -1).keeper, orElse: ()=> defaultPlayer),
                             ),
                           );
                         },
@@ -524,18 +573,36 @@ class Points extends StatelessWidget {
               child: GetBuilder<UserController>(
                   builder: (controller) {
                     return Center(
-                      child: Obx(
+                      child: controller.pointGameweeks.value.firstWhere((element) => element.number == controller.viableGameweeks.value[controller.pointsPageIndex.value] ).freeHit == false?
+                      Obx(
                             ()=> ListView.builder(
                               padding: EdgeInsets.zero,
                           scrollDirection: Axis.horizontal,
                           physics: NeverScrollableScrollPhysics(),
                           shrinkWrap: true,
-                          itemCount: controller.pointGameweeks.value.firstWhere((element) => element.number == controller.viableGameweeks.value[controller.pointsPageIndex.value] ).defender.length,
+                          itemCount: controller.pointGameweeks.value.firstWhere((e) => e.number == controller.viableGameweeks.value[controller.pointsPageIndex.value]).defender.length,
                           itemBuilder: (context, index) {
                             return Obx(
                               ()=> PointPlayerCard(
-                                gameweek: userController.pointGameweeks.value.firstWhere((element) => element.number == userController.viableGameweeks.value[userController.pointsPageIndex.value] ).number,
-                                player: players.firstWhere((element) => element.id == controller.pointGameweeks.value[controller.pointsPageIndex.value].defender[index], orElse: ()=> defaultPlayer),
+                                gameweek: controller.viableGameweeks.value[controller.pointsPageIndex.value],
+                                player: players.firstWhere((element) => element.id == controller.pointGameweeks.value.firstWhere((e) => e.number == controller.viableGameweeks.value[controller.pointsPageIndex.value]).defender[index], orElse: ()=> defaultPlayer),
+                              ),
+                            );
+                          },
+                        ),
+                      ):
+                      Obx(
+                            ()=> ListView.builder(
+                          padding: EdgeInsets.zero,
+                          scrollDirection: Axis.horizontal,
+                          physics: NeverScrollableScrollPhysics(),
+                          shrinkWrap: true,
+                          itemCount: controller.pointGameweeks.value.firstWhere((e) => e.number == -1).defender.length,
+                          itemBuilder: (context, index) {
+                            return Obx(
+                                  ()=> PointPlayerCard(
+                                gameweek: controller.viableGameweeks.value[controller.pointsPageIndex.value],
+                                player: players.firstWhere((element) => element.id == controller.pointGameweeks.value.firstWhere((e) => e.number == -1).defender[index], orElse: ()=> defaultPlayer),
                               ),
                             );
                           },
@@ -551,18 +618,36 @@ class Points extends StatelessWidget {
               child: GetBuilder<UserController>(
                   builder: (controller) {
                     return Center(
-                      child: Obx(
+                      child: controller.pointGameweeks.value.firstWhere((element) => element.number == controller.viableGameweeks.value[controller.pointsPageIndex.value] ).freeHit == false?
+                      Obx(
                             ()=> ListView.builder(
-                              padding: EdgeInsets.zero,
+                          padding: EdgeInsets.zero,
                           scrollDirection: Axis.horizontal,
                           physics: NeverScrollableScrollPhysics(),
                           shrinkWrap: true,
-                          itemCount: controller.pointGameweeks.value.firstWhere((element) => element.number == controller.viableGameweeks.value[controller.pointsPageIndex.value] ).midfielder.length,
+                          itemCount: controller.pointGameweeks.value.firstWhere((e) => e.number == controller.viableGameweeks.value[controller.pointsPageIndex.value]).midfielder.length,
                           itemBuilder: (context, index) {
                             return Obx(
-                              ()=> PointPlayerCard(
-                                gameweek: userController.pointGameweeks.value.firstWhere((element) => element.number == userController.viableGameweeks.value[userController.pointsPageIndex.value] ).number,
-                                player: players.firstWhere((element) => element.id == controller.pointGameweeks.value[controller.pointsPageIndex.value].midfielder[index], orElse: ()=> defaultPlayer),
+                                  ()=> PointPlayerCard(
+                                gameweek: controller.viableGameweeks.value[controller.pointsPageIndex.value],
+                                player: players.firstWhere((element) => element.id == controller.pointGameweeks.value.firstWhere((e) => e.number == controller.viableGameweeks.value[controller.pointsPageIndex.value]).midfielder[index], orElse: ()=> defaultPlayer),
+                              ),
+                            );
+                          },
+                        ),
+                      ):
+                      Obx(
+                            ()=> ListView.builder(
+                          padding: EdgeInsets.zero,
+                          scrollDirection: Axis.horizontal,
+                          physics: NeverScrollableScrollPhysics(),
+                          shrinkWrap: true,
+                          itemCount: controller.pointGameweeks.value.firstWhere((e) => e.number == -1).midfielder.length,
+                          itemBuilder: (context, index) {
+                            return Obx(
+                                  ()=> PointPlayerCard(
+                                gameweek: controller.viableGameweeks.value[controller.pointsPageIndex.value],
+                                player: players.firstWhere((element) => element.id == controller.pointGameweeks.value.firstWhere((e) => e.number == -1).midfielder[index], orElse: ()=> defaultPlayer),
                               ),
                             );
                           },
@@ -578,18 +663,36 @@ class Points extends StatelessWidget {
               child: GetBuilder<UserController>(
                   builder: (controller) {
                     return Center(
-                      child: Obx(
+                      child: controller.pointGameweeks.value.firstWhere((element) => element.number == controller.viableGameweeks.value[controller.pointsPageIndex.value] ).freeHit == false?
+                      Obx(
                             ()=> ListView.builder(
-                              padding: EdgeInsets.zero,
+                          padding: EdgeInsets.zero,
                           scrollDirection: Axis.horizontal,
                           physics: NeverScrollableScrollPhysics(),
                           shrinkWrap: true,
-                          itemCount: controller.pointGameweeks.value.firstWhere((element) => element.number == controller.viableGameweeks.value[controller.pointsPageIndex.value] ).attacker.length,
+                          itemCount: controller.pointGameweeks.value.firstWhere((e) => e.number == controller.viableGameweeks.value[controller.pointsPageIndex.value]).attacker.length,
                           itemBuilder: (context, index) {
                             return Obx(
-                              ()=> PointPlayerCard(
-                                gameweek: userController.pointGameweeks.value.firstWhere((element) => element.number == userController.viableGameweeks.value[userController.pointsPageIndex.value] ).number,
-                                  player: players.firstWhere((element) => element.id == controller.pointGameweeks.value[controller.pointsPageIndex.value].attacker[index], orElse: ()=> defaultPlayer)
+                                  ()=> PointPlayerCard(
+                                gameweek: controller.viableGameweeks.value[controller.pointsPageIndex.value],
+                                player: players.firstWhere((element) => element.id == controller.pointGameweeks.value.firstWhere((e) => e.number == controller.viableGameweeks.value[controller.pointsPageIndex.value]).attacker[index], orElse: ()=> defaultPlayer),
+                              ),
+                            );
+                          },
+                        ),
+                      ):
+                      Obx(
+                            ()=> ListView.builder(
+                          padding: EdgeInsets.zero,
+                          scrollDirection: Axis.horizontal,
+                          physics: NeverScrollableScrollPhysics(),
+                          shrinkWrap: true,
+                          itemCount: controller.pointGameweeks.value.firstWhere((e) => e.number == -1).attacker.length,
+                          itemBuilder: (context, index) {
+                            return Obx(
+                                  ()=> PointPlayerCard(
+                                gameweek: controller.viableGameweeks.value[controller.pointsPageIndex.value],
+                                player: players.firstWhere((element) => element.id == controller.pointGameweeks.value.firstWhere((e) => e.number == -1).attacker[index], orElse: ()=> defaultPlayer),
                               ),
                             );
                           },
@@ -599,9 +702,6 @@ class Points extends StatelessWidget {
                   }
               ),
             ),
-            // SizedBox(
-            //   height: MediaQuery.of(context).size.height / 15,
-            // )
           ],
         ),
       ),

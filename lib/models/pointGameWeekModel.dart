@@ -13,6 +13,7 @@ class PointGameWeek {
   bool? wildcard;
   bool? benchBoost;
   bool? freeHit;
+  bool? tripleCaptain;
   String id;
   int number;
   int points;
@@ -29,6 +30,7 @@ class PointGameWeek {
     this.wildcard,
     this.benchBoost,
     this.freeHit,
+    this.tripleCaptain,
     required this.id,
     required this.number,
     required this.points,
@@ -46,6 +48,7 @@ class PointGameWeek {
     wildcard: json["wildcard"],
     benchBoost: json["benchBoost"],
     freeHit: json["freeHit"],
+    tripleCaptain: json["tripleCaptain"],
     id: json["_id"],
     number: json["number"],
     points: json["points"],
@@ -63,6 +66,7 @@ class PointGameWeek {
     "wildcard": wildcard,
     "benchBoost": benchBoost,
     "freeHit": freeHit,
+    "tripleCaptain": tripleCaptain,
     "_id": id,
     "number": number,
     "points": points,

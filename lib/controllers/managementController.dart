@@ -8,5 +8,5 @@ import 'package:wild_sport/models/matchesModel.dart';
 class ManagementController extends GetxController {
   //Get The highest user for all gameWeeks
   //Get the lowest user for all gameWeeks
-  late Rx<Match> updatingMatch = Match(id: '', date: DateTime.now(), hour: 0, minute: 0, awayScore: 0, homeScore: 0, awayTeam: '', homeTeam: '', gameWeek: 0, live: false, homeGoalScorers: [], homePenaltyScorers: [], homePenaltyMissers: [], homeOwnGoals: [], homeRedCard: [], homeYellowCard: [], homeOffsides: [], homeCorners: [], awayGoalScorers: [], awayPenaltyScorers: [], awayPenaltyMissers: [], awayOwnGoals: [], awayRedCard: [], awayYellowCard: [], awayOffsides: [], awayCorners: [], homeLineUp: [], awayLineUp: [], v: 0).obs;
+  late Rx<Match> updatingMatch = Match( awaySubs: [],homeSubs: [],updated: false,id: '', date: DateTime.now(), hour: 0, minute: 0, awayScore: 0, homeScore: 0, awayTeam: '', homeTeam: '', gameWeek: 0, live: false, homeGoalScorers: [], homePenaltyScorers: [], homePenaltyMissers: [], homeOwnGoals: [], homeRedCard: [], homeYellowCard: [], homeOffsides: [], homeCorners:0, awayGoalScorers: [], awayPenaltyScorers: [], awayPenaltyMissers: [], awayOwnGoals: [], awayRedCard: [], awayYellowCard: [], awayOffsides: [], awayCorners: 0, homeLineUp: [], awayLineUp: [], v: 0).obs;
 }

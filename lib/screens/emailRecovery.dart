@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:wild_sport/components/textfield.dart';
 import 'package:wild_sport/controllers/userController.dart';
 import 'package:wild_sport/models/userModel.dart' as MainUser;
+import 'package:wild_sport/screens/resetPassword.dart';
 
 class EmailRecovery extends StatelessWidget {
   @override
@@ -100,6 +101,7 @@ class EmailRecovery extends StatelessWidget {
                     ),
                     child: InkWell(
                       onTap: () async{
+                        Get.to(()=>ResetPassword());
                       },
                       child: Padding(
                         padding: EdgeInsets.symmetric(horizontal: 30, vertical: 15),

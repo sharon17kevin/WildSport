@@ -7,6 +7,7 @@ import 'package:wild_sport/helperPages/pickTeam1.dart';
 import 'package:wild_sport/models/fantasyModel.dart';
 import 'package:wild_sport/models/playerModel.dart';
 import 'package:flutter/src/widgets/image.dart' as Image1;
+import 'package:wild_sport/models/pointGameWeekModel.dart';
 import 'package:wild_sport/models/userModel.dart';
 
 class DrawerCard extends StatefulWidget {
@@ -114,7 +115,9 @@ class PlayerTile extends StatelessWidget {
   Widget build(BuildContext context) {
     UserController _userController = Get.find<UserController>();
     bool? shouldIgnore() {
-      List<String>? players = _userController.myUser.fantasyTeam?.map((e) => e.player).toList();
+      int number = _userController.viableGameweeks.value.length;
+      PointGameWeek pgw = _userController.pointGameweeks.firstWhere((element) => element.number == number + 1);
+      List<String>? players = pgw.freeHit == false? _userController.myUser.fantasyTeam?.map((e) => e.player).toList() : _userController.myUser.freeHitTeam?.map((e) => e.player).toList();
       return players?.contains(player.id);
     }
     void showSnackbar() {
@@ -187,15 +190,19 @@ class PlayerTile extends StatelessWidget {
           actions: [
             TextButton(
               onPressed: () async{
+                int number = _userController.viableGameweeks.value.length;
+                PointGameWeek pgw = _userController.pointGameweeks.firstWhere((element) => element.number == number + 1);
                 int availableBank = _userController.myUser.bank! + _userController.bankToAdd.value;
                 if (player.fantasyPrice <= availableBank) {
                   User newUser = _userController.myUser;
                   String playerPosition = _userController.myToUpdate;
-                  await _userController.updateFantasyTeam(newUser, player, playerPosition);
+                  pgw.freeHit == false? await _userController.updateFantasyTeam(newUser, player, playerPosition) : _userController.updateFreeHitTeam(newUser, player, playerPosition);
                   _userController.updateFantasy(player, playerPosition);
-                  _userController.myUser.bank = availableBank - player.fantasyPrice;
+                  _userController.myUser.bank = (_userController.myUser.freeTransfer! > -1)? availableBank - player.fantasyPrice : _userController.myUser.bank;
                   await _userController.updateBank(_userController.myUser);
                   _userController.updateTransferValues();
+                  pgw.cost = _userController.myUser.cost;
+                  await _userController.updatePGW(pgw, number + 1);
                   Get.back();
                   _userController.xOffset.value = 0.0;
                   _userController.yOffset.value = 0.0;

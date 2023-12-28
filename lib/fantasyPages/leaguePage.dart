@@ -15,7 +15,11 @@ class LeaguePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     UserController userController = Get.find<UserController>();
-    //userController
+    List<LeagueUser> leagueUsers = userController.leagueUsers.where(
+            (element) => league.players.contains(element.id)).toList().map(
+            (e) => LeagueUser(name: e.name!, totalPoint: e.point!.reduce((value, element) => value + element))
+    ).toList();
+    leagueUsers.sort((a,b)=>b.totalPoint.compareTo(a.totalPoint));
     return Scaffold(
       appBar: AppBar(
         leadingWidth: 100,
@@ -106,13 +110,13 @@ class LeaguePage extends StatelessWidget {
                             child: ListView.builder(
                               shrinkWrap: true,
                               physics: NeverScrollableScrollPhysics(),
-                              itemCount:league.players.length,
+                              itemCount: leagueUsers.length,//league.players.length,
                               itemBuilder: (context, index) {
                                 //User currentUser = userController.leagueUsers.firstWhere((element) => element.id == league.players[index]);
                                 return LeagueTile(
                                   index: index,
-                                  title: userController.leagueUsers.firstWhere((element) => element.id == league.players[index]).name!,//currentUser.name!,
-                                  points:  userController.leagueUsers.firstWhere((element) => element.id == league.players[index]).point!.reduce((value, element) => value + element),//(currentUser.point?[0] == null)? 90: currentUser.point?[0]!,
+                                  title: leagueUsers[index].name,//userController.leagueUsers.firstWhere((element) => element.id == league.players[index]).name!,//currentUser.name!,
+                                  points:  leagueUsers[index].totalPoint,//userController.leagueUsers.firstWhere((element) => element.id == league.players[index]).point!.reduce((value, element) => value + element),
                                 );
                               },
                             ),
@@ -129,6 +133,13 @@ class LeaguePage extends StatelessWidget {
       ),
     );
   }
+}
+
+class LeagueUser {
+  final String name;
+  final int totalPoint;
+
+  LeagueUser({required this.name, required this.totalPoint});
 }
 
 class LeagueTile extends StatelessWidget {

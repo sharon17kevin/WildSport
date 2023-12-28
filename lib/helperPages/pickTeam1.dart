@@ -14,6 +14,8 @@ import 'package:wild_sport/models/teamsModel.dart';
 import 'package:wild_sport/models/teamsModel.dart' as Icon1;
 import 'package:flutter/src/widgets/icon.dart'as IconMain;
 
+import '../models/pointGameWeekModel.dart';
+
 class PickTeam1 extends StatefulWidget {
   @override
   _PickTeam1State createState() => _PickTeam1State();
@@ -50,10 +52,53 @@ class _PickTeam1State extends State<PickTeam1> {
     });
   }
 
+  UserController userController = Get.find<UserController>();
+
+  void showTripleCaptain() {
+    Get.dialog(
+        AlertDialog(
+          title: Text('Activate Triple Captain'),
+          content: Text('Triple the points of your captain in the line up'),
+          actions: <Widget>[
+            TextButton(
+                onPressed: (){
+                  Get.back();
+                },
+                child: Text('Cancel',
+                  style: TextStyle(
+                    fontSize: 15,
+                    color: Get.isDarkMode? Colors.white : Colors.black,
+                    letterSpacing: 1,
+                  ),
+                )
+            ),
+            TextButton(
+              onPressed: () async{
+                userController.myUser.freeHit = 0;
+                userController.myUser.freeTransfer = -1;
+                await userController.updateUserFuture();
+                int number = userController.viableGameweeks.value.length;
+                PointGameWeek pgw = userController.pointGameweeks.firstWhere((element) => element.number == number + 1);
+                pgw.tripleCaptain = true;
+                await userController.updatePGW(pgw, number + 1);
+                Get.back();
+              },
+              child: Text('Confirm',
+                style: TextStyle(
+                  fontSize: 15,
+                  color: Get.isDarkMode? Colors.white : Colors.black,
+                  letterSpacing: 1,
+                ),
+              ),
+            ),
+          ],
+        )
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     bool isDark = Theme.of(context).brightness == Brightness.dark;
-    UserController userController = Get.find<UserController>();
     TeamController teamController = Get.find<TeamController>();
     List<Player> players = teamController.getPlayers;
     Fantasy fantasyTeam = userController.myFantasyTeam;
@@ -70,96 +115,151 @@ class _PickTeam1State extends State<PickTeam1> {
               child: Container(
                 color: isDark? Theme.of(context).scaffoldBackgroundColor : Theme.of(context).primaryColor,
                 child: Center(
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  child: Column(
                     children: [
-                      TextButton(
-                        onPressed: (){
-                          if (userController.pickTeamUpdating.value == false) {
-                            Get.back();
-                          } else {
-                            Get.dialog(
-                                AlertDialog(
-                                  backgroundColor: Colors.white,
-                                  title: Text('Have you saved your lineup?',
-                                    style: TextStyle(
-                                        color: Colors.black
-                                    ),
-                                  ),
-                                  content: Container(
-                                    padding: EdgeInsets.all(10),
-                                    height: 50,
-                                    child: Column(
-                                      children: [
-                                        Text('Save so you do not lose lineup',
-                                          style: TextStyle(
-                                              color: Colors.black,
-                                              fontWeight: FontWeight.w500,
-                                              fontSize: 15
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          TextButton(
+                            onPressed: (){
+                              if (userController.pickTeamUpdating.value == false) {
+                                Get.back();
+                              } else {
+                                Get.dialog(
+                                    AlertDialog(
+                                      backgroundColor: Colors.white,
+                                      title: Text('Have you saved your lineup?',
+                                        style: TextStyle(
+                                            color: Colors.black
+                                        ),
+                                      ),
+                                      content: Container(
+                                        padding: EdgeInsets.all(10),
+                                        height: 50,
+                                        child: Column(
+                                          children: [
+                                            Text('Save so you do not lose lineup',
+                                              style: TextStyle(
+                                                  color: Colors.black,
+                                                  fontWeight: FontWeight.w500,
+                                                  fontSize: 15
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                      actions: [
+                                        TextButton(
+                                          onPressed: (){
+                                            Get.back();
+                                            Get.back();
+                                            //userController.pickTeamUpdating.value = false;
+                                          },
+                                          child: Text('Back',
+                                              style: GoogleFonts.inter(
+                                                  color: Colors.black,
+                                                  fontWeight: FontWeight.w500,
+                                                  fontSize: 15,
+                                                letterSpacing: 1
+                                              )
+                                          ),
+                                        ),
+                                        TextButton(
+                                          onPressed: (){
+                                            Get.back();
+                                          },
+                                          child: Text('Continue',
+                                              style: GoogleFonts.inter(
+                                                  color: Colors.black,
+                                                  fontWeight: FontWeight.w500,
+                                                  fontSize: 15,
+                                                letterSpacing: 1
+                                              )
                                           ),
                                         ),
                                       ],
+                                    )
+                                );
+                              }
+                            },
+                            child: Text('Back',
+                              style: TextStyle(
+                                  fontSize: 10,
+                                color: Get.isDarkMode? Colors.white : Colors.black
+                              ),
+                            ),
+                          ),
+                          Text('Pick Your Team',
+                            style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+                              color: isDark? Colors.white : Color(0xff4A4138),
+                              fontSize: 23,
+                            ),
+                          ),
+                          TextButton(
+                            onPressed: () async{
+                              int number = userController.viableGameweeks.value.length;
+                              PointGameWeek pgw = userController.pointGameweeks.firstWhere((element) => element.number == number + 1);
+                              if (pgw.freeHit == false) {
+                                userController.pickTeamUpdating.value = false;
+                                await userController.updatePickTeam(userController.myUser);
+                              } else {
+                                userController.pickTeamUpdating.value = false;
+                                await userController.updateFreeHitPickTeam(userController.myUser);
+                              }
+
+                            },
+                            child: Text('Save',
+                              style: TextStyle(
+                                  fontSize: 10,
+                                color: Get.isDarkMode? Colors.white : Colors.black
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                      GestureDetector(
+                        onTap: showTripleCaptain,
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.all(Radius.circular(5)),
+                          child: Container(
+                            width: 100,
+                            height: 40,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.all(Radius.circular(5))
+                            ),
+                            child: Column(
+                              children: [
+                                Expanded(
+                                  child: Container(
+                                    color: Get.isDarkMode? Color(0xff3D4455) : Color(0xff01BA5C),
+                                    alignment: Alignment.center,
+                                    padding: EdgeInsets.all(2),
+                                    child: Text(
+                                      'Triple Captain',
+                                      style: TextStyle(
+                                        color: Get.isDarkMode? Colors.black : Colors.white,
+                                      ),
                                     ),
                                   ),
-                                  actions: [
-                                    TextButton(
-                                      onPressed: (){
-                                        Get.back();
-                                        Get.back();
-                                        //userController.pickTeamUpdating.value = false;
-                                      },
-                                      child: Text('Back',
-                                          style: GoogleFonts.inter(
-                                              color: Colors.black,
-                                              fontWeight: FontWeight.w500,
-                                              fontSize: 15,
-                                            letterSpacing: 1
-                                          )
+                                ),
+                                Expanded(
+                                  child: Container(
+                                    color: Get.isDarkMode? Colors.white : Colors.black,
+                                    padding: EdgeInsets.all(2),
+                                    alignment: Alignment.center,
+                                    child: Text(
+                                        'Play',
+                                      style: TextStyle(
+                                        color: Get.isDarkMode? Colors.black : Colors.white,
                                       ),
                                     ),
-                                    TextButton(
-                                      onPressed: (){
-                                        Get.back();
-                                      },
-                                      child: Text('Continue',
-                                          style: GoogleFonts.inter(
-                                              color: Colors.black,
-                                              fontWeight: FontWeight.w500,
-                                              fontSize: 15,
-                                            letterSpacing: 1
-                                          )
-                                      ),
-                                    ),
-                                  ],
-                                )
-                            );
-                          }
-                        },
-                        child: Text('Back',
-                          style: TextStyle(
-                              fontSize: 10,
-                            color: Get.isDarkMode? Colors.white : Colors.black
+                                  ),
+                                ),
+                              ],
+                            ),
                           ),
                         ),
-                      ),
-                      Text('Pick Your Team',
-                        style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                          color: isDark? Colors.white : Color(0xff4A4138),
-                          fontSize: 23,
-                        ),
-                      ),
-                      TextButton(
-                        onPressed: () async{
-                          userController.pickTeamUpdating.value = false;
-                          await userController.updatePickTeam(userController.myUser);
-                        },
-                        child: Text('Save',
-                          style: TextStyle(
-                              fontSize: 10,
-                            color: Get.isDarkMode? Colors.white : Colors.black
-                          ),
-                        ),
-                      ),
+                      )
                     ],
                   ),
                 ),
@@ -603,23 +703,6 @@ class PickedPlayerCard extends StatelessWidget {
                                             ),
                                           ),
                                         ),
-                                        // CheckboxListTile(
-                                        //     title: Text('Vice Captain',
-                                        // style: TextStyle(
-                                        //     fontSize: 15
-                                        // ),
-                                        //     ),
-                                        //     value: player.isViceCaptain.value,//userController.viceCaptain.value == player.id,
-                                        //     onChanged: (value) {
-                                        // //viceCaptain.value = value!;
-                                        // player.isViceCaptain.value = value!;
-                                        // if (player.isViceCaptain.value == true) {
-                                        //   userController.updateViceCaptain(player.id);
-                                        // } else {
-                                        //   userController.updateViceCaptain('   ');
-                                        // }
-                                        //     },
-                                        //   ),
                                       ),
                                     ),
                                   ),

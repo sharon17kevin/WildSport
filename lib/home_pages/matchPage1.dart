@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -79,6 +81,32 @@ class _MatchPage1State extends State<MatchPage1> {
                                   height: 50,
                                   width: 50,
                                   fit: BoxFit.contain,
+                                  loadingBuilder: (BuildContext context, Widget child, ImageChunkEvent? loadingProgress) {
+                                    if (loadingProgress == null) {
+                                      return child;
+                                    } else if (loadingProgress.cumulativeBytesLoaded == loadingProgress.expectedTotalBytes) {
+                                      return Center(
+                                        child: MainImage.Image.asset(
+                                          'assets/icons/badgePlaceholder.webp',
+                                          fit: BoxFit.contain,
+                                          height: 50,
+                                          width: 50,
+                                        ),
+                                      );
+                                    } else {
+                                      return Center(child: CircularProgressIndicator());
+                                    }
+                                  },
+                                  errorBuilder: (BuildContext context, Object exception, StackTrace? stackTrace) {
+                                    return Center(
+                                      child: MainImage.Image.asset(
+                                        'assets/icons/badgePlaceholder.webp',
+                                        fit: BoxFit.contain,
+                                        height: 50,
+                                        width: 50,
+                                      ),
+                                    );
+                                  },
                                 ),
                                 Padding(
                                   padding: const EdgeInsets.all(8.0),
@@ -126,6 +154,32 @@ class _MatchPage1State extends State<MatchPage1> {
                                   height: 50,
                                   width: 50,
                                   fit: BoxFit.contain,
+                                  loadingBuilder: (BuildContext context, Widget child, ImageChunkEvent? loadingProgress) {
+                                    if (loadingProgress == null) {
+                                      return child;
+                                    } else if (loadingProgress.cumulativeBytesLoaded == loadingProgress.expectedTotalBytes) {
+                                      return Center(
+                                        child: MainImage.Image.asset(
+                                          'assets/icons/badgePlaceholder.webp',
+                                          fit: BoxFit.contain,
+                                          height: 50,
+                                          width: 50,
+                                        ),
+                                      );
+                                    } else {
+                                      return Center(child: CircularProgressIndicator());
+                                    }
+                                  },
+                                  errorBuilder: (BuildContext context, Object exception, StackTrace? stackTrace) {
+                                    return Center(
+                                      child: MainImage.Image.asset(
+                                        'assets/icons/badgePlaceholder.webp',
+                                        fit: BoxFit.contain,
+                                        height: 50,
+                                        width: 50,
+                                      ),
+                                    );
+                                  },
                                 ),
                                 Padding(
                                   padding: const EdgeInsets.all(8.0),
@@ -151,9 +205,9 @@ class _MatchPage1State extends State<MatchPage1> {
                       ],
                     ),
                   ),
+                  //====================Events showcase=======================>
                   Container(
                     width: double.maxFinite,
-                    height: 70,
                     child: Row(
                       children: [
                         Expanded(
@@ -169,8 +223,23 @@ class _MatchPage1State extends State<MatchPage1> {
                                     itemCount: match.value.homeGoalScorers.length,
                                     itemBuilder: (context, index) {
                                       return Tile(
-                                        category: 'goals',
+                                        category: 'futbol',
                                         name: 'Default'
+                                      );
+                                    },
+                                  ),
+                                ),
+                                SizedBox(height: 5,),
+                                Obx(
+                                      ()=> ListView.builder(
+                                    padding: EdgeInsets.zero,
+                                    shrinkWrap: true,
+                                    physics: NeverScrollableScrollPhysics(),
+                                    itemCount: match.value.homePenaltyScorers.length,
+                                    itemBuilder: (context, index) {
+                                      return Tile(
+                                          category: 'scoredPen',
+                                          name: 'Default'
                                       );
                                     },
                                   ),
@@ -184,7 +253,7 @@ class _MatchPage1State extends State<MatchPage1> {
                                     itemCount: match.value.homePenaltyMissers.length,
                                     itemBuilder: (context, index) {
                                       return Tile(
-                                          category: 'penaltyMissed',
+                                          category: 'missedPen',
                                           name: 'Default'
                                       );
                                     },
@@ -213,6 +282,7 @@ class _MatchPage1State extends State<MatchPage1> {
                           child: Container(
                             padding: EdgeInsets.symmetric(horizontal: 10),
                             child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.end,
                               children: [
                                 Obx(
                                       ()=> ListView.builder(
@@ -222,7 +292,22 @@ class _MatchPage1State extends State<MatchPage1> {
                                     itemCount: match.value.awayGoalScorers.length,
                                     itemBuilder: (context, index) {
                                       return Tile(
-                                          category: 'goals',
+                                          category: 'futbol',
+                                          name: 'Default'
+                                      );
+                                    },
+                                  ),
+                                ),
+                                SizedBox(height: 5,),
+                                Obx(
+                                      ()=> ListView.builder(
+                                    padding: EdgeInsets.zero,
+                                    shrinkWrap: true,
+                                    physics: NeverScrollableScrollPhysics(),
+                                    itemCount: match.value.awayPenaltyScorers.length,
+                                    itemBuilder: (context, index) {
+                                      return Tile(
+                                          category: 'scoredPen',
                                           name: 'Default'
                                       );
                                     },
@@ -237,7 +322,7 @@ class _MatchPage1State extends State<MatchPage1> {
                                     itemCount: match.value.awayPenaltyMissers.length,
                                     itemBuilder: (context, index) {
                                       return Tile(
-                                          category: 'penaltyMissed',
+                                          category: 'missedPen',
                                           name: 'Default'
                                       );
                                     },
@@ -265,7 +350,7 @@ class _MatchPage1State extends State<MatchPage1> {
                       ],
                     ),
                   ),
-                  Text('Statistic Match')
+                  Text('Stats Match-Up')
                 ],
               ),
             ),
@@ -323,78 +408,6 @@ class _MatchPage1State extends State<MatchPage1> {
                 )
             ),
           ),
-          // SliverToBoxAdapter(
-          //   child: Center(
-          //     child: ClipRRect(
-          //       borderRadius: BorderRadius.only(
-          //         topRight: Radius.circular(20),
-          //         topLeft: Radius.circular(20)
-          //       ),
-          //       child: Container(
-          //         color: Colors.orange,
-          //         height: 600,
-          //         child: Stack(
-          //           children: [
-          //             Container(
-          //               child: Image.asset(
-          //                 'assets/images/matchbox4.jpg',
-          //                 height: double.maxFinite,
-          //                 fit: BoxFit.fitHeight,
-          //               ),
-          //             ),
-          //             Container(
-          //               height: double.maxFinite,
-          //               width: double.maxFinite,
-          //               color: Colors.black87,//Get.theme.primaryColor.withOpacity(0.3),
-          //             ),
-          //             Container(
-          //               height: 500,
-          //               child: Column(
-          //                 children: [
-          //                   MatchStatTile(
-          //                     home: 17,
-          //                     property: 'Shots',
-          //                     away: 17
-          //                   ),
-          //                   MatchStatTile(
-          //                       home: 17,
-          //                       property: 'Shots on Target',
-          //                       away: 17
-          //                   ),
-          //                   MatchStatTile(
-          //                       home: 17,
-          //                       property: 'Fouls',
-          //                       away: 17
-          //                   ),
-          //                   MatchStatTile(
-          //                       home: 17,
-          //                       property: 'Yellow Cards',
-          //                       away: 17
-          //                   ),
-          //                   MatchStatTile(
-          //                       home: 17,
-          //                       property: 'Red Cards',
-          //                       away: 17
-          //                   ),
-          //                   MatchStatTile(
-          //                       home: 17,
-          //                       property: 'Offsides',
-          //                       away: 17
-          //                   ),
-          //                   MatchStatTile(
-          //                       home: 17,
-          //                       property: 'Corners',
-          //                       away: 17
-          //                   ),
-          //                 ],
-          //               ),
-          //             ),
-          //           ],
-          //         ),
-          //       ),
-          //     ),
-          //   ),
-          // )
         ],
       ),
     );
@@ -460,9 +473,9 @@ class MatchStats extends StatelessWidget {
                         away: match.awayOffsides.length
                     ),
                     MatchStatTile(
-                        home: match.homeCorners.length,
+                        home: match.homeCorners,
                         property: 'Corners',
-                        away: match.awayCorners.length
+                        away: match.awayCorners
                     ),
                     MatchStatTile(
                         home: match.homeOwnGoals.length,
@@ -498,44 +511,126 @@ class MatchLineUp extends StatelessWidget {
         ),
         height: 600,
         width: double.maxFinite,
-        child: Row(
+        alignment: Alignment.topCenter,
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
           children: [
-            Expanded(
-              child: Container(
-                color: Colors.purple,
-                child: ListView.builder(
-                  padding: EdgeInsets.zero,
-                  shrinkWrap: true,
-                  physics: NeverScrollableScrollPhysics(),
-                  itemCount: match.homeLineUp.length,
-                  itemBuilder: (context, index) {
-                    return Container(
-                      child: Text(
-                        players.firstWhere((element) => element.id == match.homeLineUp[index], orElse: ()=>defaultPlayer).name,
-                      ),
-                    );
-                  },
-                ),
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 10),
+              child: Row(
+                children: [
+                  Expanded(
+                    child: Container(
+                      alignment: Alignment.center,
+                        child: Text("Home Line Up")
+                    ),
+                  ),
+                  Expanded(
+                    child: Container(
+                      alignment: Alignment.center,
+                        child: Text("Away Line Up")
+                    ),
+                  ),
+                ],
               ),
             ),
-            Expanded(
-              child: Container(
-                color: Colors.purple,
-                child: ListView.builder(
-                  padding: EdgeInsets.zero,
-                  shrinkWrap: true,
-                  physics: NeverScrollableScrollPhysics(),
-                  itemCount: match.awayLineUp.length,
-                  itemBuilder: (context, index) {
-                    return Container(
-                      child: Text(
-                        players.firstWhere((element) => element.id == match.awayLineUp[index], orElse: ()=> defaultPlayer).name,
-                      ),
-                    );
-                  },
+            Row(
+              children: [
+                Expanded(
+                  child: Container(
+                    child: ListView.builder(
+                      padding: EdgeInsets.zero,
+                      shrinkWrap: true,
+                      physics: NeverScrollableScrollPhysics(),
+                      itemCount: match.homeLineUp.length,
+                      itemBuilder: (context, index) {
+                        return Container(
+                          child: Text(
+                            players.firstWhere((element) => element.id == match.homeLineUp[index], orElse: ()=>defaultPlayer).name,
+                          ),
+                        );
+                      },
+                    ),
+                  ),
                 ),
+                Expanded(
+                  child: Container(
+                    child: ListView.builder(
+                      padding: EdgeInsets.zero,
+                      shrinkWrap: true,
+                      physics: NeverScrollableScrollPhysics(),
+                      itemCount: match.awayLineUp.length,
+                      itemBuilder: (context, index) {
+                        return Container(
+                          child: Text(
+                            players.firstWhere((element) => element.id == match.awayLineUp[index], orElse: ()=> defaultPlayer).name,
+                          ),
+                        );
+                      },
+                    ),
+                  ),
+                )
+              ],
+            ),
+            SizedBox(height: 25,),
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 10),
+              child: Row(
+                children: [
+                  Expanded(
+                    child: Container(
+                        alignment: Alignment.center,
+                        child: Text("Home Substitutes")
+                    ),
+                  ),
+                  Expanded(
+                    child: Container(
+                        alignment: Alignment.center,
+                        child: Text("Away Substitutes")
+                    ),
+                  ),
+                ],
               ),
-            )
+            ),
+            Row(
+              children: [
+                Expanded(
+                  child: Container(
+                    child: ListView.builder(
+                      padding: EdgeInsets.zero,
+                      shrinkWrap: true,
+                      physics: NeverScrollableScrollPhysics(),
+                      itemCount: match.homeSubs.length,
+                      itemBuilder: (context, index) {
+                        return Container(
+                          child: Text(
+                            players.firstWhere((element) => element.id == match.homeSubs[index], orElse: ()=>defaultPlayer).name,
+                          ),
+                        );
+                      },
+                    ),
+                  ),
+                ),
+                Expanded(
+                  child: Container(
+                    child: ListView.builder(
+                      padding: EdgeInsets.zero,
+                      shrinkWrap: true,
+                      physics: NeverScrollableScrollPhysics(),
+                      itemCount: match.awaySubs.length,
+                      itemBuilder: (context, index) {
+                        return Container(
+                          child: Text(
+                            players.firstWhere((element) => element.id == match.awaySubs[index], orElse: ()=> defaultPlayer).name,
+                          ),
+                        );
+                      },
+                    ),
+                  ),
+                )
+              ],
+            ),
+
           ],
         ),
       ),
@@ -551,11 +646,29 @@ class Tile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
+      margin: EdgeInsets.symmetric(vertical: 2),
+      alignment: Alignment.center,
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Icon(Icons.policy),
-          Text(name)
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 8.0),
+            child: CircleAvatar(
+              radius: 15,
+              backgroundColor: Colors.white12,
+              child: MainImage.Image.asset(
+                'assets/icons/${category}.webp',
+                fit: BoxFit.contain,
+                height: 15,
+                width: 15,
+              ),
+            ),
+          ),
+          Text(name,
+            style: TextStyle(
+              color: Get.isDarkMode? Colors.white70 : Colors.black54
+            ),
+          )
         ],
       ),
     );
