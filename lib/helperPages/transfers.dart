@@ -29,7 +29,7 @@ class _TransfersState extends State<Transfers> {
             } else if (snapshot.hasError) {
               return Center(child: CircularProgressIndicator());
             } else {
-              return       SafeArea(
+              return SafeArea(
                 child: Stack(
                   children: [
                     DrawerCard(),

@@ -10,7 +10,6 @@ import 'package:wild_sport/models/playerModel.dart';
 import 'package:wild_sport/models/pointGameWeekModel.dart';
 
 import '../models/userModel.dart';
-final FlutterSecureStorage storage = const FlutterSecureStorage();
 
 Future registerUser(String url, User newUser) async{
   try {

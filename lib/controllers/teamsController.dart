@@ -6,7 +6,7 @@ import 'package:wild_sport/models/playerModel.dart';
 import 'package:wild_sport/models/teamsModel.dart';
 
 class TeamController extends GetxController {
-  final String ipaddress = "192.168.8.104";
+  final String ipaddress = "172.20.10.4";
   //team variables-------------------------------->
   var _teams = <Team>[].obs;
   var _teamPoints = <Team>[].obs;

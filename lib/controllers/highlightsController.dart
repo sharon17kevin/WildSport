@@ -21,7 +21,7 @@ class HighlightsController extends GetxController {
 
   Future<void> fetchHighlight() async {
     try{
-      var response = await fetchHighlights('http://192.168.8.104:3000/api/highlights');
+      var response = await fetchHighlights('http://172.20.10.4:3000/api/highlights');
       List<Highlight> highlight = highlightsFromJson(response);
       updateHighlights(highlight);
       print("highlights ready");

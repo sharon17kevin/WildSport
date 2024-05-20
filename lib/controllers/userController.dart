@@ -25,7 +25,7 @@ class UserController extends GetxController {
   RxBool isadmin = false.obs;
   var _fantasy = new Fantasy().obs;
   var _freeHitFantasy = new Fantasy().obs;
-  String pather = '192.168.8.104:3000';
+  String pather = '172.20.10.4:3000';
   var _pickedTeam = <String, dynamic>{}.obs;
   var _freehitPickedTeam = <String, dynamic>{}.obs;
   var substitutes = <Player?>[].obs;
