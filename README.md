@@ -1,5 +1,5 @@
 # Fantasy Football App
-A Flutter-based fantasy football app built specifically for the football league at [Your University’s Name]! This app allows students and league members to create teams, compete with others, and track their players' performance throughout the season.
+A Flutter-based fantasy football app built specifically for the football league at Afe Babalola University! This app allows students and league members to create teams, compete with others, and track their players' performance throughout the season.
 
 ## Features
 1) Create and Manage Teams: Users can build their fantasy teams from available league players and manage lineups each week.
